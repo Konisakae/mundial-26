@@ -1,7 +1,30 @@
+import { Line } from 'react-chartjs-2'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from 'chart.js'
 import { MATCHES } from '../data/matches'
 import { calcTotalPts } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
 import styles from '../styles/Evolucion.module.css'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+)
 
 export default function Evolucion({ participants, predictions, actuals }) {
   const dates = [...new Set(MATCHES.map(m => m.dt))].sort((a, b) => {
@@ -19,108 +42,91 @@ export default function Evolucion({ participants, predictions, actuals }) {
       return dateM <= dateU
     })
 
-    const relevantMatches = matchesUpToDate
-    const tempMatches = relevantMatches
-
     const tempActuals = {}
     matchesUpToDate.forEach(m => {
       if (actuals[m.id]) tempActuals[m.id] = actuals[m.id]
     })
 
-    return calcTotalPts(participant, predictions, tempActuals, tempMatches)
+    return calcTotalPts(participant, predictions, tempActuals, matchesUpToDate)
   }
 
-  const evolution = participants.map((p, i) => ({
-    name: p,
-    color: AVATAR_COLORS[i % AVATAR_COLORS.length],
-    points: dates.map(date => getPointsAfterDate(p, date)),
-  }))
+  const datasets = participants.map((p, i) => {
+    const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
+    const points = dates.map(date => getPointsAfterDate(p, date))
+
+    return {
+      label: p,
+      data: points,
+      borderColor: color.b,
+      backgroundColor: color.b + '20',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      pointBackgroundColor: color.b,
+      pointBorderColor: '#354a65',
+      pointBorderWidth: 2,
+    }
+  })
+
+  const chartData = {
+    labels: dates,
+    datasets,
+  }
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          color: '#cbd5e1',
+          font: { size: 12 },
+          padding: 15,
+          usePointStyle: true,
+        },
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        titleColor: '#00d9ff',
+        bodyColor: '#cbd5e1',
+        borderColor: '#00d9ff',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 4,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          color: 'rgba(255,255,255,0.05)',
+          drawBorder: false,
+        },
+        ticks: {
+          color: '#94a3b8',
+          font: { size: 11 },
+        },
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(255,255,255,0.05)',
+          drawBorder: false,
+        },
+        ticks: {
+          color: '#94a3b8',
+          font: { size: 11 },
+        },
+      },
+    },
+  }
 
   return (
     <div className={styles.evolucion}>
-      <div className={styles.container}>
-        <div className={styles.chart}>
-          <div className={styles.legend}>
-            {evolution.map(p => (
-              <div key={p.name} className={styles.legendItem}>
-                <div
-                  className={styles.legendColor}
-                  style={{ background: p.color.b }}
-                />
-                <span>{p.name}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.grid}>
-            <div className={styles.yAxis}>
-              {[0, 25, 50, 75, 100].map(val => (
-                <div key={val} className={styles.yLabel}>
-                  {val}
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.plotArea}>
-              {evolution.map(p => (
-                <div key={p.name} className={styles.line}>
-                  {p.points.map((pt, i) => (
-                    <div
-                      key={i}
-                      className={styles.point}
-                      style={{
-                        left: `${(i / (dates.length - 1 || 1)) * 100}%`,
-                        bottom: `${(pt / 150) * 100}%`,
-                        background: p.color.b,
-                      }}
-                      title={`${p.name}: ${pt} pts (${dates[i]})`}
-                    />
-                  ))}
-                </div>
-              ))}
-
-              <div className={styles.xAxis}>
-                {dates.map((date, i) => (
-                  <div key={date} className={styles.xLabel} style={{ left: `${(i / (dates.length - 1 || 1)) * 100}%` }}>
-                    {date}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.table}>
-          <div className={styles.header}>
-            <div className={styles.participant}>Participante</div>
-            {dates.map(date => (
-              <div key={date} className={styles.dateCol}>
-                {date}
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.rows}>
-            {evolution.map(p => (
-              <div key={p.name} className={styles.row}>
-                <div className={styles.participant}>
-                  <div
-                    className={styles.avatar}
-                    style={{ background: p.color.b, color: p.color.t }}
-                  >
-                    {p.name[0]}
-                  </div>
-                  <span>{p.name}</span>
-                </div>
-                {p.points.map((pts, i) => (
-                  <div key={i} className={styles.dateCol}>
-                    {pts}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className={styles.chartContainer}>
+        <Line data={chartData} options={options} />
       </div>
     </div>
   )
