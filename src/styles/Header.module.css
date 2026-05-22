@@ -1,0 +1,220 @@
+.header {
+  margin-bottom: 1rem;
+}
+
+.container {
+  background: #253545;
+  border-radius: 8px;
+  border: 1px solid #00d9ff;
+  box-shadow: 0 0 15px #00d9ff22;
+  overflow: hidden;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0, 217, 255, 0.15);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  width: 28px;
+  height: 28px;
+  background: #ffc600;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.titleText {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.rightControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.scoreBox {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.5rem;
+}
+
+.avatarSmall {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5rem;
+  font-weight: 500;
+}
+
+.scoreText {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+}
+
+.adminBtn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.adminBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.adminActive {
+  border-color: #ff006e;
+  background: #ff006e22;
+  color: #ff006e;
+}
+
+.pinInput {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pinField {
+  width: 40px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  outline: none;
+}
+
+.pinField::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.pinBtn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.pinBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.participants {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid rgba(0, 217, 255, 0.15);
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.chipActive {
+  color: white;
+}
+
+.avatarChip {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.addInput {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  width: 65px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.addInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.addInput:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  border-top: 1px solid rgba(0, 217, 255, 0.15);
+}
+
+.tab {
+  flex-shrink: 0;
+  padding: 0.5rem 0.5rem;
+  border-bottom: 2px solid transparent;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.35);
+  background: transparent;
+  border: none;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tabActive {
+  border-bottom-color: #00d9ff;
+  color: #00d9ff;
+  text-shadow: 0 0 8px #00d9ff55;
+}

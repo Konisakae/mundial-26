@@ -1,122 +1,86 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect } from 'react'
+import { DEFAULT_PARTICIPANTS } from './data/teams'
+import { MATCHES } from './data/matches'
+import { calcTotalPts } from './utils/scoring'
+import { storage } from './utils/storage'
+import Header from './components/Header'
+import styles from './styles/App.module.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [tab, setTab] = useState('resultados')
+  const [phase, setPhase] = useState('G')
+  const [group, setGroup] = useState('A')
+  const [participant, setParticipant] = useState('')
+  const [participants, setParticipants] = useState([])
+  const [predictions, setPredictions] = useState({})
+  const [actuals, setActuals] = useState({})
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const parts = storage.get('wc26_participants', DEFAULT_PARTICIPANTS)
+    setParticipants(parts)
+    storage.set('wc26_participants', parts)
+
+    const preds = storage.get('wc26_predictions', {})
+    const acts = storage.get('wc26_actuals', {})
+    setPredictions(preds)
+    setActuals(acts)
+    setLoading(false)
+  }, [])
+
+  const savePred = (matchId, h, a) => {
+    if (!participant) return
+    const next = {
+      ...predictions,
+      [participant]: { ...(predictions[participant] || {}), [matchId]: { h, a } },
+    }
+    setPredictions(next)
+    storage.set('wc26_predictions', next)
+  }
+
+  const saveActual = (matchId, h, a) => {
+    const next = { ...actuals, [matchId]: { h, a } }
+    setActuals(next)
+    storage.set('wc26_actuals', next)
+  }
+
+  const addParticipant = (name) => {
+    if (!name || participants.includes(name)) return
+    const next = [...participants, name]
+    setParticipants(next)
+    setParticipant(name)
+    storage.set('wc26_participants', next)
+  }
+
+  const totalPts = calcTotalPts(participant, predictions, actuals, MATCHES)
+
+  if (loading) return (
+    <div className={styles.loading}>Cargando...</div>
+  )
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className={styles.app}>
+      <Header
+        participants={participants}
+        participant={participant}
+        setParticipant={setParticipant}
+        addParticipant={addParticipant}
+        totalPts={totalPts}
+        isAdmin={isAdmin}
+        setIsAdmin={setIsAdmin}
+        tab={tab}
+        setTab={setTab}
+      />
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <div className={styles.content}>
+        {tab === 'resultados' && <div>Resultados</div>}
+        {tab === 'grupos' && <div>Grupos</div>}
+        {tab === 'apuestas' && <div>Apuestas</div>}
+        {tab === 'todas' && <div>Todas las apuestas</div>}
+        {tab === 'clasificacion' && <div>Clasificación</div>}
+        {tab === 'evolucion' && <div>Evolución</div>}
+      </div>
+    </div>
   )
 }
-
-export default App
