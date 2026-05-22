@@ -4,6 +4,12 @@ import { MATCHES } from './data/matches'
 import { calcTotalPts } from './utils/scoring'
 import { storage } from './utils/storage'
 import Header from './components/Header'
+import Resultados from './components/Resultados'
+import Apuestas from './components/Apuestas'
+import Clasificacion from './components/Clasificacion'
+import Grupos from './components/Grupos'
+import Todas from './components/Todas'
+import Evolucion from './components/Evolucion'
 import styles from './styles/App.module.css'
 
 export default function App() {
@@ -74,12 +80,55 @@ export default function App() {
       />
 
       <div className={styles.content}>
-        {tab === 'resultados' && <div>Resultados</div>}
-        {tab === 'grupos' && <div>Grupos</div>}
-        {tab === 'apuestas' && <div>Apuestas</div>}
-        {tab === 'todas' && <div>Todas las apuestas</div>}
-        {tab === 'clasificacion' && <div>Clasificación</div>}
-        {tab === 'evolucion' && <div>Evolución</div>}
+        {tab === 'resultados' && (
+          <Resultados
+            phase={phase}
+            setPhase={setPhase}
+            group={group}
+            setGroup={setGroup}
+            actuals={actuals}
+            saveActual={saveActual}
+            isAdmin={isAdmin}
+          />
+        )}
+        {tab === 'grupos' && <Grupos actuals={actuals} />}
+        {tab === 'apuestas' && (
+          <Apuestas
+            participant={participant}
+            phase={phase}
+            setPhase={setPhase}
+            group={group}
+            setGroup={setGroup}
+            predictions={predictions}
+            savePred={savePred}
+            actuals={actuals}
+          />
+        )}
+        {tab === 'todas' && (
+          <Todas
+            participants={participants}
+            phase={phase}
+            setPhase={setPhase}
+            group={group}
+            setGroup={setGroup}
+            predictions={predictions}
+            actuals={actuals}
+          />
+        )}
+        {tab === 'clasificacion' && (
+          <Clasificacion
+            participants={participants}
+            predictions={predictions}
+            actuals={actuals}
+          />
+        )}
+        {tab === 'evolucion' && (
+          <Evolucion
+            participants={participants}
+            predictions={predictions}
+            actuals={actuals}
+          />
+        )}
       </div>
     </div>
   )
