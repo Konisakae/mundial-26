@@ -1,0 +1,65 @@
+# Mundial 2026 - v2 - Protocolo del Proyecto
+
+## Principios
+
+Este es un nuevo proyecto hecho correctamente desde cero:
+- ✅ Git desde el inicio
+- ✅ Código limpio, sin inline styles
+- ✅ CSS Modules para estilos
+- ✅ Estructura clara de carpetas
+- ✅ Un cambio, un commit
+
+## Stack
+
+- Frontend: React + Vite
+- Estilos: CSS Modules (NO inline styles)
+- Almacenamiento local: localStorage (temporal)
+- Base de datos: Supabase (después)
+- Autenticación: Supabase Auth (después)
+- Deploy: Vercel (al final)
+
+## Estructura
+
+```
+src/
+├── components/      ← Componentes React
+├── data/           ← teams.js, matches.js, colors.js
+├── styles/         ← Archivos .module.css
+├── utils/          ← scoring.js, storage.js
+├── App.jsx         ← Componente raíz
+└── main.jsx        ← Entry point
+```
+
+## Reglas de trabajo
+
+1. **Estilos**: SIEMPRE usar CSS Modules (archivo.module.css)
+2. **Un cambio = Un commit**: No acumules cambios
+3. **Componentes**: Solo lógica y presentación, nada de datos hardcodeados
+4. **Git**: Commits claros con descripción de qué cambió y por qué
+5. **Verificación**: Prueba en navegador ANTES de hacer commit
+
+## Fases del proyecto
+
+1. **Fase 1 - Diseño**: Crear interfaz visual que coincida con antes.png
+2. **Fase 2 - Funcionamiento**: Lógica, cálculos, interactividad (aquí refinamos reglas si es necesario)
+3. **Fase 3 - Autenticación local**: Múltiples usuarios, contraseñas
+4. **Fase 4 - Supabase**: Migrar a base de datos en la nube
+5. **Fase 5 - Vercel**: Desplegar al mundo
+
+## Datos del proyecto
+
+- **Participantes**: 13 personas (Laura, Lucía, Olivia, Eva, Pablo, Lucas, Darío, Elena, Javi, Nic, Jose M., Charo, Abuelo)
+- **Partidos**: 104 (72 fases de grupos + 32 eliminatoria)
+- **Grupos**: 12 grupos (A-L), 4 equipos cada uno
+- **Puntuación**: 5 pts marcador exacto, 2 pts resultado (1/X/2), 1 pt un gol correcto, +2 ganador eliminatoria
+
+## Colores de referencia (del proyecto actual)
+
+- Fondo principal: #354a65
+- Fondo oscuro: #253545
+- Fondo muy oscuro: #1f2f45
+- Cyan/Cian: #00d9ff
+- Magenta: #ff006e
+- Gold/Oro: #ffc600
+
+Nota: Los colores pueden cambiar en Fase 1
