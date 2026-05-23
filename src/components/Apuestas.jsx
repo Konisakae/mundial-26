@@ -55,6 +55,21 @@ export default function Apuestas({
     if (isCurrent && !isConfirmed) borderClass = styles.jornadaCurrent
     if (isBlocked) borderClass = styles.jornadaBlocked
 
+    const confirmSection = isCurrent && !isConfirmed && (
+      <div className={styles.confirmSection}>
+        <button
+          onClick={handleConfirm}
+          disabled={!allFilled}
+          className={styles.confirmBtn}
+        >
+          Confirmar jornada {j}
+        </button>
+        {!allFilled && (
+          <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+        )}
+      </div>
+    )
+
     return (
       <div key={j} className={`${styles.jornadaSection} ${borderClass}`}>
         <div className={styles.jornadaHeader}>
@@ -65,6 +80,8 @@ export default function Apuestas({
             {isBlocked && <span className={styles.badgeBlocked}>Pendiente</span>}
           </h3>
         </div>
+
+        {confirmSection}
 
         <div className={styles.matches}>
           {matches.map(match => {
@@ -90,20 +107,7 @@ export default function Apuestas({
           })}
         </div>
 
-        {isCurrent && !isConfirmed && (
-          <div className={styles.confirmSection}>
-            <button
-              onClick={handleConfirm}
-              disabled={!allFilled}
-              className={styles.confirmBtn}
-            >
-              Confirmar jornada {j}
-            </button>
-            {!allFilled && (
-              <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
-            )}
-          </div>
-        )}
+        {confirmSection}
       </div>
     )
   }
