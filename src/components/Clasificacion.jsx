@@ -1,13 +1,24 @@
+import { useMemo } from 'react'
 import { calcTotalPts } from '../utils/scoring'
 import { MATCHES } from '../data/matches'
 import { AVATAR_COLORS } from '../data/colors'
+import { generateInitials } from '../utils/initials'
 import styles from '../styles/Clasificacion.module.css'
 
 export default function Clasificacion({ participants, predictions, actuals }) {
+  const initialsMap = useMemo(() => generateInitials(participants), [participants])
+  const colorMap = useMemo(() => {
+    const map = {}
+    participants.forEach((p, i) => {
+      map[p] = AVATAR_COLORS[i % AVATAR_COLORS.length]
+    })
+    return map
+  }, [participants])
+
   const standings = participants.map((p, i) => ({
     name: p,
     pts: calcTotalPts(p, predictions, actuals, MATCHES),
-    color: AVATAR_COLORS[i % AVATAR_COLORS.length],
+    color: colorMap[p],
   })).sort((a, b) => b.pts - a.pts)
 
   return (
@@ -28,7 +39,7 @@ export default function Clasificacion({ participants, predictions, actuals }) {
                   className={styles.avatar}
                   style={{ background: p.color.b, color: p.color.t }}
                 >
-                  {p.name[0]}
+                  {initialsMap[p.name]}
                 </div>
                 <span className={styles.nameText}>{p.name}</span>
               </div>

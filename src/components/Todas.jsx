@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { MATCHES } from '../data/matches'
 import { TEAMS } from '../data/teams'
 import { AVATAR_COLORS } from '../data/colors'
 import { getMatchesForJornada } from '../utils/jornadas'
+import { generateInitials } from '../utils/initials'
 import CustomSelect from './CustomSelect'
 import styles from '../styles/Todas.module.css'
 
 export default function Todas({ participants, phase, setPhase, predictions, actuals }) {
   const [jornada, setJornada] = useState(1)
+  const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   let matches
   if (phase === 'G') {
@@ -95,7 +97,7 @@ export default function Todas({ participants, phase, setPhase, predictions, actu
                       <div key={p} className={styles.prediction}>
                         <div className={styles.participantName}>
                           <div className={styles.avatar} style={{ background: av.b, color: av.t }}>
-                            {p[0]}
+                            {initialsMap[p]}
                           </div>
                           <span>{p}</span>
                         </div>
