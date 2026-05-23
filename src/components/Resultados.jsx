@@ -52,14 +52,16 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
           ]}
         />
         {phase === 'G' && (
-          <div className={styles.jornadalSelect}>
-            <label>Jornada:</label>
-            <select value={jornada} onChange={e => setJornada(parseInt(e.target.value))} className={styles.select}>
-              {[1, 2, 3].map(j => (
-                <option key={j} value={j}>Jornada {j}</option>
-              ))}
-            </select>
-          </div>
+          <CustomSelect
+            value={jornada}
+            onChange={e => setJornada(parseInt(e))}
+            label="Jornada:"
+            options={[
+              { value: 1, label: 'Jornada 1' },
+              { value: 2, label: 'Jornada 2' },
+              { value: 3, label: 'Jornada 3' },
+            ]}
+          />
         )}
       </div>
 
