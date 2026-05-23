@@ -3,9 +3,13 @@ import { MATCHES } from '../data/matches'
 import { getMatchesForJornada, JORNADAS } from '../utils/jornadas'
 import MatchCard from './MatchCard'
 import CustomSelect from './CustomSelect'
+import ThirdPlaceSelector from './ThirdPlaceSelector'
 import styles from '../styles/Resultados.module.css'
 
-export default function Resultados({ phase, setPhase, group, setGroup, actuals, saveActual, isAdmin, r16Substitutions }) {
+export default function Resultados({
+  phase, setPhase, group, setGroup, actuals, saveActual, isAdmin, r16Substitutions,
+  selectedThirds, onConfirmThirds, simulatedJornadas,
+}) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
 
@@ -65,6 +69,19 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
           />
         )}
       </div>
+
+      {phase === 'R16' && isAdmin && !selectedThirds.completed && simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3] && (
+        <ThirdPlaceSelector
+          actuals={actuals}
+          onConfirm={onConfirmThirds}
+        />
+      )}
+
+      {phase === 'R16' && !selectedThirds.completed && !(simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3]) && (
+        <div className={styles.message}>
+          Simula las 3 jornadas de grupos primero para ver los dieciseisavos.
+        </div>
+      )}
 
       <div className={styles.matches}>
         {matches.map(match => {

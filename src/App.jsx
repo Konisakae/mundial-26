@@ -25,6 +25,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [simulatedJornadas, setSimulatedJornadas] = useState({ 1: false, 2: false, 3: false })
   const [r16Substitutions, setR16Substitutions] = useState({})
+  const [selectedThirds, setSelectedThirds] = useState({})
 
   useEffect(() => {
     const parts = DEFAULT_PARTICIPANTS
@@ -37,11 +38,13 @@ export default function App() {
     const acts = storage.get('wc26_actuals', {})
     const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
     const subs = storage.get('wc26_r16Substitutions', {})
+    const selThirds = storage.get('wc26_selectedThirds', {})
 
     setPredictions(preds)
     setActuals(acts)
     setSimulatedJornadas(simJornadas)
     setR16Substitutions(subs)
+    setSelectedThirds(selThirds)
     setLoading(false)
   }, [])
 
@@ -157,6 +160,31 @@ export default function App() {
     }
   }, [simulatedJornadas])
 
+  // Confirmar terceros lugares seleccionados y generar dieciseisavos
+  const confirmThirdPlaces = (selectedMap) => {
+    if (Object.keys(selectedMap).length !== 8) return
+
+    const groupWinners = getAllGroupWinners(actuals)
+
+    // Crear mapeo de substituciones incluyendo terceros
+    const subs = {}
+    Object.entries(groupWinners).forEach(([group, winners]) => {
+      if (winners.first) subs[`1.º ${group}`] = winners.first
+      if (winners.second) subs[`2.º ${group}`] = winners.second
+      if (winners.third) subs[`3.º ${group}`] = winners.third
+    })
+
+    // Reemplazar referencias de terceros con los seleccionados
+    Object.entries(selectedMap).forEach(([group, team]) => {
+      subs[`3.º ${group}`] = team
+    })
+
+    setR16Substitutions(subs)
+    setSelectedThirds({ ...selectedMap, completed: true })
+    storage.set('wc26_r16Substitutions', subs)
+    storage.set('wc26_selectedThirds', { ...selectedMap, completed: true })
+  }
+
   // Generar automáticamente partidos de dieciseisavos cuando grupos estén listos
   const generateR16Matches = () => {
     if (Object.values(actuals).filter(a => a?.h !== undefined).length < 72) return
@@ -216,6 +244,9 @@ export default function App() {
             saveActual={saveActual}
             isAdmin={isAdmin}
             r16Substitutions={r16Substitutions}
+            selectedThirds={selectedThirds}
+            onConfirmThirds={confirmThirdPlaces}
+            simulatedJornadas={simulatedJornadas}
           />
         )}
         {tab === 'grupos' && <Grupos actuals={actuals} />}

@@ -1,0 +1,169 @@
+.container {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.header h3 {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.5px;
+}
+
+.header p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.counter {
+  color: #00d9ff;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.table {
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 217, 255, 0.1);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 40px 50px 70px 1fr 50px 60px 50px;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0, 217, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.row:hover {
+  background: rgba(0, 217, 255, 0.08);
+}
+
+.headerRow {
+  background: rgba(0, 217, 255, 0.1);
+  color: #00d9ff;
+  font-weight: bold;
+  cursor: default;
+  padding: 0.9rem 1rem;
+}
+
+.headerRow:hover {
+  background: rgba(0, 217, 255, 0.1);
+}
+
+.row.selected {
+  background: rgba(0, 217, 255, 0.15);
+  border-left: 3px solid #00d9ff;
+  padding-left: calc(1rem - 3px);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #00d9ff;
+}
+
+.pos {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.group {
+  display: flex;
+  justify-content: center;
+}
+
+.badge {
+  background: rgba(0, 217, 255, 0.2);
+  color: #00d9ff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.team {
+  display: flex;
+  align-items: center;
+}
+
+.teamInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flag {
+  font-size: 1.2rem;
+}
+
+.code {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  min-width: 35px;
+}
+
+.pts {
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+}
+
+.dif {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gf {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.confirmBtn {
+  background: rgba(0, 217, 255, 0.2);
+  border: 1px solid rgba(0, 217, 255, 0.4);
+  color: #00d9ff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background: rgba(0, 217, 255, 0.3);
+  border-color: #00d9ff;
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.3);
+}
+
+.confirmBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -45,7 +45,11 @@ function getGroupWinners(group, actuals) {
       b.goalsFor - a.goalsFor
     )
 
-  return { first: standings[0]?.team, second: standings[1]?.team }
+  return {
+    first: standings[0]?.team,
+    second: standings[1]?.team,
+    third: standings[2]?.team,
+  }
 }
 
 // Retorna objeto con ganadores de todos los grupos
@@ -82,4 +86,33 @@ export function getGroupStandings(group, actuals) {
     )
 
   return standings
+}
+
+// Extrae los 12 terceros lugares de todos los grupos y los ordena por criterios FIFA
+export function getTop12Thirds(actuals) {
+  const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+  const thirds = []
+
+  groups.forEach(g => {
+    const standings = getGroupStandings(g, actuals)
+    if (standings[2]) {
+      const third = standings[2]
+      thirds.push({
+        group: g,
+        team: third.team,
+        points: third.points,
+        diff: third.diff,
+        goalsFor: third.goalsFor,
+      })
+    }
+  })
+
+  // Ordenar por criterios FIFA: puntos > diferencia > goles a favor
+  thirds.sort((a, b) =>
+    b.points - a.points ||
+    b.diff - a.diff ||
+    b.goalsFor - a.goalsFor
+  )
+
+  return thirds
 }
