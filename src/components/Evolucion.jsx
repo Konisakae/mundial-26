@@ -45,7 +45,19 @@ export default function Evolucion({ participants, predictions, actuals }) {
 
   const datasets = participants.map((p, i) => {
     const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
-    const points = matchIds.map(id => getPointsAfterMatch(p, id))
+
+    // Find the last match ID that has actual results
+    let lastMatchWithResults = 0
+    for (const matchId of matchIds) {
+      if (actuals[matchId] !== undefined) {
+        lastMatchWithResults = matchId
+      }
+    }
+
+    // Generate points only up to the last match with results
+    const points = matchIds
+      .filter(id => id <= lastMatchWithResults)
+      .map(id => getPointsAfterMatch(p, id))
 
     return {
       label: p,
@@ -62,8 +74,18 @@ export default function Evolucion({ participants, predictions, actuals }) {
     }
   })
 
+  // Find the last match ID that has actual results for all datasets
+  let lastMatchWithResults = 0
+  for (const matchId of matchIds) {
+    if (actuals[matchId] !== undefined) {
+      lastMatchWithResults = matchId
+    }
+  }
+
   const chartData = {
-    labels: matchIds.map(id => `P${id}`),
+    labels: matchIds
+      .filter(id => id <= lastMatchWithResults)
+      .map(id => `P${id}`),
     datasets,
   }
 
