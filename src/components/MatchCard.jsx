@@ -1,5 +1,6 @@
 import { TEAMS } from '../data/teams'
 import { GROUP_COLORS } from '../data/groupColors'
+import { useIsMobile } from '../hooks/useIsMobile'
 import styles from '../styles/MatchCard.module.css'
 
 export default function MatchCard({
@@ -15,6 +16,7 @@ export default function MatchCard({
   resetBtn,
   isConfirmed = false,
 }) {
+  const isMobile = useIsMobile()
   const h = TEAMS[match.h]
   const a = TEAMS[match.a]
 
@@ -104,7 +106,7 @@ export default function MatchCard({
       <div className={styles.matchBody}>
         <div className={styles.team}>
           <span className={styles.flag}>{h?.f}</span>
-          <span className={styles.name}>{h?.n}</span>
+          <span className={styles.name}>{isMobile ? match.h : h?.n}</span>
         </div>
 
         <div className={styles.score}>
@@ -174,7 +176,7 @@ export default function MatchCard({
         </div>
 
         <div className={styles.team}>
-          <span className={styles.name}>{a?.n}</span>
+          <span className={styles.name}>{isMobile ? match.a : a?.n}</span>
           <span className={styles.flag}>{a?.f}</span>
         </div>
       </div>
