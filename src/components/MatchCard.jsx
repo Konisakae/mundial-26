@@ -263,32 +263,7 @@ export default function MatchCard({
 
         <div className={styles.team}>
           <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
-          {awayOptions.length > 0 && isAdmin ? (
-            <select
-              className={styles.thirdSelector}
-              onChange={(e) => {
-                const group = e.target.value
-                if (onSelectThird) onSelectThird(match.id, group)
-              }}
-              value={selectedThirds[match.id] || ''}
-              disabled={!groupsCompleted}
-              title={!groupsCompleted ? 'Completa la jornada 3 para seleccionar terceros' : ''}
-              style={{ cursor: 'pointer' }}
-            >
-              <option value="">{a?.f || '🔄'}</option>
-              {awayOptions.map(group => {
-                const thirdTeam = availableThirds[group]
-                const isUsedInOtherMatch = Object.entries(selectedThirds).some(([mId, g]) => g === group && mId !== match.id)
-                return (
-                  <option key={group} value={group} disabled={isUsedInOtherMatch}>
-                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsedInOtherMatch ? '(usado)' : ''}
-                  </option>
-                )
-              })}
-            </select>
-          ) : (
-            <span className={styles.flag}>{a?.f}</span>
-          )}
+          <span className={styles.flag}>{a?.f}</span>
         </div>
       </div>
 
