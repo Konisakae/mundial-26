@@ -6,12 +6,9 @@ export const getRes = (h, a) => {
 }
 
 // Calcula puntos de una predicción frente al resultado real.
-// Reglas (igual que el Excel original):
-//   Gol local correcto  → +1
-//   Gol visitante correcto → +1
-//   1/X/2 correcto      → +2
-//   Si los 4 puntos → bonus = 5 (marcador exacto)
-export const calcPts = (pred, actual) => {
+// Para grupos: Gol correcto +1, 1/X/2 correcto +2, exacto +5
+// Para eliminatorias: igual pero +2 extra si aciertas ganador
+export const calcPts = (pred, actual, match = null) => {
   if (!pred) return null
   if (actual?.h === undefined || actual?.a === undefined) return null
   if (actual.h === '' || actual.a === '') return null
@@ -21,8 +18,30 @@ export const calcPts = (pred, actual) => {
   const g1 = Number(pred.h) === Number(actual.h) ? 1 : 0
   const g2 = Number(pred.a) === Number(actual.a) ? 1 : 0
   const res = getRes(pred.h, pred.a) === getRes(actual.h, actual.a) ? 2 : 0
-  const total = g1 + g2 + res
-  return total === 4 ? 5 : total
+  let total = g1 + g2 + res
+
+  // Si es eliminatoria con empate
+  if (match && match.ph !== 'G') {
+    const predRes = getRes(pred.h, pred.a)
+    const actualRes = getRes(actual.h, actual.a)
+    const isDraw = predRes === 'X' && actualRes === 'X'
+
+    if (isDraw) {
+      // En empate: marcador exacto vale 4 en lugar de 5 (el 5 es si también aciertas ganador)
+      if (total === 4) total = 4
+      // Si aciertas el ganador: +2
+      if (actual.winner && pred.winner && pred.winner === actual.winner) total += 2
+    } else if (actualRes !== '') {
+      // Si no es empate pero aciertas ganador: +2
+      if (actual.winner && pred.winner && pred.winner === actual.winner) total += 2
+    }
+  }
+
+  // Para marcador exacto en grupos (o en eliminatorias no empate): bonus
+  if (!match || match.ph === 'G') {
+    return total === 4 ? 5 : total
+  }
+  return total
 }
 
 // Iniciales de un nombre (máx. 2 letras)
@@ -56,6 +75,6 @@ export const calcGroupStandings = (groupMatches, actuals) => {
 // Calcula el total de puntos de un participante
 export const calcTotalPts = (name, predictions, actuals, matches) =>
   matches.reduce((acc, m) => {
-    const pts = calcPts(predictions[name]?.[m.id], actuals[m.id])
+    const pts = calcPts(predictions[name]?.[m.id], actuals[m.id], m)
     return acc + (pts || 0)
   }, 0)

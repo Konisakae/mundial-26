@@ -6,7 +6,7 @@ import CustomSelect from './CustomSelect'
 import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({
-  phase, setPhase, group, setGroup, actuals, saveActual, isAdmin, r16Substitutions,
+  phase, setPhase, group, setGroup, actuals, saveActual, setWinner, isAdmin, r16Substitutions,
   selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
 }) {
   const [editing, setEditing] = useState({})
@@ -93,6 +93,7 @@ export default function Resultados({
               onSelectThird={onSelectThird}
               isAdmin={isAdmin}
               groupsCompleted={groupsCompleted}
+              onSetWinner={setWinner}
             />
           )
         })}

@@ -83,7 +83,7 @@ export default function App() {
     if (h === undefined || a === undefined) {
       delete next[matchId]
     } else {
-      next[matchId] = { h, a }
+      next[matchId] = { ...next[matchId], h, a }
     }
     setActuals(next)
     storage.set('wc26_actuals', next)
@@ -99,6 +99,15 @@ export default function App() {
       })
       setR16Substitutions(newSubs)
       storage.set('wc26_r16Substitutions', newSubs)
+    }
+  }
+
+  const setWinner = (matchId, winner) => {
+    const next = { ...actuals }
+    if (next[matchId]) {
+      next[matchId] = { ...next[matchId], winner: winner || undefined }
+      setActuals(next)
+      storage.set('wc26_actuals', next)
     }
   }
 
@@ -389,6 +398,7 @@ export default function App() {
             setGroup={setGroup}
             actuals={actuals}
             saveActual={saveActual}
+            setWinner={setWinner}
             isAdmin={isAdmin}
             r16Substitutions={r16Substitutions}
             selectedThirds={selectedThirds}

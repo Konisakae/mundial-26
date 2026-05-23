@@ -21,8 +21,16 @@ export default function MatchCard({
   onSelectThird = null,
   isAdmin = false,
   groupsCompleted = false,
+  onSetWinner = null,
 }) {
   const isMobile = useIsMobile()
+
+  // Detectar si es eliminatoria y hay empate
+  const isElimination = match.ph !== 'G'
+  const resultH = value?.h ?? actual?.h
+  const resultA = value?.a ?? actual?.a
+  const isDraw = resultH !== undefined && resultA !== undefined && resultH === resultA && resultH !== '' && resultA !== ''
+  const showWinnerSelector = isElimination && isDraw && (editable || (isAdmin && actual))
 
   // Resolver nombres de equipos, con substituciones para dieciseisavos
   const resolveTeamCode = (code) => {
@@ -241,6 +249,19 @@ export default function MatchCard({
                 </button>
               )}
             </>
+          ) : showWinnerSelector ? (
+            <select
+              onChange={(e) => {
+                if (onSetWinner) onSetWinner(match.id, e.target.value)
+              }}
+              value={actual?.winner || ''}
+              className={styles.input}
+              style={{ minWidth: '80px' }}
+            >
+              <option value="">Ganador...</option>
+              <option value="h">{getTeamDisplay(match.h, h, isMobile)}</option>
+              <option value="a">{getTeamDisplay(match.a, a, isMobile)}</option>
+            </select>
           ) : (
             <>
               {(value?.h !== undefined && value?.h !== '') || actual?.h !== undefined ? (
