@@ -238,12 +238,25 @@
 }
 
 .actualResult {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 0.75rem 1rem;
   background: rgba(0, 217, 255, 0.15);
   border-top: 2px solid #00d9ff;
   font-size: 0.75rem;
   color: #00d9ff;
-  text-align: center;
+  gap: 1rem;
+}
+
+.actualLeft {
+  flex: 1;
+  text-align: left;
+}
+
+.actualRight {
+  text-align: right;
+  white-space: nowrap;
 }
 
 .actualValue {

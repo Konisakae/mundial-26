@@ -354,16 +354,18 @@ export default function MatchCard({
 
       {showActual && actual && (
         <div className={styles.actualResult}>
-          Resultado real: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
-          {actual.winner && (
-            <>
-              {' - Ganador: '}<span className={styles.actualValue}>{actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
-            </>
-          )}
+          <div className={styles.actualLeft}>
+            Resultado real: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
+            {actual.winner && (
+              <>
+                {' - Ganador: '}<span className={styles.actualValue}>{actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
+              </>
+            )}
+          </div>
           {points !== null && (
-            <>
-              {' - Puntos: '}<span className={styles.actualValue}>{points}</span>
-            </>
+            <div className={styles.actualRight}>
+              Puntos: <span className={styles.actualValue}>{points}</span>
+            </div>
           )}
         </div>
       )}
