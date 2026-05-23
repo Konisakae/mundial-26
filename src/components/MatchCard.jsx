@@ -360,7 +360,7 @@ export default function MatchCard({
             </div>
           )}
           <div className={styles.actualCenter}>
-            Resultado real: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
+            Resultado: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
             {actual.winner && (
               <>
                 {' - Ganador: '}<span className={styles.actualValue}>{actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
