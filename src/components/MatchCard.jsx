@@ -21,6 +21,19 @@ export default function MatchCard({
   // Extraer grupo/clasificación en eliminatorias (ej: "1.º A" → "1º A")
   const extractGroupInfo = (teamStr) => {
     if (!teamStr) return null
+
+    // Si contiene "/" (múltiples opciones), mostrar con asterisco
+    if (teamStr.includes('/')) {
+      const match = teamStr.match(/^(\d+)/)
+      if (match) {
+        return {
+          position: match[1],
+          group: '*',
+        }
+      }
+    }
+
+    // Si es un grupo específico
     const match = teamStr.match(/^(\d+)\D+(\w)$/)
     if (match) {
       return {
@@ -43,9 +56,9 @@ export default function MatchCard({
             <div
               className={styles.groupBadgeSmall}
               style={{
-                background: GROUP_COLORS[homeGroupInfo.group]?.bg,
-                borderColor: GROUP_COLORS[homeGroupInfo.group]?.border,
-                color: GROUP_COLORS[homeGroupInfo.group]?.text,
+                background: homeGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.1)' : GROUP_COLORS[homeGroupInfo.group]?.bg,
+                borderColor: homeGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.2)' : GROUP_COLORS[homeGroupInfo.group]?.border,
+                color: homeGroupInfo.group === '*' ? '#94a3b8' : GROUP_COLORS[homeGroupInfo.group]?.text,
               }}
             >
               {homeGroupInfo.position}º {homeGroupInfo.group}
@@ -53,9 +66,9 @@ export default function MatchCard({
             <div
               className={styles.groupBadgeSmall}
               style={{
-                background: GROUP_COLORS[awayGroupInfo.group]?.bg,
-                borderColor: GROUP_COLORS[awayGroupInfo.group]?.border,
-                color: GROUP_COLORS[awayGroupInfo.group]?.text,
+                background: awayGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.1)' : GROUP_COLORS[awayGroupInfo.group]?.bg,
+                borderColor: awayGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.2)' : GROUP_COLORS[awayGroupInfo.group]?.border,
+                color: awayGroupInfo.group === '*' ? '#94a3b8' : GROUP_COLORS[awayGroupInfo.group]?.text,
               }}
             >
               {awayGroupInfo.position}º {awayGroupInfo.group}
