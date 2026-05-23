@@ -40,24 +40,9 @@ export default function Evolucion({ participants, predictions, actuals }) {
     }
   }
 
-  // Usar datos simulados si hay muy pocos resultados (para demostración)
-  const useSimulation = lastMatchWithResults === 0
-  if (useSimulation) {
-    lastMatchWithResults = 104
-  }
-
   const visibleMatchIds = matchIds.filter(id => id <= lastMatchWithResults)
 
   const getPointsAfterMatch = (participant, upToMatchId) => {
-    if (useSimulation) {
-      // Generar puntos simulados basados en el índice del participante
-      const pIndex = participants.indexOf(participant)
-      const basePoints = pIndex * 5
-      const matchProgress = (upToMatchId / 104)
-      const variation = Math.sin(upToMatchId * 0.1 + pIndex) * 20
-      return Math.floor(basePoints + (matchProgress * 200) + variation)
-    }
-
     const matchesUpToId = MATCHES.filter(m => m.id <= upToMatchId)
 
     const tempActuals = {}
