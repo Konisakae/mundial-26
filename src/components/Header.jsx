@@ -10,7 +10,9 @@ export default function Header({
   isAdmin, setIsAdmin,
   tab, setTab,
   simulate,
+  simulate16,
   simulatedJornadas,
+  selectedThirds,
   clearAllData,
 }) {
   const [newName, setNewName] = useState('')
@@ -82,6 +84,16 @@ export default function Header({
                   style={{ opacity: simulatedJornadas[1] && simulatedJornadas[2] ? 1 : 0.5 }}
                 >
                   SJ3 {simulatedJornadas[3] ? '✓' : simulatedJornadas[1] && simulatedJornadas[2] ? '' : '🔒'}
+                </button>
+
+                <button
+                  onClick={simulate16}
+                  disabled={!simulatedJornadas[1] || !simulatedJornadas[2] || !simulatedJornadas[3] || Object.keys(selectedThirds).length < 8}
+                  className={styles.simulateBtn}
+                  title="Simular dieciseisavos: 16 partidos (73-88)"
+                  style={{ opacity: (simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3] && Object.keys(selectedThirds).length >= 8) ? 1 : 0.5 }}
+                >
+                  S16 {Object.keys(selectedThirds).length >= 8 ? '✓' : ''}
                 </button>
 
                 <button

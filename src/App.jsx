@@ -153,6 +153,43 @@ export default function App() {
     storage.set('wc26_simulatedJornadas', newSimJornadas)
   }
 
+  // Simular dieciseisavos cuando todos los terceros estén seleccionados
+  const simulate16 = () => {
+    const selectedGroupCount = Object.keys(selectedThirds).length
+    if (selectedGroupCount < 8) return
+
+    // Obtener los 16 partidos de dieciseisavos
+    const r16Matches = MATCHES.filter(m => m.ph === 'R16' && m.id >= 73 && m.id <= 88)
+
+    // Generar resultados reales simulados
+    const newActuals = { ...actuals }
+    r16Matches.forEach(m => {
+      newActuals[m.id] = {
+        h: Math.floor(Math.random() * 4),
+        a: Math.floor(Math.random() * 4)
+      }
+    })
+
+    // Generar predicciones para todos los participantes
+    const newPreds = { ...predictions }
+    participants.forEach(p => {
+      const pData = newPreds[p] || { predictions: {}, confirmed: { 1: false, 2: false, 3: false } }
+      r16Matches.forEach(m => {
+        pData.predictions[m.id] = {
+          h: Math.floor(Math.random() * 4),
+          a: Math.floor(Math.random() * 4)
+        }
+      })
+      newPreds[p] = pData
+    })
+
+    setActuals(newActuals)
+    setPredictions(newPreds)
+
+    storage.set('wc26_actuals', newActuals)
+    storage.set('wc26_predictions', newPreds)
+  }
+
   // Validar automáticamente ganadores cuando todas las jornadas estén simuladas
   useEffect(() => {
     if (simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3]) {
@@ -290,7 +327,9 @@ export default function App() {
         tab={tab}
         setTab={setTab}
         simulate={simulate}
+        simulate16={simulate16}
         simulatedJornadas={simulatedJornadas}
+        selectedThirds={selectedThirds}
         clearAllData={clearAllData}
       />
 
