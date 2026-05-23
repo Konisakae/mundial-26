@@ -33,8 +33,10 @@ export default function MatchCard({
   const hasResult = resultH !== undefined && resultA !== undefined && resultH !== '' && resultA !== ''
   const isDraw = hasResult && resultH === resultA
   const autoWinner = hasResult && !isDraw ? (resultH > resultA ? 'h' : 'a') : null
+  const userHasPrediction = value?.h !== undefined && value?.h !== '' && value?.a !== undefined && value?.a !== ''
+  const adminHasActual = actual?.h !== undefined && actual?.h !== '' && actual?.a !== undefined && actual?.a !== ''
   const showWinnerSelector = isElimination && isDraw && (editable || (isAdmin && actual))
-  const showWinnerDisplay = isElimination && hasResult
+  const showWinnerDisplay = isElimination && (userHasPrediction || adminHasActual)
 
   // Resolver nombres de equipos, con substituciones para dieciseisavos
   const resolveTeamCode = (code) => {
@@ -204,7 +206,7 @@ export default function MatchCard({
           ) : (
             <>
               <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
-              {isElimination && hasResult && (
+              {showWinnerDisplay && (
                 <span
                   onClick={() => {
                     if (!isAdmin && onSetPredictedWinner && isDraw) onSetPredictedWinner(match.id, 'h')
@@ -217,7 +219,7 @@ export default function MatchCard({
                     borderRadius: '50%',
                     border: '2px solid #00d9ff',
                     marginLeft: '0.5rem',
-                    background: (autoWinner === 'h' || (isAdmin ? actual : value)?.winner === 'h') ? '#00d9ff' : 'transparent',
+                    background: (autoWinner === 'h' || (!showActual ? actual : value)?.winner === 'h') ? '#00d9ff' : 'transparent',
                     cursor: isDraw ? 'pointer' : 'default',
                   }}
                 />
@@ -273,14 +275,6 @@ export default function MatchCard({
                     </button>
                   )}
                 </div>
-                {showWinnerDisplay && (
-                  <span style={{ fontSize: '0.85rem', color: '#00d9ff', marginTop: '0.5rem', display: 'block' }}>
-                    Ganador: {
-                      autoWinner ? (autoWinner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) :
-                      (value?.winner ? (value.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) : '-')
-                    }
-                  </span>
-                )}
               </>
             ) : (
               <>
@@ -296,14 +290,6 @@ export default function MatchCard({
                         </button>
                       )}
                     </div>
-                    {showWinnerDisplay && (
-                      <span style={{ fontSize: '0.85rem', color: '#00d9ff', marginTop: '0.5rem', display: 'block' }}>
-                        Ganador: {
-                          autoWinner ? (autoWinner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) :
-                          ((isAdmin ? actual : value)?.winner ? ((isAdmin ? actual : value).winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) : '-')
-                        }
-                      </span>
-                    )}
                   </>
                 ) : (
                   <span className={styles.noResult}>- -</span>
@@ -337,8 +323,7 @@ export default function MatchCard({
             </select>
           ) : (
             <>
-              <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
-              {isElimination && hasResult && (
+              {showWinnerDisplay && (
                 <span
                   onClick={() => {
                     if (!isAdmin && onSetPredictedWinner && isDraw) onSetPredictedWinner(match.id, 'a')
@@ -350,12 +335,13 @@ export default function MatchCard({
                     height: '12px',
                     borderRadius: '50%',
                     border: '2px solid #00d9ff',
-                    marginLeft: '0.5rem',
-                    background: (autoWinner === 'a' || (isAdmin ? actual : value)?.winner === 'a') ? '#00d9ff' : 'transparent',
+                    marginRight: '0.5rem',
+                    background: (autoWinner === 'a' || (!showActual ? actual : value)?.winner === 'a') ? '#00d9ff' : 'transparent',
                     cursor: isDraw ? 'pointer' : 'default',
                   }}
                 />
               )}
+              <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
               <span className={styles.flag}>{a?.f}</span>
             </>
           )}
@@ -364,7 +350,12 @@ export default function MatchCard({
 
       {showActual && actual && (
         <div className={styles.actualResult}>
-          Resultado real: {actual.h}-{actual.a}
+          Resultado real: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
+          {actual.winner && (
+            <>
+              {' - Ganador: '}<span className={styles.actualValue}>{actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
+            </>
+          )}
         </div>
       )}
     </div>
