@@ -28,6 +28,6 @@ export const TEAMS = {
 export const GROUPS = ['A','B','C','D','E','F','G','H','I','J','K','L']
 
 export const DEFAULT_PARTICIPANTS = [
-  'Dario','Lucas','Pablo N','Eva','Asier','Abuelo','Jose','Javier',
-  'Martina','Sergio','Alex','Sofia','Carlos'
+  'Laura','Lucía','Olivia','Eva','Pablo','Lucas','Darío','Elena',
+  'Javi','Nic','Jose','Charo','Abuelo'
 ]
