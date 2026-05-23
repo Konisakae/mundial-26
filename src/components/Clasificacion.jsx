@@ -31,8 +31,13 @@ export default function Clasificacion({ participants, predictions, actuals }) {
         </div>
 
         <div className={styles.rows}>
-          {standings.map((p, i) => (
-            <div key={p.name} className={styles.row}>
+          {standings.map((p, i) => {
+            let rowClass = styles.row
+            if (i === 0) rowClass += ` ${styles.rowFirst}`
+            else if (i === 1) rowClass += ` ${styles.rowSecond}`
+            else if (i === 2) rowClass += ` ${styles.rowThird}`
+            return (
+            <div key={p.name} className={rowClass}>
               <div className={styles.pos}>{i + 1}º</div>
               <div className={styles.nameSection}>
                 <div
@@ -45,7 +50,8 @@ export default function Clasificacion({ participants, predictions, actuals }) {
               </div>
               <div className={styles.pts}>{p.pts}</div>
             </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>

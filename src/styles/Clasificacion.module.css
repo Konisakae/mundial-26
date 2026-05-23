@@ -57,6 +57,21 @@
   border-bottom: none;
 }
 
+.rowFirst {
+  background: rgba(255, 198, 0, 0.15);
+  border-left: 3px solid #ffc600;
+}
+
+.rowSecond {
+  background: rgba(192, 192, 192, 0.15);
+  border-left: 3px solid #c0c0c0;
+}
+
+.rowThird {
+  background: rgba(205, 127, 50, 0.15);
+  border-left: 3px solid #cd7f32;
+}
+
 .nameSection {
   display: flex;
   align-items: center;
