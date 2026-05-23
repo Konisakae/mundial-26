@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { initials } from '../utils/scoring'
+import { useState, useMemo } from 'react'
 import { AVATAR_COLORS } from '../data/colors'
+import { generateInitials } from '../utils/initials'
 import { ADMIN_PIN } from '../config'
 import styles from '../styles/Header.module.css'
 
@@ -13,6 +13,7 @@ export default function Header({
   const [newName, setNewName] = useState('')
   const [pinVal, setPinVal] = useState('')
   const [showPin, setShowPin] = useState(false)
+  const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   const handleAdd = () => {
     const name = newName.trim()
@@ -44,7 +45,7 @@ export default function Header({
             {participant && pAv && (
               <div className={styles.scoreBox} style={{ background: 'rgba(255,255,255,0.1)' }}>
                 <div className={styles.avatarSmall} style={{ background: pAv.b, color: pAv.t }}>
-                  {initials(participant)}
+                  {initialsMap[participant]}
                 </div>
                 <span className={styles.scoreText}>{totalPts} pts</span>
               </div>
@@ -92,7 +93,7 @@ export default function Header({
                     color: active ? av.b : av.t,
                   }}
                 >
-                  {initials(p)}
+                  {initialsMap[p]}
                 </div>
                 <span>{p}</span>
               </button>
