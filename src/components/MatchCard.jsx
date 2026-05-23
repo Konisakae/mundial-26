@@ -26,12 +26,15 @@ export default function MatchCard({
 }) {
   const isMobile = useIsMobile()
 
-  // Detectar si es eliminatoria y hay empate
+  // Detectar si es eliminatoria
   const isElimination = match.ph !== 'G'
   const resultH = value?.h ?? actual?.h
   const resultA = value?.a ?? actual?.a
-  const isDraw = resultH !== undefined && resultA !== undefined && resultH === resultA && resultH !== '' && resultA !== ''
+  const hasResult = resultH !== undefined && resultA !== undefined && resultH !== '' && resultA !== ''
+  const isDraw = hasResult && resultH === resultA
+  const autoWinner = hasResult && !isDraw ? (resultH > resultA ? 'h' : 'a') : null
   const showWinnerSelector = isElimination && isDraw && (editable || (isAdmin && actual))
+  const showWinnerDisplay = isElimination && hasResult
 
   // Resolver nombres de equipos, con substituciones para dieciseisavos
   const resolveTeamCode = (code) => {
@@ -263,9 +266,12 @@ export default function MatchCard({
                     </button>
                   )}
                 </div>
-                {showWinnerSelector && (value?.winner) && (
+                {showWinnerDisplay && (
                   <span style={{ fontSize: '0.85rem', color: '#00d9ff' }}>
-                    Ganador: {value.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}
+                    Ganador: {
+                      autoWinner ? (autoWinner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) :
+                      (value?.winner ? (value.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) : '-')
+                    }
                   </span>
                 )}
               </>
@@ -283,9 +289,12 @@ export default function MatchCard({
                         </button>
                       )}
                     </div>
-                    {showWinnerSelector && ((isAdmin ? actual : value)?.winner) && (
+                    {showWinnerDisplay && (
                       <span style={{ fontSize: '0.85rem', color: '#00d9ff' }}>
-                        Ganador: {(isAdmin ? actual : value).winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}
+                        Ganador: {
+                          autoWinner ? (autoWinner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) :
+                          ((isAdmin ? actual : value)?.winner ? ((isAdmin ? actual : value).winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) : '-')
+                        }
                       </span>
                     )}
                   </>
