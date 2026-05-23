@@ -46,6 +46,20 @@ export default function App() {
     setR16Substitutions(subs)
     setSelectedThirds(selThirds)
     setLoading(false)
+
+    // Si todas las jornadas están simuladas, generar R16 substituciones
+    if (simJornadas[1] && simJornadas[2] && simJornadas[3] && Object.keys(subs).length === 0) {
+      const groupWinners = getAllGroupWinners(acts)
+      const newSubs = {}
+      Object.entries(groupWinners).forEach(([group, winners]) => {
+        if (winners.first) newSubs[`1.º ${group}`] = winners.first
+        if (winners.second) newSubs[`2.º ${group}`] = winners.second
+      })
+      if (Object.keys(newSubs).length > 0) {
+        setR16Substitutions(newSubs)
+        storage.set('wc26_r16Substitutions', newSubs)
+      }
+    }
   }, [])
 
   const savePred = (matchId, h, a) => {
