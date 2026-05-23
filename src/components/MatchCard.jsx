@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { TEAMS } from '../data/teams'
 import styles from '../styles/MatchCard.module.css'
 
@@ -15,6 +16,8 @@ export default function MatchCard({
 }) {
   const h = TEAMS[match.h]
   const a = TEAMS[match.a]
+  const wasEmptyH = (value?.h === undefined || value?.h === '')
+  const wasEmptyA = (value?.a === undefined || value?.a === '')
 
   return (
     <div className={styles.matchCard}>
@@ -40,7 +43,7 @@ export default function MatchCard({
                 value={value?.h === '' || value?.h === undefined ? '' : value?.h}
                 onChange={e => {
                   const newVal = e.target.value
-                  if ((value?.h === undefined || value?.h === '') && newVal === '1') {
+                  if (wasEmptyH && newVal === '1') {
                     onChange('h', '0')
                   } else {
                     onChange('h', newVal || '0')
@@ -62,7 +65,7 @@ export default function MatchCard({
                 value={value?.a === '' || value?.a === undefined ? '' : value?.a}
                 onChange={e => {
                   const newVal = e.target.value
-                  if ((value?.a === undefined || value?.a === '') && newVal === '1') {
+                  if (wasEmptyA && newVal === '1') {
                     onChange('a', '0')
                   } else {
                     onChange('a', newVal || '0')
