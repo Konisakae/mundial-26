@@ -48,6 +48,7 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
             { value: 'OCT', label: 'Octavos' },
             { value: 'CTO', label: 'Cuartos' },
             { value: 'SEMI', label: 'Semifinales' },
+            { value: '3P', label: 'Tercer Puesto' },
             { value: 'FIN', label: 'Final' },
           ]}
         />

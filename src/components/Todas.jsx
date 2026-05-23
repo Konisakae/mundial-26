@@ -29,6 +29,7 @@ export default function Todas({ participants, phase, setPhase, predictions, actu
             { value: 'OCT', label: 'Octavos' },
             { value: 'CTO', label: 'Cuartos' },
             { value: 'SEMI', label: 'Semifinales' },
+            { value: '3P', label: 'Tercer Puesto' },
             { value: 'FIN', label: 'Final' },
           ]}
         />

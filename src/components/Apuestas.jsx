@@ -133,6 +133,7 @@ export default function Apuestas({
             { value: 'OCT', label: 'Octavos' },
             { value: 'CTO', label: 'Cuartos' },
             { value: 'SEMI', label: 'Semifinales' },
+            { value: '3P', label: 'Tercer Puesto' },
             { value: 'FIN', label: 'Final' },
           ]}
         />
