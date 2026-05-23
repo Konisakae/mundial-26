@@ -99,11 +99,11 @@ export default function Evolucion({ participants, predictions, actuals }) {
           pinch: {
             enabled: true,
           },
-          mode: 'x',
+          mode: 'xy',
         },
         pan: {
           enabled: true,
-          mode: 'x',
+          mode: 'xy',
           modifierKey: 'ctrl',
         },
       },
