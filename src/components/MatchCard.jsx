@@ -21,24 +21,22 @@ export default function MatchCard({
   return (
     <div className={styles.matchCard}>
       <div className={styles.matchHeader}>
-        <div className={styles.matchBadges}>
-          <div
-            className={styles.groupBadge}
-            style={{
-              background: GROUP_COLORS[match.gr]?.bg,
-              borderColor: GROUP_COLORS[match.gr]?.border,
-              color: GROUP_COLORS[match.gr]?.text,
-            }}
-          >
-            {match.gr}
-          </div>
-          <div className={styles.matchId}>
-            P{match.id}
-          </div>
+        <div
+          className={styles.groupBadge}
+          style={{
+            background: GROUP_COLORS[match.gr]?.bg,
+            borderColor: GROUP_COLORS[match.gr]?.border,
+            color: GROUP_COLORS[match.gr]?.text,
+          }}
+        >
+          {match.gr}
         </div>
         <div className={styles.dateTime}>
           <span className={styles.date}>{match.dt}</span>
           <span className={styles.time}>{match.tm}</span>
+        </div>
+        <div className={styles.matchId}>
+          P{match.id}
         </div>
       </div>
 
