@@ -31,16 +31,22 @@ export default function MatchCard({
   }
 
   const getTeamDisplay = (code, teamObj, isMobile) => {
-    // Si es una referencia de dieciseisavos sin substitución, mostrar código
-    if (code.includes('.º') && !teamObj) {
+    // Si tenemos el objeto del equipo
+    if (teamObj) {
+      return isMobile ? (teamObj.c || code) : teamObj.n
+    }
+    // Si es una referencia sin resolver
+    if (code.includes('.º')) {
+      if (isMobile) {
+        // En mobile, mostrar versión compacta: "2A", "3*", etc.
+        const match = code.match(/^(\d+)/)
+        if (match) {
+          return code.includes('/') ? `${match[1]}*` : code.replace(/\.º\s*/g, '')
+        }
+      }
       return code
     }
-    // Si es mobile, mostrar código de equipo
-    if (isMobile && teamObj) {
-      return teamObj.c || code
-    }
-    // Si no es mobile, mostrar nombre completo
-    return teamObj?.n || code
+    return code
   }
 
   // Detectar y extraer referencias a terceros
