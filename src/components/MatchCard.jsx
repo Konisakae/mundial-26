@@ -48,30 +48,34 @@ export default function MatchCard({
   const awayGroupInfo = extractGroupInfo(match.a)
   const isElimination = match.ph !== 'G'
 
+  // Mostrar placeholders si no hay info de grupo válida
+  const homeDisplay = homeGroupInfo || { position: '-', group: '-' }
+  const awayDisplay = awayGroupInfo || { position: '-', group: '-' }
+
   return (
     <div className={styles.matchCard}>
       <div className={styles.matchHeader}>
-        {isElimination && homeGroupInfo && awayGroupInfo ? (
+        {isElimination ? (
           <div className={styles.groupBadgesContainer}>
             <div
               className={styles.groupBadgeSmall}
               style={{
-                background: homeGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.1)' : GROUP_COLORS[homeGroupInfo.group]?.bg,
-                borderColor: homeGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.2)' : GROUP_COLORS[homeGroupInfo.group]?.border,
-                color: homeGroupInfo.group === '*' ? '#94a3b8' : GROUP_COLORS[homeGroupInfo.group]?.text,
+                background: (homeDisplay.group === '*' || homeDisplay.group === '-') ? 'rgba(255, 255, 255, 0.1)' : GROUP_COLORS[homeDisplay.group]?.bg,
+                borderColor: (homeDisplay.group === '*' || homeDisplay.group === '-') ? 'rgba(255, 255, 255, 0.2)' : GROUP_COLORS[homeDisplay.group]?.border,
+                color: (homeDisplay.group === '*' || homeDisplay.group === '-') ? '#94a3b8' : GROUP_COLORS[homeDisplay.group]?.text,
               }}
             >
-              {homeGroupInfo.position}º {homeGroupInfo.group}
+              {homeDisplay.position === '-' ? '-' : `${homeDisplay.position}º ${homeDisplay.group}`}
             </div>
             <div
               className={styles.groupBadgeSmall}
               style={{
-                background: awayGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.1)' : GROUP_COLORS[awayGroupInfo.group]?.bg,
-                borderColor: awayGroupInfo.group === '*' ? 'rgba(255, 255, 255, 0.2)' : GROUP_COLORS[awayGroupInfo.group]?.border,
-                color: awayGroupInfo.group === '*' ? '#94a3b8' : GROUP_COLORS[awayGroupInfo.group]?.text,
+                background: (awayDisplay.group === '*' || awayDisplay.group === '-') ? 'rgba(255, 255, 255, 0.1)' : GROUP_COLORS[awayDisplay.group]?.bg,
+                borderColor: (awayDisplay.group === '*' || awayDisplay.group === '-') ? 'rgba(255, 255, 255, 0.2)' : GROUP_COLORS[awayDisplay.group]?.border,
+                color: (awayDisplay.group === '*' || awayDisplay.group === '-') ? '#94a3b8' : GROUP_COLORS[awayDisplay.group]?.text,
               }}
             >
-              {awayGroupInfo.position}º {awayGroupInfo.group}
+              {awayDisplay.position === '-' ? '-' : `${awayDisplay.position}º ${awayDisplay.group}`}
             </div>
           </div>
         ) : (
