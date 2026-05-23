@@ -27,32 +27,23 @@ ChartJS.register(
 )
 
 export default function Evolucion({ participants, predictions, actuals }) {
-  const dates = [...new Set(MATCHES.map(m => m.dt))].sort((a, b) => {
-    const [da, ma, ya] = a.split('/').map(Number)
-    const [db, mb, yb] = b.split('/').map(Number)
-    return new Date(ya, ma - 1, da) - new Date(yb, mb - 1, db)
-  })
+  const matchIds = MATCHES.map(m => m.id)
+  const maxMatchId = Math.max(...matchIds)
 
-  const getPointsAfterDate = (participant, upToDate) => {
-    const matchesUpToDate = MATCHES.filter(m => {
-      const [d, mo] = m.dt.split('/').map(Number)
-      const [du, mou] = upToDate.split('/').map(Number)
-      const dateM = new Date(2026, mo - 1, d)
-      const dateU = new Date(2026, mou - 1, du)
-      return dateM <= dateU
-    })
+  const getPointsAfterMatch = (participant, upToMatchId) => {
+    const matchesUpToId = MATCHES.filter(m => m.id <= upToMatchId)
 
     const tempActuals = {}
-    matchesUpToDate.forEach(m => {
+    matchesUpToId.forEach(m => {
       if (actuals[m.id]) tempActuals[m.id] = actuals[m.id]
     })
 
-    return calcTotalPts(participant, predictions, tempActuals, matchesUpToDate)
+    return calcTotalPts(participant, predictions, tempActuals, matchesUpToId)
   }
 
   const datasets = participants.map((p, i) => {
     const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
-    const points = dates.map(date => getPointsAfterDate(p, date))
+    const points = matchIds.map(id => getPointsAfterMatch(p, id))
 
     return {
       label: p,
@@ -70,7 +61,7 @@ export default function Evolucion({ participants, predictions, actuals }) {
   })
 
   const chartData = {
-    labels: dates,
+    labels: matchIds.map(id => `P${id}`),
     datasets,
   }
 
