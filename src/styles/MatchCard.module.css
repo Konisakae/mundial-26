@@ -36,6 +36,26 @@
   min-width: auto;
 }
 
+.groupBadgesContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.groupBadgeSmall {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid;
+  border-radius: 0.2rem;
+  font-weight: 600;
+  font-size: 0.6rem;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
 .matchId {
   display: flex;
   align-items: center;

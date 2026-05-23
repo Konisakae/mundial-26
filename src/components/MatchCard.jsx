@@ -18,19 +18,61 @@ export default function MatchCard({
   const h = TEAMS[match.h]
   const a = TEAMS[match.a]
 
+  // Extraer grupo/clasificación en eliminatorias (ej: "1.º A" → "1º A")
+  const extractGroupInfo = (teamStr) => {
+    if (!teamStr) return null
+    const match = teamStr.match(/^(\d+)\D+(\w)$/)
+    if (match) {
+      return {
+        position: match[1],
+        group: match[2],
+      }
+    }
+    return null
+  }
+
+  const homeGroupInfo = extractGroupInfo(match.h)
+  const awayGroupInfo = extractGroupInfo(match.a)
+  const isElimination = match.ph !== 'G'
+
   return (
     <div className={styles.matchCard}>
       <div className={styles.matchHeader}>
-        <div
-          className={styles.groupBadge}
-          style={{
-            background: GROUP_COLORS[match.gr]?.bg,
-            borderColor: GROUP_COLORS[match.gr]?.border,
-            color: GROUP_COLORS[match.gr]?.text,
-          }}
-        >
-          {match.gr}
-        </div>
+        {isElimination && homeGroupInfo && awayGroupInfo ? (
+          <div className={styles.groupBadgesContainer}>
+            <div
+              className={styles.groupBadgeSmall}
+              style={{
+                background: GROUP_COLORS[homeGroupInfo.group]?.bg,
+                borderColor: GROUP_COLORS[homeGroupInfo.group]?.border,
+                color: GROUP_COLORS[homeGroupInfo.group]?.text,
+              }}
+            >
+              {homeGroupInfo.position}º {homeGroupInfo.group}
+            </div>
+            <div
+              className={styles.groupBadgeSmall}
+              style={{
+                background: GROUP_COLORS[awayGroupInfo.group]?.bg,
+                borderColor: GROUP_COLORS[awayGroupInfo.group]?.border,
+                color: GROUP_COLORS[awayGroupInfo.group]?.text,
+              }}
+            >
+              {awayGroupInfo.position}º {awayGroupInfo.group}
+            </div>
+          </div>
+        ) : (
+          <div
+            className={styles.groupBadge}
+            style={{
+              background: GROUP_COLORS[match.gr]?.bg,
+              borderColor: GROUP_COLORS[match.gr]?.border,
+              color: GROUP_COLORS[match.gr]?.text,
+            }}
+          >
+            {match.gr}
+          </div>
+        )}
         <div className={styles.dateTime}>
           <span className={styles.date}>{match.dt}</span>
           <span className={styles.time}>{match.tm}</span>
