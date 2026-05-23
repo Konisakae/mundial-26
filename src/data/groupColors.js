@@ -10,5 +10,5 @@ export const GROUP_COLORS = {
   I: { bg: 'rgba(100, 255, 200, 0.2)', border: '#64ffc8', text: '#64ffc8' },    // Aqua
   J: { bg: 'rgba(255, 200, 100, 0.2)', border: '#ffc864', text: '#ffc864' },    // Peach
   K: { bg: 'rgba(150, 100, 255, 0.2)', border: '#9664ff', text: '#9664ff' },    // Violet
-  L: { bg: 'rgba(255, 0, 100, 0.2)', border: '#ff0064', text: '#ff0064' },      // Crimson Red
+  L: { bg: 'rgba(0, 170, 170, 0.2)', border: '#00aaaa', text: '#00aaaa' },      // Teal
 }
