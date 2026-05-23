@@ -7,7 +7,7 @@ import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({
   phase, setPhase, group, setGroup, actuals, saveActual, setWinner, isAdmin, r16Substitutions,
-  selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
+  octavosSubstitutions, r16Confirmed, confirmR16, selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -88,6 +88,7 @@ export default function Resultados({
               saveBtn={isAdmin && !actual ? () => handleSave(match.id) : null}
               resetBtn={isAdmin && actual ? () => handleReset(match.id) : null}
               r16Substitutions={r16Substitutions}
+              octavosSubstitutions={octavosSubstitutions}
               selectedThirds={selectedThirds}
               availableThirds={availableThirds}
               onSelectThird={onSelectThird}
@@ -98,6 +99,21 @@ export default function Resultados({
           )
         })}
       </div>
+
+      {phase === 'R16' && !r16Confirmed && isAdmin && (
+        <div className={styles.confirmSection}>
+          <button
+            onClick={confirmR16}
+            disabled={matches.some(m => !actuals[m.id]?.h || !actuals[m.id]?.a)}
+            className={styles.confirmBtn}
+          >
+            Confirmar Dieciseisavos
+          </button>
+          {matches.some(m => !actuals[m.id]?.h || !actuals[m.id]?.a) && (
+            <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

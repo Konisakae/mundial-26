@@ -26,6 +26,7 @@ export default function App() {
   const [simulatedJornadas, setSimulatedJornadas] = useState({ 1: false, 2: false, 3: false })
   const [r16Substitutions, setR16Substitutions] = useState({})
   const [octavosSubstitutions, setOctavosSubstitutions] = useState({})
+  const [r16Confirmed, setR16Confirmed] = useState(false)
   const [selectedThirds, setSelectedThirds] = useState({})
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function App() {
     const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
     const subs = storage.get('wc26_r16Substitutions', {})
     const octSubs = storage.get('wc26_octavosSubstitutions', {})
+    const r16Conf = storage.get('wc26_r16Confirmed', false)
     const selThirds = storage.get('wc26_selectedThirds', {})
 
     setPredictions(preds)
@@ -47,6 +49,7 @@ export default function App() {
     setSimulatedJornadas(simJornadas)
     setR16Substitutions(subs)
     setOctavosSubstitutions(octSubs)
+    setR16Confirmed(r16Conf)
     setSelectedThirds(selThirds)
     setLoading(false)
 
@@ -339,6 +342,12 @@ export default function App() {
     storage.set('wc26_r16Substitutions', subs)
   }
 
+  const confirmR16 = () => {
+    generateOctavosMatches()
+    setR16Confirmed(true)
+    storage.set('wc26_r16Confirmed', true)
+  }
+
   const generateOctavosMatches = () => {
     // Verificar que todos los R16 estén completos
     const r16Matches = MATCHES.filter(m => m.ph === 'R16')
@@ -493,6 +502,8 @@ export default function App() {
             isAdmin={isAdmin}
             r16Substitutions={r16Substitutions}
             octavosSubstitutions={octavosSubstitutions}
+            r16Confirmed={r16Confirmed}
+            confirmR16={confirmR16}
             selectedThirds={selectedThirds}
             availableThirds={availableThirds}
             onSelectThird={(matchId, group) => {
