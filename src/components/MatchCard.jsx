@@ -55,6 +55,9 @@ export default function MatchCard({
                   const val = e.target.value.replace(/[^0-9]/g, '')
                   onChange('h', val)
                 }}
+                style={{
+                  borderColor: value?.h === '' || value?.h === undefined ? '#ff3333' : '#00d9ff',
+                }}
                 className={styles.input}
               />
               <span>-</span>
@@ -67,6 +70,9 @@ export default function MatchCard({
                 onChange={e => {
                   const val = e.target.value.replace(/[^0-9]/g, '')
                   onChange('a', val)
+                }}
+                style={{
+                  borderColor: value?.a === '' || value?.a === undefined ? '#ff3333' : '#00d9ff',
                 }}
                 className={styles.input}
               />
