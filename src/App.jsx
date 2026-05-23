@@ -87,6 +87,19 @@ export default function App() {
     }
     setActuals(next)
     storage.set('wc26_actuals', next)
+
+    // Generar R16 automáticamente si hay 72 resultados (sin importar si fueron simulados o manuales)
+    const resultCount = Object.values(next).filter(a => a?.h !== undefined).length
+    if (resultCount === 72) {
+      const groupWinners = getAllGroupWinners(next)
+      const newSubs = {}
+      Object.entries(groupWinners).forEach(([group, winners]) => {
+        if (winners.first) newSubs[`1.º ${group}`] = winners.first
+        if (winners.second) newSubs[`2.º ${group}`] = winners.second
+      })
+      setR16Substitutions(newSubs)
+      storage.set('wc26_r16Substitutions', newSubs)
+    }
   }
 
   const addParticipant = (name) => {
