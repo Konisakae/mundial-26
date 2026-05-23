@@ -37,6 +37,7 @@ src/
 3. **Componentes**: Solo lógica y presentación, nada de datos hardcodeados
 4. **Git**: Commits claros con descripción de qué cambió y por qué
 5. **Verificación**: Prueba en navegador ANTES de hacer commit
+6. **Idioma**: SIEMPRE comunicar en castellano
 
 ## Fases del proyecto
 
