@@ -202,19 +202,25 @@ export default function MatchCard({
               })}
             </select>
           ) : (
-            <span
-              className={styles.name}
-              onClick={() => {
-                if (showWinnerSelector && !isAdmin && onSetPredictedWinner) {
-                  onSetPredictedWinner(match.id, 'h')
-                } else if (showWinnerSelector && isAdmin && onSetWinner) {
-                  onSetWinner(match.id, 'h')
-                }
-              }}
-              style={showWinnerSelector ? { cursor: 'pointer', opacity: (isAdmin ? actual : value)?.winner === 'h' ? 1 : 0.6 } : {}}
-            >
-              {getTeamDisplay(match.h, h, isMobile)}
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {isElimination && (
+                <input
+                  type="radio"
+                  name={`winner-${match.id}`}
+                  checked={autoWinner === 'h' || (isAdmin ? actual : value)?.winner === 'h'}
+                  onChange={() => {
+                    if (!isAdmin && onSetPredictedWinner) {
+                      onSetPredictedWinner(match.id, 'h')
+                    } else if (isAdmin && onSetWinner) {
+                      onSetWinner(match.id, 'h')
+                    }
+                  }}
+                  disabled={autoWinner === 'h' || !showWinnerSelector}
+                  style={{ cursor: 'pointer' }}
+                />
+              )}
+              <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
+            </div>
           )}
         </div>
 
@@ -330,22 +336,26 @@ export default function MatchCard({
               })}
             </select>
           ) : (
-            <>
-              <span
-                className={styles.name}
-                onClick={() => {
-                  if (showWinnerSelector && !isAdmin && onSetPredictedWinner) {
-                    onSetPredictedWinner(match.id, 'a')
-                  } else if (showWinnerSelector && isAdmin && onSetWinner) {
-                    onSetWinner(match.id, 'a')
-                  }
-                }}
-                style={showWinnerSelector ? { cursor: 'pointer', opacity: (isAdmin ? actual : value)?.winner === 'a' ? 1 : 0.6 } : {}}
-              >
-                {getTeamDisplay(match.a, a, isMobile)}
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {isElimination && (
+                <input
+                  type="radio"
+                  name={`winner-${match.id}`}
+                  checked={autoWinner === 'a' || (isAdmin ? actual : value)?.winner === 'a'}
+                  onChange={() => {
+                    if (!isAdmin && onSetPredictedWinner) {
+                      onSetPredictedWinner(match.id, 'a')
+                    } else if (isAdmin && onSetWinner) {
+                      onSetWinner(match.id, 'a')
+                    }
+                  }}
+                  disabled={autoWinner === 'a' || !showWinnerSelector}
+                  style={{ cursor: 'pointer' }}
+                />
+              )}
+              <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
               <span className={styles.flag}>{a?.f}</span>
-            </>
+            </div>
           )}
         </div>
       </div>
