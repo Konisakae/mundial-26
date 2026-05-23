@@ -38,6 +38,8 @@ export const AVATAR_COLORS = [
   {b:'#00ff88',t:'#000'},{b:'#ff4444',t:'#fff'},
   {b:'#0088ff',t:'#fff'},{b:'#ffaa00',t:'#000'},
   {b:'#ff00ff',t:'#fff'},{b:'#00cccc',t:'#000'},
+  {b:'#ff6600',t:'#fff'},{b:'#00dd99',t:'#000'},
+  {b:'#dd00ff',t:'#fff'},
 ]
 
 export const PHASES = [
