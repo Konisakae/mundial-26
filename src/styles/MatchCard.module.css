@@ -55,6 +55,8 @@
   font-size: 0.6rem;
   flex-shrink: 0;
   transition: all 0.2s;
+  min-width: 2.5rem;
+  min-height: 1.2rem;
 }
 
 .matchId {
