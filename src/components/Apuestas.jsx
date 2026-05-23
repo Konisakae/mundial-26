@@ -19,6 +19,7 @@ export default function Apuestas({
   getCurrentJornada,
   confirmJornada,
   r16Substitutions = {},
+  availableThirds = {},
 }) {
   const [selectedJornada, setSelectedJornada] = useState(1)
   const currentJornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
@@ -105,6 +106,7 @@ export default function Apuestas({
                 editable={!isBlocked}
                 isConfirmed={isConfirmed || isBlocked}
                 r16Substitutions={r16Substitutions}
+                availableThirds={availableThirds}
               />
             )
           })}

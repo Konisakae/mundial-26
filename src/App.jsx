@@ -376,6 +376,7 @@ export default function App() {
             getCurrentJornada={getCurrentJornada}
             confirmJornada={confirmJornada}
             r16Substitutions={r16Substitutions}
+            availableThirds={availableThirds}
           />
         )}
         {tab === 'todas' && (
