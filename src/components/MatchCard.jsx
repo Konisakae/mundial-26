@@ -1,6 +1,7 @@
 import { TEAMS } from '../data/teams'
 import { GROUP_COLORS } from '../data/groupColors'
 import { useIsMobile } from '../hooks/useIsMobile'
+import { calcPts } from '../utils/scoring'
 import styles from '../styles/MatchCard.module.css'
 
 export default function MatchCard({
@@ -121,6 +122,9 @@ export default function MatchCard({
 
   const homeGroupInfo = extractGroupInfo(match.h)
   const awayGroupInfo = extractGroupInfo(match.a)
+
+  // Calcular puntos de la predicción
+  const points = value && actual ? calcPts(value, actual, match) : null
 
   // Si se selecciona un tercero, mostrar "3º [GRUPO]"
   const selectedThirdGroup = selectedThirds[match.id]
@@ -354,6 +358,11 @@ export default function MatchCard({
           {actual.winner && (
             <>
               {' - Ganador: '}<span className={styles.actualValue}>{actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
+            </>
+          )}
+          {points !== null && (
+            <>
+              {' - Puntos: '}<span className={styles.actualValue}>{points}</span>
             </>
           )}
         </div>
