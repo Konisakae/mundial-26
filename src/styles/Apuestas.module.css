@@ -43,14 +43,16 @@
 }
 
 .groupSelect,
-.phaseSelect {
+.phaseSelect,
+.jornadalSelect {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .groupSelect label,
-.phaseSelect label {
+.phaseSelect label,
+.jornadalSelect label {
   font-size: 0.875rem;
   color: #94a3b8;
   font-weight: 500;
