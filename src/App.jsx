@@ -26,6 +26,7 @@ export default function App() {
   const [simulatedJornadas, setSimulatedJornadas] = useState({ 1: false, 2: false, 3: false })
   const [r16Substitutions, setR16Substitutions] = useState({})
   const [octavosSubstitutions, setOctavosSubstitutions] = useState({})
+  const [octavosGroupInfo, setOctavosGroupInfo] = useState({})
   const [r16Confirmed, setR16Confirmed] = useState(false)
   const [selectedThirds, setSelectedThirds] = useState({})
 
@@ -41,6 +42,7 @@ export default function App() {
     const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
     const subs = storage.get('wc26_r16Substitutions', {})
     const octSubs = storage.get('wc26_octavosSubstitutions', {})
+    const octGroupInfo = storage.get('wc26_octavosGroupInfo', {})
     const r16Conf = storage.get('wc26_r16Confirmed', false)
     const selThirds = storage.get('wc26_selectedThirds', {})
 
@@ -49,6 +51,7 @@ export default function App() {
     setSimulatedJornadas(simJornadas)
     setR16Substitutions(subs)
     setOctavosSubstitutions(octSubs)
+    setOctavosGroupInfo(octGroupInfo)
     setR16Confirmed(r16Conf)
     setSelectedThirds(selThirds)
     setLoading(false)
@@ -287,12 +290,16 @@ export default function App() {
     setPredictions({})
     setSimulatedJornadas({ 1: false, 2: false, 3: false })
     setR16Substitutions({})
+    setOctavosSubstitutions({})
+    setOctavosGroupInfo({})
     setSelectedThirds({})
 
     storage.set('wc26_actuals', {})
     storage.set('wc26_predictions', {})
     storage.set('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
     storage.set('wc26_r16Substitutions', {})
+    storage.set('wc26_octavosSubstitutions', {})
+    storage.set('wc26_octavosGroupInfo', {})
     storage.set('wc26_selectedThirds', {})
   }
 
@@ -374,6 +381,24 @@ export default function App() {
 
     // Mapeo de ganadores R16 → Octavos
     const octavosSubs = {}
+    const octavosGroupInfoMap = {}
+
+    // Función para extraer info de grupo de una referencia
+    const extractGroupInfoFromRef = (ref) => {
+      // Formato: "1.º A", "2.º B", "3.º A", etc.
+      const match = ref.match(/^(\d+)\.º\s*(.+)$/i)
+      if (match) {
+        return { position: match[1], group: match[2] }
+      }
+      // Si es un multi-option como "3.º A/B/C", devolver el primero
+      if (ref.includes('3.º') && ref.includes('/')) {
+        const match2 = ref.match(/^(\d+)\.º\s*([A-Z])/)
+        if (match2) {
+          return { position: match2[1], group: match2[2] }
+        }
+      }
+      return null
+    }
 
     // Función para obtener el ganador de un partido
     const getWinner = (matchId) => {
@@ -431,17 +456,72 @@ export default function App() {
       85: [96, 87],
     }
 
-    // Generar substituciones
+    // Generar substituciones y extraer info de grupo
     Object.entries(r16ToOctavos).forEach(([r16Id, [octId, r16IdPair]]) => {
-      const winner1 = getWinner(Number(r16Id))
-      const winner2 = getWinner(Number(r16IdPair))
+      const r16IdNum = Number(r16Id)
+      const r16IdPairNum = Number(r16IdPair)
+      const match1 = MATCHES.find(m => m.id === r16IdNum)
+      const match2 = MATCHES.find(m => m.id === r16IdPairNum)
 
-      if (winner1) octavosSubs[`Gan. P${r16Id}`] = winner1
-      if (winner2) octavosSubs[`Gan. P${r16IdPair}`] = winner2
+      if (match1) {
+        const actual1 = actualResults[r16IdNum]
+        const winner1 = getWinner(r16IdNum)
+
+        if (winner1) {
+          octavosSubs[`Gan. P${r16Id}`] = winner1
+
+          // Determinar cuál equipo ganó (home o away) para extraer su grupo
+          let winningRef = null
+          if (actual1.winner) {
+            winningRef = actual1.winner === 'h' ? match1.h : match1.a
+          } else {
+            const hScore = Number(actual1.h)
+            const aScore = Number(actual1.a)
+            winningRef = hScore > aScore ? match1.h : aScore > hScore ? match1.a : null
+          }
+
+          // Extraer info de grupo del equipo ganador
+          if (winningRef) {
+            const groupInfo = extractGroupInfoFromRef(winningRef)
+            if (groupInfo) {
+              octavosGroupInfoMap[`Gan. P${r16Id}`] = groupInfo
+            }
+          }
+        }
+      }
+
+      if (match2) {
+        const actual2 = actualResults[r16IdPairNum]
+        const winner2 = getWinner(r16IdPairNum)
+
+        if (winner2) {
+          octavosSubs[`Gan. P${r16IdPair}`] = winner2
+
+          // Determinar cuál equipo ganó (home o away) para extraer su grupo
+          let winningRef = null
+          if (actual2.winner) {
+            winningRef = actual2.winner === 'h' ? match2.h : match2.a
+          } else {
+            const hScore = Number(actual2.h)
+            const aScore = Number(actual2.a)
+            winningRef = hScore > aScore ? match2.h : aScore > hScore ? match2.a : null
+          }
+
+          // Extraer info de grupo del equipo ganador
+          if (winningRef) {
+            const groupInfo = extractGroupInfoFromRef(winningRef)
+            if (groupInfo) {
+              octavosGroupInfoMap[`Gan. P${r16IdPair}`] = groupInfo
+            }
+          }
+        }
+      }
     })
 
     setOctavosSubstitutions(octavosSubs)
+    setOctavosGroupInfo(octavosGroupInfoMap)
     storage.set('wc26_octavosSubstitutions', octavosSubs)
+    storage.set('wc26_octavosGroupInfo', octavosGroupInfoMap)
   }
 
   // Obtener predicciones en formato compatible con calcTotalPts (estructura antigua)
@@ -534,6 +614,7 @@ export default function App() {
             isAdmin={isAdmin}
             r16Substitutions={r16Substitutions}
             octavosSubstitutions={octavosSubstitutions}
+            octavosGroupInfo={octavosGroupInfo}
             r16Confirmed={r16Confirmed}
             confirmR16={confirmR16}
             selectedThirds={selectedThirds}
@@ -570,6 +651,7 @@ export default function App() {
             confirmJornada={confirmJornada}
             r16Substitutions={r16Substitutions}
             octavosSubstitutions={octavosSubstitutions}
+            octavosGroupInfo={octavosGroupInfo}
             availableThirds={availableThirds}
             selectedThirds={selectedThirds}
           />

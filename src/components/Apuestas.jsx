@@ -21,6 +21,7 @@ export default function Apuestas({
   confirmJornada,
   r16Substitutions = {},
   octavosSubstitutions = {},
+  octavosGroupInfo = {},
   availableThirds = {},
   selectedThirds = {},
 }) {
@@ -110,6 +111,7 @@ export default function Apuestas({
                 isConfirmed={isConfirmed || isBlocked}
                 r16Substitutions={r16Substitutions}
                 octavosSubstitutions={octavosSubstitutions}
+                octavosGroupInfo={octavosGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}
@@ -187,6 +189,7 @@ export default function Apuestas({
                 editable={true}
                 r16Substitutions={r16Substitutions}
                 octavosSubstitutions={octavosSubstitutions}
+                octavosGroupInfo={octavosGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}

@@ -18,6 +18,7 @@ export default function MatchCard({
   isConfirmed = false,
   r16Substitutions = {},
   octavosSubstitutions = {},
+  octavosGroupInfo = {},
   selectedThirds = {},
   availableThirds = {},
   onSelectThird = null,
@@ -129,12 +130,17 @@ export default function MatchCard({
 
   // Si se selecciona un tercero, mostrar "3º [GRUPO]"
   const selectedThirdGroup = selectedThirds[match.id]
+
+  // Buscar info de grupo en octavosGroupInfo si es una referencia a ganador
+  const homeOctavoGroupInfo = octavosGroupInfo[match.h]
+  const awayOctavoGroupInfo = octavosGroupInfo[match.a]
+
   const homeDisplay = (homeOptions.length > 0 && selectedThirdGroup)
     ? { position: '3', group: selectedThirdGroup }
-    : (homeGroupInfo || { position: '-', group: '-' })
+    : (homeOctavoGroupInfo || homeGroupInfo || { position: '-', group: '-' })
   const awayDisplay = (awayOptions.length > 0 && selectedThirdGroup)
     ? { position: '3', group: selectedThirdGroup }
-    : (awayGroupInfo || { position: '-', group: '-' })
+    : (awayOctavoGroupInfo || awayGroupInfo || { position: '-', group: '-' })
 
   return (
     <div className={styles.matchCard}>
