@@ -108,9 +108,14 @@ export default function MatchCard({
   const awayGroupInfo = extractGroupInfo(match.a)
   const isElimination = match.ph !== 'G'
 
-  // Mostrar placeholders si no hay info de grupo válida
-  const homeDisplay = homeGroupInfo || { position: '-', group: '-' }
-  const awayDisplay = awayGroupInfo || { position: '-', group: '-' }
+  // Si se selecciona un tercero, mostrar "3º [GRUPO]"
+  const selectedThirdGroup = selectedThirds[match.id]
+  const homeDisplay = (homeOptions.length > 0 && selectedThirdGroup)
+    ? { position: '3', group: selectedThirdGroup }
+    : (homeGroupInfo || { position: '-', group: '-' })
+  const awayDisplay = (awayOptions.length > 0 && selectedThirdGroup)
+    ? { position: '3', group: selectedThirdGroup }
+    : (awayGroupInfo || { position: '-', group: '-' })
 
   return (
     <div className={styles.matchCard}>
