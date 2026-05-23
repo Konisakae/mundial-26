@@ -91,6 +91,9 @@ export default function Evolucion({ participants, predictions, actuals }) {
         cornerRadius: 4,
       },
       zoom: {
+        limits: {
+          y: { min: 0, max: 300 },
+        },
         zoom: {
           wheel: {
             enabled: true,
@@ -105,6 +108,7 @@ export default function Evolucion({ participants, predictions, actuals }) {
           enabled: true,
           mode: 'xy',
           modifierKey: 'ctrl',
+          scaleMode: 'xy',
         },
       },
     },
@@ -129,7 +133,8 @@ export default function Evolucion({ participants, predictions, actuals }) {
       },
       y: {
         beginAtZero: true,
-        max: 50,
+        min: 0,
+        max: 300,
         grid: {
           color: 'rgba(255,255,255,0.05)',
           drawBorder: false,
@@ -137,6 +142,12 @@ export default function Evolucion({ participants, predictions, actuals }) {
         ticks: {
           color: '#94a3b8',
           font: { size: 11 },
+          callback: function(value) {
+            if (Number.isInteger(value)) {
+              return value
+            }
+            return ''
+          },
         },
       },
     },
