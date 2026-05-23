@@ -18,6 +18,7 @@ export default function Apuestas({
   getCurrentJornada,
   confirmJornada,
 }) {
+  const [selectedJornada, setSelectedJornada] = useState(1)
   const currentJornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
 
   if (!participant) {
@@ -134,7 +135,9 @@ export default function Apuestas({
           {[1, 2, 3].map(j => (
             <button
               key={j}
-              className={`${styles.tabBtn} ${confirmed[j] ? styles.tabConfirmed : j === currentJornada ? styles.tabCurrent : styles.tabPending}`}
+              onClick={() => setSelectedJornada(j)}
+              disabled={!confirmed[j] && j !== currentJornada}
+              className={`${styles.tabBtn} ${selectedJornada === j ? styles.tabActive : ''} ${confirmed[j] ? styles.tabConfirmed : j === currentJornada ? styles.tabCurrent : styles.tabPending}`}
             >
               Jornada {j}
               <span className={styles.tabIcon}>
@@ -147,7 +150,7 @@ export default function Apuestas({
 
       {phase === 'G' ? (
         <div className={styles.jornadasContainer}>
-          {[1, 2, 3].map(j => renderJornada(j))}
+          {renderJornada(selectedJornada)}
         </div>
       ) : (
         <div className={styles.matches}>
