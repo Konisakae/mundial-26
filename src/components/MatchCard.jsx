@@ -227,7 +227,6 @@ export default function MatchCard({
         </div>
 
         <div className={styles.score}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
             {editable && !isConfirmed ? (
               <>
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -275,7 +274,7 @@ export default function MatchCard({
                   )}
                 </div>
                 {showWinnerDisplay && (
-                  <span style={{ fontSize: '0.85rem', color: '#00d9ff' }}>
+                  <span style={{ fontSize: '0.85rem', color: '#00d9ff', marginTop: '0.5rem', display: 'block' }}>
                     Ganador: {
                       autoWinner ? (autoWinner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) :
                       (value?.winner ? (value.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) : '-')
@@ -298,7 +297,7 @@ export default function MatchCard({
                       )}
                     </div>
                     {showWinnerDisplay && (
-                      <span style={{ fontSize: '0.85rem', color: '#00d9ff' }}>
+                      <span style={{ fontSize: '0.85rem', color: '#00d9ff', marginTop: '0.5rem', display: 'block' }}>
                         Ganador: {
                           autoWinner ? (autoWinner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) :
                           ((isAdmin ? actual : value)?.winner ? ((isAdmin ? actual : value).winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)) : '-')
@@ -311,7 +310,6 @@ export default function MatchCard({
                 )}
               </>
             )}
-          </div>
         </div>
 
         <div className={styles.team}>
