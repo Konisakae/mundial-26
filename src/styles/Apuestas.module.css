@@ -42,17 +42,13 @@
   align-items: center;
 }
 
-.groupSelect,
-.phaseSelect,
-.jornadalSelect {
+.phaseSelect {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.groupSelect label,
-.phaseSelect label,
-.jornadalSelect label {
+.phaseSelect label {
   font-size: 0.875rem;
   color: #94a3b8;
   font-weight: 500;
@@ -80,58 +76,134 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-.jornadaProgressSection {
-  margin-top: 0.5rem;
-}
-
-.jornadaProgress {
+/* Tabs de jornadas */
+.jornadaTabs {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.5rem;
 }
 
-.jornadaTab {
+.tabBtn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.375rem;
-  flex: 1;
+  transition: all 0.2s;
 }
 
-.jornadaLabel {
-  font-size: 0.875rem;
+.tabIcon {
+  font-size: 1rem;
+}
+
+.tabConfirmed {
+  background: rgba(0, 217, 255, 0.2);
+  border: 2px solid #00d9ff;
+  color: #00d9ff;
+}
+
+.tabCurrent {
+  background: rgba(255, 100, 100, 0.2);
+  border: 2px solid #ff6464;
+  color: #ff6464;
+}
+
+.tabPending {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Contenedor de jornadas */
+.jornadasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Secciones de jornada */
+.jornadaSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.jornadaConfirmed {
+  border: 2px solid #00d9ff;
+  background: rgba(0, 217, 255, 0.05);
+}
+
+.jornadaCurrent {
+  border: 2px solid #ff6464;
+  background: rgba(255, 100, 100, 0.05);
+}
+
+.jornadaBlocked {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.02);
+  opacity: 0.6;
+}
+
+.jornadaDefault {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.jornadaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jornadaHeading {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(0, 217, 255, 0.2);
+  border: 1px solid #00d9ff;
+  border-radius: 0.25rem;
+  color: #00d9ff;
   font-weight: 500;
 }
 
-.jornadaStatus {
-  font-size: 1rem;
-  margin-left: auto;
+.badgeCurrent {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 100, 100, 0.2);
+  border: 1px solid #ff6464;
+  border-radius: 0.25rem;
+  color: #ff6464;
+  font-weight: 500;
 }
 
-.jornadaTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #00d9ff;
-  padding: 0.5rem 0;
-  border-bottom: 2px solid #00d9ff;
-}
-
-.jornadaCompleted {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #00ff00;
-  padding: 1rem;
-  background: rgba(0, 255, 0, 0.1);
-  border: 1px solid rgba(0, 255, 0, 0.3);
-  border-radius: 0.5rem;
-  text-align: center;
+.badgeBlocked {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.25rem;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .matches {
@@ -144,11 +216,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 1rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
+  border-radius: 0.375rem;
+  margin-top: 0.5rem;
 }
 
 .confirmBtn {

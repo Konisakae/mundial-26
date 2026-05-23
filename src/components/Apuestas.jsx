@@ -18,36 +18,93 @@ export default function Apuestas({
   getCurrentJornada,
   confirmJornada,
 }) {
-  // Para fases no-grupo, usar jornada como dummy variable
-  const jornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
+  const currentJornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
 
   if (!participant) {
     return <div className={styles.noParticipant}>Selecciona un participante primero</div>
-  }
-
-  let matches
-  if (phase === 'G') {
-    matches = getMatchesForJornada(MATCHES, jornada)
-  } else {
-    matches = MATCHES.filter(m => m.ph === phase)
   }
 
   const pIdx = participant ? participant.charCodeAt(0) : 0
   const pAv = AVATAR_COLORS[pIdx % AVATAR_COLORS.length]
   const userPreds = predictions[participant]?.predictions || {}
   const confirmed = predictions[participant]?.confirmed || { 1: false, 2: false, 3: false }
-  const isCurrentJornadalConfirmed = confirmed[jornada] || false
 
-  // Validar si todos los partidos de la jornada actual están rellenos
-  const allFilled = phase === 'G' && matches.every(m => {
-    const pred = userPreds[m.id]
-    return pred && pred.h !== '' && pred.h !== undefined && pred.a !== '' && pred.a !== undefined
-  })
+  // Renderizar sección de jornada
+  const renderJornada = (j) => {
+    const matches = getMatchesForJornada(MATCHES, j)
+    const isConfirmed = confirmed[j]
+    const isCurrent = j === currentJornada
+    const isBlocked = !isConfirmed && !isCurrent
 
-  const handleConfirmJornada = () => {
-    if (allFilled && confirmJornada) {
-      confirmJornada(participant, jornada)
+    // Validar si todos los partidos están rellenos
+    const allFilled = matches.every(m => {
+      const pred = userPreds[m.id]
+      return pred && pred.h !== '' && pred.h !== undefined && pred.a !== '' && pred.a !== undefined
+    })
+
+    const handleConfirm = () => {
+      if (allFilled && confirmJornada) {
+        confirmJornada(participant, j)
+      }
     }
+
+    // Determinar clase de borde
+    let borderClass = styles.jornadaDefault
+    if (isConfirmed) borderClass = styles.jornadaConfirmed
+    if (isCurrent && !isConfirmed) borderClass = styles.jornadaCurrent
+    if (isBlocked) borderClass = styles.jornadaBlocked
+
+    return (
+      <div key={j} className={`${styles.jornadaSection} ${borderClass}`}>
+        <div className={styles.jornadaHeader}>
+          <h3 className={styles.jornadaHeading}>
+            Jornada {j}
+            {isConfirmed && <span className={styles.badge}>✓ Confirmada</span>}
+            {isCurrent && !isConfirmed && <span className={styles.badgeCurrent}>En progreso</span>}
+            {isBlocked && <span className={styles.badgeBlocked}>Pendiente</span>}
+          </h3>
+        </div>
+
+        <div className={styles.matches}>
+          {matches.map(match => {
+            const pred = userPreds[match.id] || { h: '', a: '' }
+            const actual = actuals[match.id]
+
+            return (
+              <MatchCard
+                key={match.id}
+                match={match}
+                value={pred}
+                onChange={(field, val) => {
+                  if (!isBlocked) {
+                    savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)
+                  }
+                }}
+                actual={actual}
+                showActual={true}
+                editable={!isBlocked}
+                isConfirmed={isConfirmed || isBlocked}
+              />
+            )
+          })}
+        </div>
+
+        {isCurrent && !isConfirmed && (
+          <div className={styles.confirmSection}>
+            <button
+              onClick={handleConfirm}
+              disabled={!allFilled}
+              className={styles.confirmBtn}
+            >
+              Confirmar jornada {j}
+            </button>
+            {!allFilled && (
+              <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+            )}
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -73,64 +130,43 @@ export default function Apuestas({
       </div>
 
       {phase === 'G' && (
-        <div className={styles.jornadaProgressSection}>
-          <div className={styles.jornadaProgress}>
-            {[1, 2, 3].map(j => (
-              <div key={j} className={styles.jornadaTab}>
-                <span className={styles.jornadaLabel}>Jornada {j}</span>
-                <span className={styles.jornadaStatus}>
-                  {confirmed[j] ? '✓' : j === jornada ? '🔄' : '🔒'}
-                </span>
-              </div>
-            ))}
-          </div>
+        <div className={styles.jornadaTabs}>
+          {[1, 2, 3].map(j => (
+            <button
+              key={j}
+              className={`${styles.tabBtn} ${confirmed[j] ? styles.tabConfirmed : j === currentJornada ? styles.tabCurrent : styles.tabPending}`}
+            >
+              Jornada {j}
+              <span className={styles.tabIcon}>
+                {confirmed[j] ? '✓' : j === currentJornada ? '🔄' : '🔒'}
+              </span>
+            </button>
+          ))}
         </div>
       )}
 
-      {phase === 'G' && !isCurrentJornadalConfirmed && (
-        <div className={styles.jornadaTitle}>
-          Jornada {jornada}
+      {phase === 'G' ? (
+        <div className={styles.jornadasContainer}>
+          {[1, 2, 3].map(j => renderJornada(j))}
         </div>
-      )}
+      ) : (
+        <div className={styles.matches}>
+          {MATCHES.filter(m => m.ph === phase).map(match => {
+            const pred = userPreds[match.id] || { h: '', a: '' }
+            const actual = actuals[match.id]
 
-      {phase === 'G' && isCurrentJornadalConfirmed && (
-        <div className={styles.jornadaCompleted}>
-          ✓ Jornada {jornada} confirmada
-        </div>
-      )}
-
-      <div className={styles.matches}>
-        {matches.map(match => {
-          const pred = userPreds[match.id] || { h: '', a: '' }
-          const actual = actuals[match.id]
-
-          return (
-            <MatchCard
-              key={match.id}
-              match={match}
-              value={pred}
-              onChange={(field, val) => savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
-              actual={actual}
-              showActual={true}
-              editable={true}
-              isConfirmed={isCurrentJornadalConfirmed}
-            />
-          )
-        })}
-      </div>
-
-      {phase === 'G' && !isCurrentJornadalConfirmed && (
-        <div className={styles.confirmSection}>
-          <button
-            onClick={handleConfirmJornada}
-            disabled={!allFilled}
-            className={styles.confirmBtn}
-          >
-            Confirmar jornada {jornada}
-          </button>
-          {!allFilled && (
-            <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
-          )}
+            return (
+              <MatchCard
+                key={match.id}
+                match={match}
+                value={pred}
+                onChange={(field, val) => savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
+                actual={actual}
+                showActual={true}
+                editable={true}
+              />
+            )
+          })}
         </div>
       )}
     </div>
