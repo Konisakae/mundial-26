@@ -44,15 +44,15 @@ export default function Evolucion({ participants, predictions, actuals }) {
   }
 
   // Usar datos simulados si hay muy pocos resultados (para demostración)
-  const useSimulation = lastMatchWithResults < 20
-  if (useSimulation && lastMatchWithResults === 0) {
+  const useSimulation = lastMatchWithResults === 0
+  if (useSimulation) {
     lastMatchWithResults = 104
   }
 
   const visibleMatchIds = matchIds.filter(id => id <= lastMatchWithResults)
 
   const getPointsAfterMatch = (participant, upToMatchId) => {
-    if (useSimulation && lastMatchWithResults === 104) {
+    if (useSimulation) {
       // Generar puntos simulados basados en el índice del participante
       const pIndex = participants.indexOf(participant)
       const basePoints = pIndex * 5
