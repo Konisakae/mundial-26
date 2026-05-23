@@ -19,11 +19,10 @@ export default function Grupos({ actuals }) {
       if (!teams[h]) teams[h] = { name: h, code: match.h, flag: TEAMS[match.h].f, pj: 0, g: 0, gc: 0, pts: 0 }
       if (!teams[a]) teams[a] = { name: a, code: match.a, flag: TEAMS[match.a].f, pj: 0, g: 0, gc: 0, pts: 0 }
 
-      teams[h].pj++
-      teams[a].pj++
-
       const actual = actuals[match.id]
       if (actual !== undefined) {
+        teams[h].pj++
+        teams[a].pj++
         const hg = actual.h
         const ag = actual.a
 

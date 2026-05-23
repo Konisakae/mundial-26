@@ -58,16 +58,22 @@ export default function MatchCard({
   let h, a
   if (homeOptions.length > 0) {
     // Es una referencia a terceros
-    const selectedGroup = homeOptions.find(g => selectedThirds[g])
-    h = selectedGroup ? TEAMS[selectedThirds[selectedGroup]] : null
+    const selectedGroupForMatch = selectedThirds[match.id]
+    if (selectedGroupForMatch && homeOptions.includes(selectedGroupForMatch)) {
+      const teamCode = availableThirds[selectedGroupForMatch]
+      h = teamCode ? TEAMS[teamCode] : null
+    }
   } else {
     h = resolveTeamCode(match.h)
   }
 
   if (awayOptions.length > 0) {
     // Es una referencia a terceros
-    const selectedGroup = awayOptions.find(g => selectedThirds[g])
-    a = selectedGroup ? TEAMS[selectedThirds[selectedGroup]] : null
+    const selectedGroupForMatch = selectedThirds[match.id]
+    if (selectedGroupForMatch && awayOptions.includes(selectedGroupForMatch)) {
+      const teamCode = availableThirds[selectedGroupForMatch]
+      a = teamCode ? TEAMS[teamCode] : null
+    }
   } else {
     a = resolveTeamCode(match.a)
   }
@@ -163,18 +169,17 @@ export default function MatchCard({
               className={styles.thirdSelector}
               onChange={(e) => {
                 const group = e.target.value
-                const team = availableThirds[group]
-                if (team && onSelectThird) onSelectThird(group, team)
+                if (onSelectThird) onSelectThird(match.id, group)
               }}
-              defaultValue=""
+              defaultValue={selectedThirds[match.id] || ''}
             >
               <option value="">Seleccionar 3º...</option>
               {homeOptions.map(group => {
                 const thirdTeam = availableThirds[group]
-                const isUsed = Object.values(selectedThirds).includes(thirdTeam)
+                const isUsedInOtherMatch = Object.entries(selectedThirds).some(([mId, g]) => g === group && mId !== match.id)
                 return (
-                  <option key={group} value={group} disabled={isUsed && !selectedThirds[group]}>
-                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsed && !selectedThirds[group] ? '(usado)' : ''}
+                  <option key={group} value={group} disabled={isUsedInOtherMatch}>
+                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsedInOtherMatch ? '(usado)' : ''}
                   </option>
                 )
               })}
@@ -256,18 +261,17 @@ export default function MatchCard({
               className={styles.thirdSelector}
               onChange={(e) => {
                 const group = e.target.value
-                const team = availableThirds[group]
-                if (team && onSelectThird) onSelectThird(group, team)
+                if (onSelectThird) onSelectThird(match.id, group)
               }}
-              defaultValue=""
+              defaultValue={selectedThirds[match.id] || ''}
             >
               <option value="">Seleccionar 3º...</option>
               {awayOptions.map(group => {
                 const thirdTeam = availableThirds[group]
-                const isUsed = Object.values(selectedThirds).includes(thirdTeam)
+                const isUsedInOtherMatch = Object.entries(selectedThirds).some(([mId, g]) => g === group && mId !== match.id)
                 return (
-                  <option key={group} value={group} disabled={isUsed && !selectedThirds[group]}>
-                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsed && !selectedThirds[group] ? '(usado)' : ''}
+                  <option key={group} value={group} disabled={isUsedInOtherMatch}>
+                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsedInOtherMatch ? '(usado)' : ''}
                   </option>
                 )
               })}

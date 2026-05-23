@@ -307,15 +307,18 @@ export default function App() {
             r16Substitutions={r16Substitutions}
             selectedThirds={selectedThirds}
             availableThirds={availableThirds}
-            onSelectThird={(group, team) => {
-              const newSelected = { ...selectedThirds, [group]: team }
+            onSelectThird={(matchId, group) => {
+              const newSelected = { ...selectedThirds, [matchId]: group }
               setSelectedThirds(newSelected)
               storage.set('wc26_selectedThirds', newSelected)
 
               // Actualizar r16Substitutions cuando se selecciona un tercero
-              const newSubs = { ...r16Substitutions, [`3.º ${group}`]: team }
-              setR16Substitutions(newSubs)
-              storage.set('wc26_r16Substitutions', newSubs)
+              const teamCode = availableThirds[group]
+              if (teamCode) {
+                const newSubs = { ...r16Substitutions, [`3.º ${group}`]: teamCode }
+                setR16Substitutions(newSubs)
+                storage.set('wc26_r16Substitutions', newSubs)
+              }
             }}
             simulatedJornadas={simulatedJornadas}
           />
