@@ -36,7 +36,7 @@ export default function MatchCard({
                 type="number"
                 min="0"
                 max="20"
-                placeholder="0"
+                placeholder="-"
                 value={value?.h ?? ''}
                 onChange={e => onChange('h', e.target.value)}
                 className={styles.input}
@@ -46,7 +46,7 @@ export default function MatchCard({
                 type="number"
                 min="0"
                 max="20"
-                placeholder="0"
+                placeholder="-"
                 value={value?.a ?? ''}
                 onChange={e => onChange('a', e.target.value)}
                 className={styles.input}
