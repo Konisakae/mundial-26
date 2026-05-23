@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { MATCHES } from '../data/matches'
 import { getMatchesForJornada, JORNADAS } from '../utils/jornadas'
 import MatchCard from './MatchCard'
+import CustomSelect from './CustomSelect'
 import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({ phase, setPhase, group, setGroup, actuals, saveActual, isAdmin }) {
@@ -37,17 +38,19 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
   return (
     <div className={styles.resultados}>
       <div className={styles.controls}>
-        <div className={styles.phaseSelect}>
-          <label>Fase:</label>
-          <select value={phase} onChange={e => setPhase(e.target.value)} className={styles.select}>
-            <option value="G">Grupos</option>
-            <option value="R16">Dieciseisavos</option>
-            <option value="OCT">Octavos</option>
-            <option value="CTO">Cuartos</option>
-            <option value="SEMI">Semifinales</option>
-            <option value="FIN">Final</option>
-          </select>
-        </div>
+        <CustomSelect
+          value={phase}
+          onChange={setPhase}
+          label="Fase:"
+          options={[
+            { value: 'G', label: 'Grupos' },
+            { value: 'R16', label: 'Dieciseisavos' },
+            { value: 'OCT', label: 'Octavos' },
+            { value: 'CTO', label: 'Cuartos' },
+            { value: 'SEMI', label: 'Semifinales' },
+            { value: 'FIN', label: 'Final' },
+          ]}
+        />
         {phase === 'G' && (
           <div className={styles.jornadalSelect}>
             <label>Jornada:</label>

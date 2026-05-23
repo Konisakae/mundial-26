@@ -1,6 +1,7 @@
 import { MATCHES } from '../data/matches'
 import { TEAMS } from '../data/teams'
 import { AVATAR_COLORS } from '../data/colors'
+import CustomSelect from './CustomSelect'
 import styles from '../styles/Todas.module.css'
 
 export default function Todas({ participants, phase, setPhase, group, setGroup, predictions, actuals }) {
@@ -20,17 +21,19 @@ export default function Todas({ participants, phase, setPhase, group, setGroup, 
             </select>
           </div>
         )}
-        <div className={styles.phaseSelect}>
-          <label>Fase:</label>
-          <select value={phase} onChange={e => setPhase(e.target.value)} className={styles.select}>
-            <option value="G">Grupos</option>
-            <option value="R16">Dieciseisavos</option>
-            <option value="OCT">Octavos</option>
-            <option value="CTO">Cuartos</option>
-            <option value="SEMI">Semifinales</option>
-            <option value="FIN">Final</option>
-          </select>
-        </div>
+        <CustomSelect
+          value={phase}
+          onChange={setPhase}
+          label="Fase:"
+          options={[
+            { value: 'G', label: 'Grupos' },
+            { value: 'R16', label: 'Dieciseisavos' },
+            { value: 'OCT', label: 'Octavos' },
+            { value: 'CTO', label: 'Cuartos' },
+            { value: 'SEMI', label: 'Semifinales' },
+            { value: 'FIN', label: 'Final' },
+          ]}
+        />
       </div>
 
       <div className={styles.matches}>

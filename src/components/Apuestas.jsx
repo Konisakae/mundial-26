@@ -4,6 +4,7 @@ import { getMatchesForJornada } from '../utils/jornadas'
 import { initials } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
 import MatchCard from './MatchCard'
+import CustomSelect from './CustomSelect'
 import styles from '../styles/Apuestas.module.css'
 
 export default function Apuestas({
@@ -122,17 +123,19 @@ export default function Apuestas({
       </div>
 
       <div className={styles.controls}>
-        <div className={styles.phaseSelect}>
-          <label>Fase:</label>
-          <select value={phase} onChange={e => setPhase(e.target.value)} className={styles.select}>
-            <option value="G">Grupos</option>
-            <option value="R16">Dieciseisavos</option>
-            <option value="OCT">Octavos</option>
-            <option value="CTO">Cuartos</option>
-            <option value="SEMI">Semifinales</option>
-            <option value="FIN">Final</option>
-          </select>
-        </div>
+        <CustomSelect
+          value={phase}
+          onChange={setPhase}
+          label="Fase:"
+          options={[
+            { value: 'G', label: 'Grupos' },
+            { value: 'R16', label: 'Dieciseisavos' },
+            { value: 'OCT', label: 'Octavos' },
+            { value: 'CTO', label: 'Cuartos' },
+            { value: 'SEMI', label: 'Semifinales' },
+            { value: 'FIN', label: 'Final' },
+          ]}
+        />
       </div>
 
       {phase === 'G' && (
