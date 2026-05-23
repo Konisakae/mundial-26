@@ -1,26 +1,24 @@
+import { useState } from 'react'
 import { MATCHES } from '../data/matches'
 import { TEAMS } from '../data/teams'
 import { AVATAR_COLORS } from '../data/colors'
+import { getMatchesForJornada } from '../utils/jornadas'
 import CustomSelect from './CustomSelect'
 import styles from '../styles/Todas.module.css'
 
-export default function Todas({ participants, phase, setPhase, group, setGroup, predictions, actuals }) {
-  const matches = MATCHES.filter(m => m.ph === phase && (phase === 'G' ? m.gr === group : true))
-  const groups = phase === 'G' ? ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'] : []
+export default function Todas({ participants, phase, setPhase, predictions, actuals }) {
+  const [jornada, setJornada] = useState(1)
+
+  let matches
+  if (phase === 'G') {
+    matches = getMatchesForJornada(MATCHES, jornada)
+  } else {
+    matches = MATCHES.filter(m => m.ph === phase)
+  }
 
   return (
     <div className={styles.todas}>
       <div className={styles.controls}>
-        {groups.length > 0 && (
-          <div className={styles.groupSelect}>
-            <label>Grupo:</label>
-            <select value={group} onChange={e => setGroup(e.target.value)} className={styles.select}>
-              {groups.map(g => (
-                <option key={g} value={g}>Grupo {g}</option>
-              ))}
-            </select>
-          </div>
-        )}
         <CustomSelect
           value={phase}
           onChange={setPhase}
@@ -34,6 +32,18 @@ export default function Todas({ participants, phase, setPhase, group, setGroup, 
             { value: 'FIN', label: 'Final' },
           ]}
         />
+        {phase === 'G' && (
+          <CustomSelect
+            value={jornada}
+            onChange={e => setJornada(parseInt(e))}
+            label="Jornada:"
+            options={[
+              { value: 1, label: 'Jornada 1' },
+              { value: 2, label: 'Jornada 2' },
+              { value: 3, label: 'Jornada 3' },
+            ]}
+          />
+        )}
       </div>
 
       <div className={styles.matches}>
