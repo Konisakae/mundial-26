@@ -32,16 +32,6 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
   return (
     <div className={styles.resultados}>
       <div className={styles.controls}>
-        {groups.length > 0 && (
-          <div className={styles.groupSelect}>
-            <label>Grupo:</label>
-            <select value={group} onChange={e => setGroup(e.target.value)} className={styles.select}>
-              {groups.map(g => (
-                <option key={g} value={g}>Grupo {g}</option>
-              ))}
-            </select>
-          </div>
-        )}
         <div className={styles.phaseSelect}>
           <label>Fase:</label>
           <select value={phase} onChange={e => setPhase(e.target.value)} className={styles.select}>
@@ -52,6 +42,16 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
             <option value="F">Final</option>
           </select>
         </div>
+        {groups.length > 0 && (
+          <div className={styles.groupSelect}>
+            <label>Grupo:</label>
+            <select value={group} onChange={e => setGroup(e.target.value)} className={styles.select}>
+              {groups.map(g => (
+                <option key={g} value={g}>Grupo {g}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className={styles.matches}>
