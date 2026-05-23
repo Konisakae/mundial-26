@@ -11,7 +11,6 @@ import {
   Filler,
 } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
-import { useRef, useEffect } from 'react'
 import { MATCHES } from '../data/matches'
 import { calcTotalPts } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
@@ -30,7 +29,6 @@ ChartJS.register(
 )
 
 export default function Evolucion({ participants, predictions, actuals }) {
-  const chartRef = useRef(null)
   const matchIds = MATCHES.map(m => m.id)
   const maxMatchId = Math.max(...matchIds)
 
@@ -112,6 +110,8 @@ export default function Evolucion({ participants, predictions, actuals }) {
     },
     scales: {
       x: {
+        min: 0,
+        max: 10,
         grid: {
           color: 'rgba(255,255,255,0.05)',
           drawBorder: false,
@@ -119,6 +119,12 @@ export default function Evolucion({ participants, predictions, actuals }) {
         ticks: {
           color: '#94a3b8',
           font: { size: 11 },
+          callback: function(value) {
+            if (typeof value === 'number' && value < matchIds.length) {
+              return `P${matchIds[value]}`
+            }
+            return value
+          },
         },
       },
       y: {
@@ -136,21 +142,10 @@ export default function Evolucion({ participants, predictions, actuals }) {
     },
   }
 
-  useEffect(() => {
-    if (chartRef.current && chartRef.current.chartInstance) {
-      const chart = chartRef.current.chartInstance
-      setTimeout(() => {
-        chart.zoom({
-          x: { min: 0, max: 10 },
-        })
-      }, 100)
-    }
-  }, [])
-
   return (
     <div className={styles.evolucion}>
       <div className={styles.chartContainer}>
-        <Line ref={chartRef} data={chartData} options={options} />
+        <Line data={chartData} options={options} />
       </div>
     </div>
   )
