@@ -1,5 +1,6 @@
 import { MATCHES } from '../data/matches'
 import { TEAMS } from '../data/teams'
+import { GROUP_COLORS } from '../data/groupColors'
 import styles from '../styles/Grupos.module.css'
 
 export default function Grupos({ actuals }) {
@@ -55,7 +56,15 @@ export default function Grupos({ actuals }) {
 
           return (
             <div key={groupId} className={styles.groupCard}>
-              <div className={styles.groupTitle}>GRUPO {groupId}</div>
+              <div
+                className={styles.groupTitle}
+                style={{
+                  borderColor: GROUP_COLORS[groupId]?.border,
+                  color: GROUP_COLORS[groupId]?.text,
+                }}
+              >
+                GRUPO {groupId}
+              </div>
 
               <div className={styles.table}>
                 <div className={styles.header}>
