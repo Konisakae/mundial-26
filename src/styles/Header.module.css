@@ -3,10 +3,6 @@
 }
 
 .container {
-  background: #253545;
-  border-radius: 8px;
-  border: 1px solid #00d9ff;
-  box-shadow: 0 0 15px #00d9ff22;
   overflow: hidden;
 }
 
