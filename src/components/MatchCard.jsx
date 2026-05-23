@@ -16,6 +16,9 @@ export default function MatchCard({
   resetBtn,
   isConfirmed = false,
   r16Substitutions = {},
+  selectedThirds = {},
+  onSelectThird = null,
+  isAdmin = false,
 }) {
   const isMobile = useIsMobile()
 
@@ -38,8 +41,35 @@ export default function MatchCard({
     return teamObj?.n || code
   }
 
-  const h = resolveTeamCode(match.h)
-  const a = resolveTeamCode(match.a)
+  // Detectar y extraer referencias a terceros
+  const isThirdPlaceRef = (code) => code && code.includes('3.º')
+  const extractThirdGroupOptions = (code) => {
+    if (!code || !code.includes('3.º')) return []
+    const match = code.match(/3\.º\s*(.+)/i)
+    if (!match) return []
+    return match[1].split('/').map(g => g.trim())
+  }
+
+  const homeOptions = extractThirdGroupOptions(match.h)
+  const awayOptions = extractThirdGroupOptions(match.a)
+
+  // Resolver equipos, considerando terceros seleccionados
+  let h, a
+  if (homeOptions.length > 0) {
+    // Es una referencia a terceros
+    const selectedGroup = homeOptions.find(g => selectedThirds[g])
+    h = selectedGroup ? TEAMS[selectedThirds[selectedGroup]] : null
+  } else {
+    h = resolveTeamCode(match.h)
+  }
+
+  if (awayOptions.length > 0) {
+    // Es una referencia a terceros
+    const selectedGroup = awayOptions.find(g => selectedThirds[g])
+    a = selectedGroup ? TEAMS[selectedThirds[selectedGroup]] : null
+  } else {
+    a = resolveTeamCode(match.a)
+  }
 
   // Extraer grupo/clasificación en eliminatorias (ej: "1.º A" → "1º A")
   const extractGroupInfo = (teamStr) => {
@@ -127,7 +157,26 @@ export default function MatchCard({
       <div className={styles.matchBody}>
         <div className={styles.team}>
           <span className={styles.flag}>{h?.f}</span>
-          <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
+          {homeOptions.length > 0 && isAdmin && !h ? (
+            <select
+              className={styles.thirdSelector}
+              onChange={(e) => {
+                const group = e.target.value
+                const team = e.target.selectedOptions[0].dataset.team
+                if (onSelectThird) onSelectThird(group, team)
+              }}
+              defaultValue=""
+            >
+              <option value="">Seleccionar 3º...</option>
+              {homeOptions.map(group => (
+                <option key={group} value={group} data-team={selectedThirds[group] || ''} disabled={selectedThirds[group] ? false : true}>
+                  {group}º - {selectedThirds[group] ? TEAMS[selectedThirds[group]]?.n : 'Sin seleccionar'}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
+          )}
         </div>
 
         <div className={styles.score}>
@@ -197,7 +246,26 @@ export default function MatchCard({
         </div>
 
         <div className={styles.team}>
-          <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
+          {awayOptions.length > 0 && isAdmin && !a ? (
+            <select
+              className={styles.thirdSelector}
+              onChange={(e) => {
+                const group = e.target.value
+                const team = e.target.selectedOptions[0].dataset.team
+                if (onSelectThird) onSelectThird(group, team)
+              }}
+              defaultValue=""
+            >
+              <option value="">Seleccionar 3º...</option>
+              {awayOptions.map(group => (
+                <option key={group} value={group} data-team={selectedThirds[group] || ''} disabled={selectedThirds[group] ? false : true}>
+                  {group}º - {selectedThirds[group] ? TEAMS[selectedThirds[group]]?.n : 'Sin seleccionar'}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
+          )}
           <span className={styles.flag}>{a?.f}</span>
         </div>
       </div>

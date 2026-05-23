@@ -263,7 +263,16 @@ export default function App() {
             isAdmin={isAdmin}
             r16Substitutions={r16Substitutions}
             selectedThirds={selectedThirds}
-            onConfirmThirds={confirmThirdPlaces}
+            onSelectThird={(group, team) => {
+              const newSelected = { ...selectedThirds, [group]: team }
+              setSelectedThirds(newSelected)
+              storage.set('wc26_selectedThirds', newSelected)
+
+              // Actualizar r16Substitutions cuando se selecciona un tercero
+              const newSubs = { ...r16Substitutions, [`3.º ${group}`]: team }
+              setR16Substitutions(newSubs)
+              storage.set('wc26_r16Substitutions', newSubs)
+            }}
             simulatedJornadas={simulatedJornadas}
           />
         )}

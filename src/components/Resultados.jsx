@@ -3,12 +3,11 @@ import { MATCHES } from '../data/matches'
 import { getMatchesForJornada, JORNADAS } from '../utils/jornadas'
 import MatchCard from './MatchCard'
 import CustomSelect from './CustomSelect'
-import ThirdPlaceSelector from './ThirdPlaceSelector'
 import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({
   phase, setPhase, group, setGroup, actuals, saveActual, isAdmin, r16Substitutions,
-  selectedThirds, onConfirmThirds, simulatedJornadas,
+  selectedThirds, onSelectThird, simulatedJornadas,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -70,19 +69,6 @@ export default function Resultados({
         )}
       </div>
 
-      {phase === 'R16' && isAdmin && !selectedThirds.completed && simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3] && (
-        <ThirdPlaceSelector
-          actuals={actuals}
-          onConfirm={onConfirmThirds}
-        />
-      )}
-
-      {phase === 'R16' && !selectedThirds.completed && !(simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3]) && (
-        <div className={styles.message}>
-          Simula las 3 jornadas de grupos primero para ver los dieciseisavos.
-        </div>
-      )}
-
       <div className={styles.matches}>
         {matches.map(match => {
           const actual = actuals[match.id]
@@ -101,6 +87,9 @@ export default function Resultados({
               saveBtn={isAdmin && !actual ? () => handleSave(match.id) : null}
               resetBtn={isAdmin && actual ? () => handleReset(match.id) : null}
               r16Substitutions={r16Substitutions}
+              selectedThirds={selectedThirds}
+              onSelectThird={onSelectThird}
+              isAdmin={isAdmin}
             />
           )
         })}
