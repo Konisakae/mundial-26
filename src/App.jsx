@@ -98,6 +98,42 @@ export default function App() {
     storage.set('wc26_predictions', next)
   }
 
+  // Simular jornada 1 con datos de prueba
+  const simulateJornada1 = () => {
+    // Partidos de jornada 1 (matchIds 1-8)
+    const jornada1Matches = MATCHES.filter(m => m.ph === 'G' && m.id <= 8)
+
+    // Generar resultados reales simulados
+    const simActuals = {}
+    jornada1Matches.forEach(m => {
+      simActuals[m.id] = {
+        h: Math.floor(Math.random() * 4),
+        a: Math.floor(Math.random() * 4)
+      }
+    })
+
+    // Generar predicciones para todos los participantes
+    const simPreds = {}
+    participants.forEach(p => {
+      const pPreds = {}
+      jornada1Matches.forEach(m => {
+        pPreds[m.id] = {
+          h: Math.floor(Math.random() * 4),
+          a: Math.floor(Math.random() * 4)
+        }
+      })
+      simPreds[p] = {
+        predictions: pPreds,
+        confirmed: { 1: true, 2: false, 3: false }
+      }
+    })
+
+    setActuals(simActuals)
+    setPredictions(simPreds)
+    storage.set('wc26_actuals', simActuals)
+    storage.set('wc26_predictions', simPreds)
+  }
+
   // Obtener predicciones en formato compatible con calcTotalPts (estructura antigua)
   const getPredictionsForScoring = () => {
     const result = {}
@@ -125,6 +161,7 @@ export default function App() {
         setIsAdmin={setIsAdmin}
         tab={tab}
         setTab={setTab}
+        simulateJornada1={simulateJornada1}
       />
 
       <div className={styles.content}>

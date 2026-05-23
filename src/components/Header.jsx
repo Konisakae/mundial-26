@@ -9,6 +9,7 @@ export default function Header({
   addParticipant, totalPts,
   isAdmin, setIsAdmin,
   tab, setTab,
+  simulateJornada1,
 }) {
   const [newName, setNewName] = useState('')
   const [pinVal, setPinVal] = useState('')
@@ -50,6 +51,14 @@ export default function Header({
                 <span className={styles.scoreText}>{totalPts} pts</span>
               </div>
             )}
+
+            <button
+              onClick={simulateJornada1}
+              className={styles.simulateBtn}
+              title="Simular jornada 1 con datos de prueba"
+            >
+              🎯 Simular
+            </button>
 
             {!showPin ? (
               <button
