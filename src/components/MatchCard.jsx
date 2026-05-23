@@ -20,6 +20,7 @@ export default function MatchCard({
   availableThirds = {},
   onSelectThird = null,
   isAdmin = false,
+  groupsCompleted = false,
 }) {
   const isMobile = useIsMobile()
 
@@ -269,6 +270,8 @@ export default function MatchCard({
                 if (onSelectThird) onSelectThird(match.id, group)
               }}
               defaultValue={selectedThirds[match.id] || ''}
+              disabled={!groupsCompleted}
+              title={!groupsCompleted ? 'Completa la jornada 3 para seleccionar terceros' : ''}
             >
               <option value="">Seleccionar 3º...</option>
               {awayOptions.map(group => {
