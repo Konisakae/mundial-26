@@ -70,6 +70,7 @@
   font-size: 0.65rem;
   flex-shrink: 0;
   color: #94a3b8;
+  min-width: 3rem;
 }
 
 .rightSection {
