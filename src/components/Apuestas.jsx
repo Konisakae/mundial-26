@@ -126,6 +126,7 @@ export default function Apuestas({
           <label>Fase:</label>
           <select value={phase} onChange={e => setPhase(e.target.value)} className={styles.select}>
             <option value="G">Grupos</option>
+            <option value="R32">32avos</option>
             <option value="R16">16avos</option>
             <option value="QF">Cuartos</option>
             <option value="SF">Semis</option>
