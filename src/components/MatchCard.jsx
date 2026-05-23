@@ -202,25 +202,28 @@ export default function MatchCard({
               })}
             </select>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              {isElimination && (
-                <input
-                  type="radio"
-                  name={`winner-${match.id}`}
-                  checked={autoWinner === 'h' || (isAdmin ? actual : value)?.winner === 'h'}
-                  onChange={() => {
-                    if (!isAdmin && onSetPredictedWinner) {
-                      onSetPredictedWinner(match.id, 'h')
-                    } else if (isAdmin && onSetWinner) {
-                      onSetWinner(match.id, 'h')
-                    }
+            <>
+              <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
+              {isElimination && hasResult && (
+                <span
+                  onClick={() => {
+                    if (!isAdmin && onSetPredictedWinner && isDraw) onSetPredictedWinner(match.id, 'h')
+                    else if (isAdmin && onSetWinner && isDraw) onSetWinner(match.id, 'h')
                   }}
-                  disabled={autoWinner === 'h' || !showWinnerSelector}
-                  style={{ cursor: 'pointer' }}
+                  style={{
+                    display: 'inline-block',
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    border: '2px solid #00d9ff',
+                    marginLeft: '0.5rem',
+                    background: (autoWinner === 'h' || (isAdmin ? actual : value)?.winner === 'h') ? '#00d9ff' : 'transparent',
+                    cursor: isDraw ? 'pointer' : 'default',
+                    opacity: isDraw ? 1 : 0.5,
+                  }}
                 />
               )}
-              <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
-            </div>
+            </>
           )}
         </div>
 
@@ -336,26 +339,29 @@ export default function MatchCard({
               })}
             </select>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              {isElimination && (
-                <input
-                  type="radio"
-                  name={`winner-${match.id}`}
-                  checked={autoWinner === 'a' || (isAdmin ? actual : value)?.winner === 'a'}
-                  onChange={() => {
-                    if (!isAdmin && onSetPredictedWinner) {
-                      onSetPredictedWinner(match.id, 'a')
-                    } else if (isAdmin && onSetWinner) {
-                      onSetWinner(match.id, 'a')
-                    }
+            <>
+              <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
+              {isElimination && hasResult && (
+                <span
+                  onClick={() => {
+                    if (!isAdmin && onSetPredictedWinner && isDraw) onSetPredictedWinner(match.id, 'a')
+                    else if (isAdmin && onSetWinner && isDraw) onSetWinner(match.id, 'a')
                   }}
-                  disabled={autoWinner === 'a' || !showWinnerSelector}
-                  style={{ cursor: 'pointer' }}
+                  style={{
+                    display: 'inline-block',
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    border: '2px solid #00d9ff',
+                    marginLeft: '0.5rem',
+                    background: (autoWinner === 'a' || (isAdmin ? actual : value)?.winner === 'a') ? '#00d9ff' : 'transparent',
+                    cursor: isDraw ? 'pointer' : 'default',
+                    opacity: isDraw ? 1 : 0.5,
+                  }}
                 />
               )}
-              <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
               <span className={styles.flag}>{a?.f}</span>
-            </div>
+            </>
           )}
         </div>
       </div>
