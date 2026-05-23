@@ -134,7 +134,7 @@ export default function Evolucion({ participants, predictions, actuals }) {
       y: {
         beginAtZero: true,
         min: 0,
-        max: 300,
+        max: 50,
         grid: {
           color: 'rgba(255,255,255,0.05)',
           drawBorder: false,
