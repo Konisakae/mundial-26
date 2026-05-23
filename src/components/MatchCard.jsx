@@ -37,8 +37,14 @@ export default function MatchCard({
                 min="0"
                 max="20"
                 placeholder="-"
-                value={value?.h ?? 0}
+                value={value?.h === '' || value?.h === undefined ? '' : value?.h}
                 onChange={e => onChange('h', e.target.value)}
+                onKeyDown={e => {
+                  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && (!value?.h || value?.h === '')) {
+                    e.preventDefault()
+                    onChange('h', '0')
+                  }
+                }}
                 className={styles.input}
               />
               <span>-</span>
@@ -47,8 +53,14 @@ export default function MatchCard({
                 min="0"
                 max="20"
                 placeholder="-"
-                value={value?.a ?? 0}
+                value={value?.a === '' || value?.a === undefined ? '' : value?.a}
                 onChange={e => onChange('a', e.target.value)}
+                onKeyDown={e => {
+                  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && (!value?.a || value?.a === '')) {
+                    e.preventDefault()
+                    onChange('a', '0')
+                  }
+                }}
                 className={styles.input}
               />
               {saveBtn && (
