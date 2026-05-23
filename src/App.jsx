@@ -384,19 +384,21 @@ export default function App() {
     const octavosGroupInfoMap = {}
 
     // Función para extraer info de grupo de una referencia
-    const extractGroupInfoFromRef = (ref) => {
+    const extractGroupInfoFromRef = (ref, matchId) => {
+      // Si es una referencia con múltiples opciones (3.º A/B/C/D/F), usar el grupo seleccionado
+      if (ref.includes('3.º') && ref.includes('/')) {
+        const selectedGroup = selectedThirds[matchId]
+        if (selectedGroup) {
+          return { position: '3', group: selectedGroup }
+        }
+      }
+
       // Formato: "1.º A", "2.º B", "3.º A", etc.
-      const match = ref.match(/^(\d+)\.º\s*(.+)$/i)
+      const match = ref.match(/^(\d+)\.º\s*([A-Z])$/i)
       if (match) {
         return { position: match[1], group: match[2] }
       }
-      // Si es un multi-option como "3.º A/B/C", devolver el primero
-      if (ref.includes('3.º') && ref.includes('/')) {
-        const match2 = ref.match(/^(\d+)\.º\s*([A-Z])/)
-        if (match2) {
-          return { position: match2[1], group: match2[2] }
-        }
-      }
+
       return null
     }
 
@@ -482,7 +484,7 @@ export default function App() {
 
           // Extraer info de grupo del equipo ganador
           if (winningRef) {
-            const groupInfo = extractGroupInfoFromRef(winningRef)
+            const groupInfo = extractGroupInfoFromRef(winningRef, r16IdNum)
             if (groupInfo) {
               octavosGroupInfoMap[`Gan. P${r16Id}`] = groupInfo
             }
@@ -509,7 +511,7 @@ export default function App() {
 
           // Extraer info de grupo del equipo ganador
           if (winningRef) {
-            const groupInfo = extractGroupInfoFromRef(winningRef)
+            const groupInfo = extractGroupInfoFromRef(winningRef, r16IdPairNum)
             if (groupInfo) {
               octavosGroupInfoMap[`Gan. P${r16IdPair}`] = groupInfo
             }
