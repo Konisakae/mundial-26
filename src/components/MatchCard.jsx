@@ -219,7 +219,6 @@ export default function MatchCard({
                     marginLeft: '0.5rem',
                     background: (autoWinner === 'h' || (isAdmin ? actual : value)?.winner === 'h') ? '#00d9ff' : 'transparent',
                     cursor: isDraw ? 'pointer' : 'default',
-                    opacity: isDraw ? 1 : 0.5,
                   }}
                 />
               )}
@@ -356,7 +355,6 @@ export default function MatchCard({
                     marginLeft: '0.5rem',
                     background: (autoWinner === 'a' || (isAdmin ? actual : value)?.winner === 'a') ? '#00d9ff' : 'transparent',
                     cursor: isDraw ? 'pointer' : 'default',
-                    opacity: isDraw ? 1 : 0.5,
                   }}
                 />
               )}
