@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from 'react'
 import { TEAMS } from '../data/teams'
 import styles from '../styles/MatchCard.module.css'
 
@@ -16,13 +15,6 @@ export default function MatchCard({
 }) {
   const h = TEAMS[match.h]
   const a = TEAMS[match.a]
-  const firstChangeH = useRef(true)
-  const firstChangeA = useRef(true)
-
-  useEffect(() => {
-    if (value?.h !== undefined && value?.h !== '') firstChangeH.current = false
-    if (value?.a !== undefined && value?.a !== '') firstChangeA.current = false
-  }, [value?.h, value?.a])
 
   return (
     <div className={styles.matchCard}>
@@ -45,22 +37,8 @@ export default function MatchCard({
                 min="0"
                 max="20"
                 placeholder="-"
-                value={value?.h === '' || value?.h === undefined ? '' : value?.h}
-                onChange={e => {
-                  const newVal = e.target.value
-                  if (firstChangeH.current && newVal === '1') {
-                    onChange('h', '0')
-                    firstChangeH.current = false
-                  } else {
-                    onChange('h', newVal || '0')
-                    firstChangeH.current = false
-                  }
-                }}
-                onFocus={e => {
-                  if (!value?.h && value?.h !== 0) {
-                    onChange('h', '0')
-                  }
-                }}
+                value={value?.h ?? 0}
+                onChange={e => onChange('h', e.target.value)}
                 className={styles.input}
               />
               <span>-</span>
@@ -69,22 +47,8 @@ export default function MatchCard({
                 min="0"
                 max="20"
                 placeholder="-"
-                value={value?.a === '' || value?.a === undefined ? '' : value?.a}
-                onChange={e => {
-                  const newVal = e.target.value
-                  if (firstChangeA.current && newVal === '1') {
-                    onChange('a', '0')
-                    firstChangeA.current = false
-                  } else {
-                    onChange('a', newVal || '0')
-                    firstChangeA.current = false
-                  }
-                }}
-                onFocus={e => {
-                  if (!value?.a && value?.a !== 0) {
-                    onChange('a', '0')
-                  }
-                }}
+                value={value?.a ?? 0}
+                onChange={e => onChange('a', e.target.value)}
                 className={styles.input}
               />
               {saveBtn && (
