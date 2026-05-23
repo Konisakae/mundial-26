@@ -10,6 +10,7 @@ import {
   Legend,
   Filler,
 } from 'chart.js'
+import zoomPlugin from 'chartjs-plugin-zoom'
 import { MATCHES } from '../data/matches'
 import { calcTotalPts } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
@@ -23,7 +24,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  zoomPlugin
 )
 
 export default function Evolucion({ participants, predictions, actuals }) {
@@ -87,6 +89,23 @@ export default function Evolucion({ participants, predictions, actuals }) {
         borderWidth: 1,
         padding: 10,
         cornerRadius: 4,
+      },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+            speed: 0.1,
+          },
+          pinch: {
+            enabled: true,
+          },
+          mode: 'x',
+        },
+        pan: {
+          enabled: true,
+          mode: 'x',
+          modifierKey: 'ctrl',
+        },
       },
     },
     scales: {
