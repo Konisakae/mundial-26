@@ -98,14 +98,26 @@ export default function App() {
     storage.set('wc26_predictions', next)
   }
 
-  // Simular jornada 1 con datos de prueba
-  const simulateJornada1 = () => {
-    // Partidos de jornada 1 (matchIds 1-8)
-    const jornada1Matches = MATCHES.filter(m => m.ph === 'G' && m.id <= 8)
+  // Simular datos de prueba
+  const simulate = (level) => {
+    let maxMatchId = 0
+    const confirmedJornadas = { 1: false, 2: false, 3: false }
+
+    if (level === 1) {
+      // Simular 1: primeros 24 partidos (3 jornadas completas)
+      maxMatchId = 24
+      confirmedJornadas = { 1: true, 2: true, 3: true }
+    } else if (level === 2) {
+      // Simular 2: primeros 72 partidos (todas las jornadas de grupos)
+      maxMatchId = 72
+      confirmedJornadas = { 1: true, 2: true, 3: true }
+    }
+
+    const matchesToSimulate = MATCHES.filter(m => m.ph === 'G' && m.id <= maxMatchId)
 
     // Generar resultados reales simulados
     const simActuals = {}
-    jornada1Matches.forEach(m => {
+    matchesToSimulate.forEach(m => {
       simActuals[m.id] = {
         h: Math.floor(Math.random() * 4),
         a: Math.floor(Math.random() * 4)
@@ -116,7 +128,7 @@ export default function App() {
     const simPreds = {}
     participants.forEach(p => {
       const pPreds = {}
-      jornada1Matches.forEach(m => {
+      matchesToSimulate.forEach(m => {
         pPreds[m.id] = {
           h: Math.floor(Math.random() * 4),
           a: Math.floor(Math.random() * 4)
@@ -124,7 +136,7 @@ export default function App() {
       })
       simPreds[p] = {
         predictions: pPreds,
-        confirmed: { 1: true, 2: false, 3: false }
+        confirmed: confirmedJornadas
       }
     })
 
@@ -161,7 +173,7 @@ export default function App() {
         setIsAdmin={setIsAdmin}
         tab={tab}
         setTab={setTab}
-        simulateJornada1={simulateJornada1}
+        simulate={simulate}
       />
 
       <div className={styles.content}>

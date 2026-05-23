@@ -9,7 +9,7 @@ export default function Header({
   addParticipant, totalPts,
   isAdmin, setIsAdmin,
   tab, setTab,
-  simulateJornada1,
+  simulate,
 }) {
   const [newName, setNewName] = useState('')
   const [pinVal, setPinVal] = useState('')
@@ -53,11 +53,19 @@ export default function Header({
             )}
 
             <button
-              onClick={simulateJornada1}
+              onClick={() => simulate(1)}
               className={styles.simulateBtn}
-              title="Simular jornada 1 con datos de prueba"
+              title="Simular primeros 24 partidos (3 jornadas)"
             >
-              🎯 Simular
+              🎯 Simular 1
+            </button>
+
+            <button
+              onClick={() => simulate(2)}
+              className={styles.simulateBtn}
+              title="Simular fase de grupos completa (72 partidos)"
+            >
+              🎯 Simular 2
             </button>
 
             {!showPin ? (
