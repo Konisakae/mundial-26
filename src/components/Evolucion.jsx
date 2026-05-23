@@ -69,7 +69,7 @@ export default function Evolucion({ participants, predictions, actuals }) {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
