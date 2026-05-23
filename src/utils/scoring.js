@@ -24,24 +24,22 @@ export const calcPts = (pred, actual, match = null) => {
   if (match && match.ph !== 'G') {
     const predRes = getRes(pred.h, pred.a)
     const actualRes = getRes(actual.h, actual.a)
-    const isDraw = predRes === 'X' && actualRes === 'X'
 
-    if (isDraw) {
-      // En empate: marcador exacto vale 4 en lugar de 5 (el 5 es si también aciertas ganador)
-      if (total === 4) total = 4
-      // Si aciertas el ganador: +2
-      if (actual.winner && pred.winner && pred.winner === actual.winner) total += 2
-    } else if (actualRes !== '') {
-      // Si no es empate pero aciertas ganador: +2
-      if (actual.winner && pred.winner && pred.winner === actual.winner) total += 2
+    // Si aciertas el ganador: +2 (sea automático o manual)
+    const predWinner = pred.winner || (Number(pred.h) > Number(pred.a) ? 'h' : Number(pred.h) < Number(pred.a) ? 'a' : null)
+    const actualWinner = actual.winner || (Number(actual.h) > Number(actual.a) ? 'h' : Number(actual.h) < Number(actual.a) ? 'a' : null)
+    if (predWinner && actualWinner && predWinner === actualWinner) {
+      // Ganador correcto: +2, y bonus de resultado exacto (5 en lugar de 4) si aplica
+      if (total === 4) {
+        total = 5
+      }
+      total += 2
     }
+    return total
   }
 
-  // Para marcador exacto en grupos (o en eliminatorias no empate): bonus
-  if (!match || match.ph === 'G') {
-    return total === 4 ? 5 : total
-  }
-  return total
+  // En grupos: marcador exacto vale 5 puntos
+  return total === 4 ? 5 : total
 }
 
 // Iniciales de un nombre (máx. 2 letras)
