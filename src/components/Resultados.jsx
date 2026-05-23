@@ -7,7 +7,7 @@ import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({
   phase, setPhase, group, setGroup, actuals, saveActual, isAdmin, r16Substitutions,
-  selectedThirds, onSelectThird, simulatedJornadas,
+  selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -88,6 +88,7 @@ export default function Resultados({
               resetBtn={isAdmin && actual ? () => handleReset(match.id) : null}
               r16Substitutions={r16Substitutions}
               selectedThirds={selectedThirds}
+              availableThirds={availableThirds}
               onSelectThird={onSelectThird}
               isAdmin={isAdmin}
             />

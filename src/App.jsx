@@ -230,6 +230,49 @@ export default function App() {
 
   const totalPts = calcTotalPts(participant, getPredictionsForScoring(), actuals, MATCHES)
 
+  // Calcular terceros disponibles para R16
+  const getAvailableThirds = () => {
+    const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+    const thirds = {}
+    groups.forEach(g => {
+      const groupMatches = MATCHES.filter(m => m.ph === 'G' && m.gr === g)
+      const teams = new Set()
+      groupMatches.forEach(m => {
+        teams.add(m.h)
+        teams.add(m.a)
+      })
+
+      const standings = Array.from(teams)
+        .map(t => {
+          let points = 0, goalsFor = 0, goalsAgainst = 0
+          groupMatches.forEach(match => {
+            if (!actuals[match.id]) return
+            const { h, a } = actuals[match.id]
+            if (match.h === t) {
+              goalsFor += h
+              goalsAgainst += a
+              if (h > a) points += 3
+              else if (h === a) points += 1
+            } else if (match.a === t) {
+              goalsFor += a
+              goalsAgainst += h
+              if (a > h) points += 3
+              else if (a === h) points += 1
+            }
+          })
+          return { team: t, points, goalsFor, goalsAgainst, diff: goalsFor - goalsAgainst }
+        })
+        .sort((a, b) => b.points - a.points || b.diff - a.diff || b.goalsFor - a.goalsFor)
+
+      if (standings[2]) {
+        thirds[g] = standings[2].team
+      }
+    })
+    return thirds
+  }
+
+  const availableThirds = getAvailableThirds()
+
   if (loading) return (
     <div className={styles.loading}>Cargando...</div>
   )
@@ -263,6 +306,7 @@ export default function App() {
             isAdmin={isAdmin}
             r16Substitutions={r16Substitutions}
             selectedThirds={selectedThirds}
+            availableThirds={availableThirds}
             onSelectThird={(group, team) => {
               const newSelected = { ...selectedThirds, [group]: team }
               setSelectedThirds(newSelected)

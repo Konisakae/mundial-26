@@ -17,6 +17,7 @@ export default function MatchCard({
   isConfirmed = false,
   r16Substitutions = {},
   selectedThirds = {},
+  availableThirds = {},
   onSelectThird = null,
   isAdmin = false,
 }) {
@@ -162,17 +163,21 @@ export default function MatchCard({
               className={styles.thirdSelector}
               onChange={(e) => {
                 const group = e.target.value
-                const team = e.target.selectedOptions[0].dataset.team
-                if (onSelectThird) onSelectThird(group, team)
+                const team = availableThirds[group]
+                if (team && onSelectThird) onSelectThird(group, team)
               }}
               defaultValue=""
             >
               <option value="">Seleccionar 3º...</option>
-              {homeOptions.map(group => (
-                <option key={group} value={group} data-team={selectedThirds[group] || ''} disabled={selectedThirds[group] ? false : true}>
-                  {group}º - {selectedThirds[group] ? TEAMS[selectedThirds[group]]?.n : 'Sin seleccionar'}
-                </option>
-              ))}
+              {homeOptions.map(group => {
+                const thirdTeam = availableThirds[group]
+                const isUsed = Object.values(selectedThirds).includes(thirdTeam)
+                return (
+                  <option key={group} value={group} disabled={isUsed && !selectedThirds[group]}>
+                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsed && !selectedThirds[group] ? '(usado)' : ''}
+                  </option>
+                )
+              })}
             </select>
           ) : (
             <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
@@ -251,17 +256,21 @@ export default function MatchCard({
               className={styles.thirdSelector}
               onChange={(e) => {
                 const group = e.target.value
-                const team = e.target.selectedOptions[0].dataset.team
-                if (onSelectThird) onSelectThird(group, team)
+                const team = availableThirds[group]
+                if (team && onSelectThird) onSelectThird(group, team)
               }}
               defaultValue=""
             >
               <option value="">Seleccionar 3º...</option>
-              {awayOptions.map(group => (
-                <option key={group} value={group} data-team={selectedThirds[group] || ''} disabled={selectedThirds[group] ? false : true}>
-                  {group}º - {selectedThirds[group] ? TEAMS[selectedThirds[group]]?.n : 'Sin seleccionar'}
-                </option>
-              ))}
+              {awayOptions.map(group => {
+                const thirdTeam = availableThirds[group]
+                const isUsed = Object.values(selectedThirds).includes(thirdTeam)
+                return (
+                  <option key={group} value={group} disabled={isUsed && !selectedThirds[group]}>
+                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsed && !selectedThirds[group] ? '(usado)' : ''}
+                  </option>
+                )
+              })}
             </select>
           ) : (
             <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
