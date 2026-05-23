@@ -38,7 +38,14 @@ export default function MatchCard({
                 max="20"
                 placeholder="-"
                 value={value?.h === '' || value?.h === undefined ? '' : value?.h}
-                onChange={e => onChange('h', e.target.value || '0')}
+                onChange={e => {
+                  const newVal = e.target.value
+                  if ((!value?.h || value?.h === '') && newVal === '1') {
+                    onChange('h', '0')
+                  } else {
+                    onChange('h', newVal || '0')
+                  }
+                }}
                 onFocus={e => {
                   if (!value?.h && value?.h !== 0) {
                     onChange('h', '0')
@@ -53,7 +60,14 @@ export default function MatchCard({
                 max="20"
                 placeholder="-"
                 value={value?.a === '' || value?.a === undefined ? '' : value?.a}
-                onChange={e => onChange('a', e.target.value || '0')}
+                onChange={e => {
+                  const newVal = e.target.value
+                  if ((!value?.a || value?.a === '') && newVal === '1') {
+                    onChange('a', '0')
+                  } else {
+                    onChange('a', newVal || '0')
+                  }
+                }}
                 onFocus={e => {
                   if (!value?.a && value?.a !== 0) {
                     onChange('a', '0')
