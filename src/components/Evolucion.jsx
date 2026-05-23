@@ -85,12 +85,13 @@ export default function Evolucion({ participants, predictions, actuals }) {
     plugins: {
       legend: {
         display: true,
-        position: 'top',
+        position: 'bottom',
         labels: {
           color: '#cbd5e1',
-          font: { size: 12 },
+          font: { size: 12, weight: '500' },
           padding: 15,
           usePointStyle: true,
+          boxWidth: 12,
         },
       },
       tooltip: {

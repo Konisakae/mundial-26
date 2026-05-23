@@ -31,13 +31,13 @@ export const PHASE_COLORS = {
   FIN: {a:PALETTE[0],b:PALETTE[0],t:'#ffffff',glow:PALETTE[0]},
 }
 
-// Colores de avatar por índice de participante
+// Colores de avatar por índice de participante (vibrantes para gráficos)
 export const AVATAR_COLORS = [
-  {b:'#dbeafe',t:'#1e40af'},{b:'#d1fae5',t:'#065f46'},
-  {b:'#fef3c7',t:'#78350f'},{b:'#ede9fe',t:'#4c1d95'},
-  {b:'#ffe4e6',t:'#881337'},{b:'#ffedd5',t:'#7c2d12'},
-  {b:'#fce7f3',t:'#831843'},{b:'#fee2e2',t:'#7f1d1d'},
-  {b:'#dcfce7',t:'#14532d'},{b:'#e0f2fe',t:'#0369a1'},
+  {b:'#00d9ff',t:'#000'},{b:'#ff006e',t:'#fff'},
+  {b:'#ffc600',t:'#000'},{b:'#7b2cbf',t:'#fff'},
+  {b:'#00ff88',t:'#000'},{b:'#ff4444',t:'#fff'},
+  {b:'#0088ff',t:'#fff'},{b:'#ffaa00',t:'#000'},
+  {b:'#ff00ff',t:'#fff'},{b:'#00cccc',t:'#000'},
 ]
 
 export const PHASES = [
