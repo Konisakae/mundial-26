@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MATCHES } from '../data/matches'
-import { TEAMS } from '../data/teams'
+import MatchCard from './MatchCard'
 import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({ phase, setPhase, group, setGroup, actuals, saveActual, isAdmin }) {
@@ -56,76 +56,22 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
 
       <div className={styles.matches}>
         {matches.map(match => {
-          const h = TEAMS[match.h]
-          const a = TEAMS[match.a]
           const actual = actuals[match.id]
+          const editing_data = editing[match.id]
 
           return (
-            <div key={match.id} className={styles.match}>
-              <div className={styles.matchHeader}>
-                <span className={styles.date}>{match.dt}</span>
-                <span className={styles.time}>{match.tm}</span>
-              </div>
-
-              <div className={styles.matchBody}>
-                <div className={styles.team}>
-                  <span className={styles.flag}>{h?.f}</span>
-                  <span className={styles.name}>{h?.n}</span>
-                </div>
-
-                <div className={styles.score}>
-                  {isAdmin && !actual ? (
-                    <>
-                      <input
-                        type="number"
-                        min="0"
-                        max="20"
-                        placeholder="0"
-                        value={editing[match.id]?.h ?? ''}
-                        onChange={e => handleInputChange(match.id, 'h', e.target.value)}
-                        className={styles.input}
-                      />
-                      <span>-</span>
-                      <input
-                        type="number"
-                        min="0"
-                        max="20"
-                        placeholder="0"
-                        value={editing[match.id]?.a ?? ''}
-                        onChange={e => handleInputChange(match.id, 'a', e.target.value)}
-                        className={styles.input}
-                      />
-                      <button
-                        onClick={() => handleSave(match.id)}
-                        className={styles.saveBtn}
-                      >
-                        ✓
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <span className={styles.gol}>{actual?.h ?? '-'}</span>
-                      <span>-</span>
-                      <span className={styles.gol}>{actual?.a ?? '-'}</span>
-                      {isAdmin && actual && (
-                        <button
-                          onClick={() => handleReset(match.id)}
-                          className={styles.resetBtn}
-                          title="Borrar resultado"
-                        >
-                          ↺
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
-
-                <div className={styles.team}>
-                  <span className={styles.name}>{a?.n}</span>
-                  <span className={styles.flag}>{a?.f}</span>
-                </div>
-              </div>
-            </div>
+            <MatchCard
+              key={match.id}
+              match={match}
+              value={isAdmin && !actual ? editing_data : null}
+              onChange={isAdmin && !actual ? (field, val) => handleInputChange(match.id, field, val) : null}
+              onReset={isAdmin && actual ? () => handleReset(match.id) : null}
+              actual={actual}
+              showActual={false}
+              editable={isAdmin && !actual}
+              saveBtn={isAdmin && !actual ? () => handleSave(match.id) : null}
+              resetBtn={isAdmin && actual ? () => handleReset(match.id) : null}
+            />
           )
         })}
       </div>
