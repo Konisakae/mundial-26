@@ -57,13 +57,15 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
       <div className={styles.grid}>
         {groups.map(groupId => {
           const standings = getGroupStandings(groupId)
+          const groupMatches = MATCHES.filter(m => m.ph === 'G' && m.gr === groupId)
+          const hasResults = groupMatches.some(m => actuals[m.id] !== undefined)
 
           return (
             <div
               key={groupId}
               className={styles.groupCard}
               style={{
-                borderColor: '#64748b',
+                borderColor: '#94a3b8',
                 borderWidth: '2px',
               }}
             >
@@ -90,16 +92,18 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
                 <div className={styles.rows}>
                   {standings.map((team, i) => {
                     let rowClass = styles.row
-                    if (i === 0) rowClass += ` ${styles.rowFirst}`
-                    else if (i === 1) rowClass += ` ${styles.rowSecond}`
-                    else if (i === 2) {
-                      if (selectedGroups.size > 0 && !selectedGroups.has(groupId)) {
-                        rowClass += ` ${styles.rowFourth}`
-                      } else {
-                        rowClass += ` ${styles.rowThird}`
+                    if (hasResults) {
+                      if (i === 0) rowClass += ` ${styles.rowFirst}`
+                      else if (i === 1) rowClass += ` ${styles.rowSecond}`
+                      else if (i === 2) {
+                        if (selectedGroups.size > 0 && !selectedGroups.has(groupId)) {
+                          rowClass += ` ${styles.rowFourth}`
+                        } else {
+                          rowClass += ` ${styles.rowThird}`
+                        }
                       }
+                      else if (i === 3) rowClass += ` ${styles.rowFourth}`
                     }
-                    else if (i === 3) rowClass += ` ${styles.rowFourth}`
                     return (
                       <div key={team.name} className={rowClass}>
                       <div className={styles.teamCell}>
