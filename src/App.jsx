@@ -24,7 +24,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const parts = storage.get('wc26_participants', DEFAULT_PARTICIPANTS)
+    const parts = DEFAULT_PARTICIPANTS
     setParticipants(parts)
     storage.set('wc26_participants', parts)
 
