@@ -10,6 +10,7 @@ export default function Header({
   isAdmin, setIsAdmin,
   tab, setTab,
   simulate,
+  simulatedJornadas,
 }) {
   const [newName, setNewName] = useState('')
   const [pinVal, setPinVal] = useState('')
@@ -52,21 +53,37 @@ export default function Header({
               </div>
             )}
 
-            <button
-              onClick={() => simulate(1)}
-              className={styles.simulateBtn}
-              title="Simular primeros 24 partidos (3 jornadas)"
-            >
-              🎯 Simular 1
-            </button>
+            {isAdmin && (
+              <>
+                <button
+                  onClick={() => simulate(1)}
+                  className={styles.simulateBtn}
+                  title="Simular jornada 1: 24 partidos (1-24)"
+                >
+                  SJ1 {simulatedJornadas[1] ? '✓' : ''}
+                </button>
 
-            <button
-              onClick={() => simulate(2)}
-              className={styles.simulateBtn}
-              title="Simular fase de grupos completa (72 partidos)"
-            >
-              🎯 Simular 2
-            </button>
+                <button
+                  onClick={() => simulate(2)}
+                  disabled={!simulatedJornadas[1]}
+                  className={styles.simulateBtn}
+                  title="Simular jornada 2: 24 partidos (25-48)"
+                  style={{ opacity: simulatedJornadas[1] ? 1 : 0.5 }}
+                >
+                  SJ2 {simulatedJornadas[2] ? '✓' : simulatedJornadas[1] ? '' : '🔒'}
+                </button>
+
+                <button
+                  onClick={() => simulate(3)}
+                  disabled={!simulatedJornadas[1] || !simulatedJornadas[2]}
+                  className={styles.simulateBtn}
+                  title="Simular jornada 3: 24 partidos (49-72)"
+                  style={{ opacity: simulatedJornadas[1] && simulatedJornadas[2] ? 1 : 0.5 }}
+                >
+                  SJ3 {simulatedJornadas[3] ? '✓' : simulatedJornadas[1] && simulatedJornadas[2] ? '' : '🔒'}
+                </button>
+              </>
+            )}
 
             {!showPin ? (
               <button
