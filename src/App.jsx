@@ -111,6 +111,25 @@ export default function App() {
     }
   }
 
+  const setPredictedWinner = (matchId, winner) => {
+    if (!participant) return
+    const next = {
+      ...predictions,
+      [participant]: {
+        predictions: {
+          ...(predictions[participant]?.predictions || {}),
+          [matchId]: {
+            ...(predictions[participant]?.predictions[matchId] || {}),
+            winner: winner || undefined
+          }
+        },
+        confirmed: predictions[participant]?.confirmed || { 1: false, 2: false, 3: false },
+      },
+    }
+    setPredictions(next)
+    storage.set('wc26_predictions', next)
+  }
+
   const addParticipant = (name) => {
     if (!name || participants.includes(name)) return
     const next = [...participants, name]
@@ -429,6 +448,7 @@ export default function App() {
             setGroup={setGroup}
             predictions={predictions}
             savePred={savePred}
+            setPredictedWinner={setPredictedWinner}
             actuals={actuals}
             getCurrentJornada={getCurrentJornada}
             confirmJornada={confirmJornada}

@@ -15,6 +15,7 @@ export default function Apuestas({
   setGroup,
   predictions,
   savePred,
+  setPredictedWinner,
   actuals,
   getCurrentJornada,
   confirmJornada,
@@ -108,6 +109,7 @@ export default function Apuestas({
                 isConfirmed={isConfirmed || isBlocked}
                 r16Substitutions={r16Substitutions}
                 availableThirds={availableThirds}
+                onSetPredictedWinner={setPredictedWinner}
               />
             )
           })}
@@ -183,6 +185,7 @@ export default function Apuestas({
                 r16Substitutions={r16Substitutions}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
+                onSetPredictedWinner={setPredictedWinner}
               />
             )
           })}

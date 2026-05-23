@@ -22,6 +22,7 @@ export default function MatchCard({
   isAdmin = false,
   groupsCompleted = false,
   onSetWinner = null,
+  onSetPredictedWinner = null,
 }) {
   const isMobile = useIsMobile()
 
@@ -252,9 +253,13 @@ export default function MatchCard({
           ) : showWinnerSelector ? (
             <select
               onChange={(e) => {
-                if (onSetWinner) onSetWinner(match.id, e.target.value)
+                if (isAdmin || !onSetPredictedWinner) {
+                  if (onSetWinner) onSetWinner(match.id, e.target.value)
+                } else {
+                  if (onSetPredictedWinner) onSetPredictedWinner(match.id, e.target.value)
+                }
               }}
-              value={actual?.winner || ''}
+              value={(isAdmin ? actual : value)?.winner || ''}
               className={styles.input}
               style={{ minWidth: '80px' }}
             >
