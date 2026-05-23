@@ -24,6 +24,7 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const [simulatedJornadas, setSimulatedJornadas] = useState({ 1: false, 2: false, 3: false })
+  const [r16Substitutions, setR16Substitutions] = useState({})
 
   useEffect(() => {
     const parts = DEFAULT_PARTICIPANTS
@@ -35,10 +36,12 @@ export default function App() {
     preds = storage.ensureNewFormat(preds)
     const acts = storage.get('wc26_actuals', {})
     const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
+    const subs = storage.get('wc26_r16Substitutions', {})
 
     setPredictions(preds)
     setActuals(acts)
     setSimulatedJornadas(simJornadas)
+    setR16Substitutions(subs)
     setLoading(false)
   }, [])
 
@@ -160,56 +163,15 @@ export default function App() {
 
     const groupWinners = getAllGroupWinners(actuals)
 
-    // Estructura de dieciseisavos: 1º grupos enfrentan 2º grupos
-    // P73: 1º A vs 2º B
-    // P74: 1º C vs 2º D
-    // P75: 1º E vs 2º F
-    // P76: 1º G vs 2º H
-    // P77: 1º I vs 2º J
-    // P78: 1º K vs 2º L
-    // P79: 1º B vs 2º A
-    // P80: 1º D vs 2º C
-    // P81: 1º F vs 2º E
-    // P82: 1º H vs 2º G
-    // P83: 1º J vs 2º I
-    // P84: 1º L vs 2º K
-    // ... (resto de combinaciones)
-
-    const pairings = [
-      { match: 73, h: '1.º A', a: '2.º B' },
-      { match: 74, h: '1.º C', a: '2.º D' },
-      { match: 75, h: '1.º E', a: '2.º F' },
-      { match: 76, h: '1.º G', a: '2.º H' },
-      { match: 77, h: '1.º I', a: '2.º J' },
-      { match: 78, h: '1.º K', a: '2.º L' },
-      { match: 79, h: '1.º B', a: '2.º A' },
-      { match: 80, h: '1.º D', a: '2.º C' },
-      { match: 81, h: '1.º F', a: '2.º E' },
-      { match: 82, h: '1.º H', a: '2.º G' },
-      { match: 83, h: '1.º J', a: '2.º I' },
-      { match: 84, h: '1.º L', a: '2.º K' },
-      { match: 85, h: '3.º A/B/C/D/F', a: '1.º ....' },
-      { match: 86, h: '3.º A/B/C/D/F', a: '1.º ....' },
-      { match: 87, h: '3.º A/B/C/D/F', a: '1.º ....' },
-      { match: 88, h: '3.º A/B/C/D/F', a: '1.º ....' }
-    ]
-
-    const newActuals = { ...actuals }
-
-    // Llenar con equipos reales (simplificado por ahora)
-    pairings.slice(0, 12).forEach(p => {
-      const groupH = p.h.split('.º ')[1]
-      const groupA = p.a.split('.º ')[1]
-      const h = groupWinners[groupH]?.first || 'TBD'
-      const a = groupWinners[groupA]?.second || 'TBD'
-
-      if (h !== 'TBD' && a !== 'TBD') {
-        newActuals[p.match] = { h: 0, a: 0 }
-      }
+    // Crear mapeo de substituciones para referencias en dieciseisavos
+    const subs = {}
+    Object.entries(groupWinners).forEach(([group, winners]) => {
+      if (winners.first) subs[`1.º ${group}`] = winners.first
+      if (winners.second) subs[`2.º ${group}`] = winners.second
     })
 
-    setActuals(newActuals)
-    storage.set('wc26_actuals', newActuals)
+    setR16Substitutions(subs)
+    storage.set('wc26_r16Substitutions', subs)
   }
 
   // Obtener predicciones en formato compatible con calcTotalPts (estructura antigua)
@@ -253,6 +215,7 @@ export default function App() {
             actuals={actuals}
             saveActual={saveActual}
             isAdmin={isAdmin}
+            r16Substitutions={r16Substitutions}
           />
         )}
         {tab === 'grupos' && <Grupos actuals={actuals} />}

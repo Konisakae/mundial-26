@@ -15,10 +15,31 @@ export default function MatchCard({
   saveBtn,
   resetBtn,
   isConfirmed = false,
+  r16Substitutions = {},
 }) {
   const isMobile = useIsMobile()
-  const h = TEAMS[match.h]
-  const a = TEAMS[match.a]
+
+  // Resolver nombres de equipos, con substituciones para dieciseisavos
+  const resolveTeamCode = (code) => {
+    const substituted = r16Substitutions[code] || code
+    return TEAMS[substituted]
+  }
+
+  const getTeamDisplay = (code, teamObj, isMobile) => {
+    // Si es una referencia de dieciseisavos sin substitución, mostrar código
+    if (code.includes('.º') && !teamObj) {
+      return code
+    }
+    // Si es mobile, mostrar código de equipo
+    if (isMobile && teamObj) {
+      return teamObj.c || code
+    }
+    // Si no es mobile, mostrar nombre completo
+    return teamObj?.n || code
+  }
+
+  const h = resolveTeamCode(match.h)
+  const a = resolveTeamCode(match.a)
 
   // Extraer grupo/clasificación en eliminatorias (ej: "1.º A" → "1º A")
   const extractGroupInfo = (teamStr) => {
@@ -106,7 +127,7 @@ export default function MatchCard({
       <div className={styles.matchBody}>
         <div className={styles.team}>
           <span className={styles.flag}>{h?.f}</span>
-          <span className={styles.name}>{isMobile ? match.h : h?.n}</span>
+          <span className={styles.name}>{getTeamDisplay(match.h, h, isMobile)}</span>
         </div>
 
         <div className={styles.score}>
@@ -176,7 +197,7 @@ export default function MatchCard({
         </div>
 
         <div className={styles.team}>
-          <span className={styles.name}>{isMobile ? match.a : a?.n}</span>
+          <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
           <span className={styles.flag}>{a?.f}</span>
         </div>
       </div>

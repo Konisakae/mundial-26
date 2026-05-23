@@ -5,7 +5,7 @@ import MatchCard from './MatchCard'
 import CustomSelect from './CustomSelect'
 import styles from '../styles/Resultados.module.css'
 
-export default function Resultados({ phase, setPhase, group, setGroup, actuals, saveActual, isAdmin }) {
+export default function Resultados({ phase, setPhase, group, setGroup, actuals, saveActual, isAdmin, r16Substitutions }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
 
@@ -83,6 +83,7 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
               editable={isAdmin && !actual}
               saveBtn={isAdmin && !actual ? () => handleSave(match.id) : null}
               resetBtn={isAdmin && actual ? () => handleReset(match.id) : null}
+              r16Substitutions={r16Substitutions}
             />
           )
         })}
