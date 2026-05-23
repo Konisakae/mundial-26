@@ -250,13 +250,13 @@
 }
 
 .actualLeft {
-  flex: 1;
-  text-align: center;
+  text-align: left;
+  white-space: nowrap;
 }
 
-.actualRight {
-  text-align: right;
-  white-space: nowrap;
+.actualCenter {
+  flex: 1;
+  text-align: center;
 }
 
 .actualValue {

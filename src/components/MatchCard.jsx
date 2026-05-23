@@ -354,7 +354,12 @@ export default function MatchCard({
 
       {showActual && actual && (
         <div className={styles.actualResult}>
-          <div className={styles.actualLeft}>
+          {points !== null && (
+            <div className={styles.actualLeft}>
+              Puntos: <span className={styles.actualValue}>{points}</span>
+            </div>
+          )}
+          <div className={styles.actualCenter}>
             Resultado real: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
             {actual.winner && (
               <>
@@ -362,11 +367,6 @@ export default function MatchCard({
               </>
             )}
           </div>
-          {points !== null && (
-            <div className={styles.actualRight}>
-              Puntos: <span className={styles.actualValue}>{points}</span>
-            </div>
-          )}
         </div>
       )}
     </div>
