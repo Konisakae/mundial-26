@@ -60,7 +60,7 @@ export default function Grupos({ actuals }) {
               key={groupId}
               className={styles.groupCard}
               style={{
-                borderColor: GROUP_COLORS[groupId]?.border,
+                borderColor: '#cbd5e1',
                 borderWidth: '2px',
               }}
             >
