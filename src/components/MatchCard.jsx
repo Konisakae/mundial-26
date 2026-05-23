@@ -116,7 +116,6 @@ export default function MatchCard({
 
   const homeGroupInfo = extractGroupInfo(match.h)
   const awayGroupInfo = extractGroupInfo(match.a)
-  const isElimination = match.ph !== 'G'
 
   // Si se selecciona un tercero, mostrar "3º [GRUPO]"
   const selectedThirdGroup = selectedThirds[match.id]
