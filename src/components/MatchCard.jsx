@@ -59,9 +59,15 @@ export default function MatchCard({
             </>
           ) : (
             <>
-              <span className={styles.gol}>{value?.h ?? actual?.h ?? '-'}</span>
-              <span>-</span>
-              <span className={styles.gol}>{value?.a ?? actual?.a ?? '-'}</span>
+              {value?.h !== undefined && value?.h !== '' && actual?.h !== undefined ? (
+                <>
+                  <span className={styles.gol}>{value?.h ?? actual?.h}</span>
+                  <span>-</span>
+                  <span className={styles.gol}>{value?.a ?? actual?.a}</span>
+                </>
+              ) : (
+                <span className={styles.noResult}>- -</span>
+              )}
               {resetBtn && (
                 <button onClick={resetBtn} className={styles.resetBtn} title="Borrar resultado">
                   ↺
