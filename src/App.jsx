@@ -355,16 +355,25 @@ export default function App() {
 
     if (!r16Completed) return
 
-    // Si r16Substitutions está vacío, generar primero
-    let currentR16Subs = r16Substitutions
+    // Si r16Substitutions está vacío, generar primero (incluyendo terceros)
+    let currentR16Subs = { ...r16Substitutions }
     if (Object.keys(currentR16Subs).length === 0) {
       const groupWinners = getAllGroupWinners(actuals)
-      const subs = {}
       Object.entries(groupWinners).forEach(([group, winners]) => {
-        if (winners.first) subs[`1.º ${group}`] = winners.first
-        if (winners.second) subs[`2.º ${group}`] = winners.second
+        if (winners.first) currentR16Subs[`1.º ${group}`] = winners.first
+        if (winners.second) currentR16Subs[`2.º ${group}`] = winners.second
+        if (winners.third) currentR16Subs[`3.º ${group}`] = winners.third
       })
-      currentR16Subs = subs
+    }
+
+    // Agregar substituciones de terceros seleccionados si existen
+    if (selectedThirds && availableThirds) {
+      Object.entries(selectedThirds).forEach(([matchId, group]) => {
+        const teamCode = availableThirds[group]
+        if (teamCode) {
+          currentR16Subs[`3.º ${group}`] = teamCode
+        }
+      })
     }
 
     // Mapeo de ganadores R16 → Octavos
