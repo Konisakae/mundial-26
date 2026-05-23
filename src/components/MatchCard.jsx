@@ -216,69 +216,85 @@ export default function MatchCard({
         </div>
 
         <div className={styles.score}>
-          {editable && !isConfirmed ? (
-            <>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="-"
-                maxLength="2"
-                value={value?.h === '' || value?.h === undefined ? '' : value?.h}
-                onChange={e => {
-                  const val = e.target.value.replace(/[^0-9]/g, '')
-                  onChange('h', val)
-                }}
-                style={{
-                  borderColor: value?.h === '' || value?.h === undefined ? '#ff0000' : '#00d9ff',
-                  borderWidth: value?.h === '' || value?.h === undefined ? '2px' : '1px',
-                  backgroundColor: value?.h === '' || value?.h === undefined ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 217, 255, 0.1)',
-                  boxShadow: value?.h === '' || value?.h === undefined ? '0 0 8px rgba(255, 0, 0, 0.3)' : 'none',
-                }}
-                className={styles.input}
-              />
-              <span>-</span>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="-"
-                maxLength="2"
-                value={value?.a === '' || value?.a === undefined ? '' : value?.a}
-                onChange={e => {
-                  const val = e.target.value.replace(/[^0-9]/g, '')
-                  onChange('a', val)
-                }}
-                style={{
-                  borderColor: value?.a === '' || value?.a === undefined ? '#ff0000' : '#00d9ff',
-                  borderWidth: value?.a === '' || value?.a === undefined ? '2px' : '1px',
-                  backgroundColor: value?.a === '' || value?.a === undefined ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 217, 255, 0.1)',
-                  boxShadow: value?.a === '' || value?.a === undefined ? '0 0 8px rgba(255, 0, 0, 0.3)' : 'none',
-                }}
-                className={styles.input}
-              />
-              {saveBtn && (
-                <button onClick={saveBtn} className={styles.saveBtn}>
-                  ✓
-                </button>
-              )}
-            </>
-          ) : (
-            <>
-              {(value?.h !== undefined && value?.h !== '') || actual?.h !== undefined ? (
-                <>
-                  <span className={styles.gol}>{value?.h ?? actual?.h}</span>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
+            {editable && !isConfirmed ? (
+              <>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="-"
+                    maxLength="2"
+                    value={value?.h === '' || value?.h === undefined ? '' : value?.h}
+                    onChange={e => {
+                      const val = e.target.value.replace(/[^0-9]/g, '')
+                      onChange('h', val)
+                    }}
+                    style={{
+                      borderColor: value?.h === '' || value?.h === undefined ? '#ff0000' : '#00d9ff',
+                      borderWidth: value?.h === '' || value?.h === undefined ? '2px' : '1px',
+                      backgroundColor: value?.h === '' || value?.h === undefined ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 217, 255, 0.1)',
+                      boxShadow: value?.h === '' || value?.h === undefined ? '0 0 8px rgba(255, 0, 0, 0.3)' : 'none',
+                    }}
+                    className={styles.input}
+                  />
                   <span>-</span>
-                  <span className={styles.gol}>{value?.a ?? actual?.a}</span>
-                </>
-              ) : (
-                <span className={styles.noResult}>- -</span>
-              )}
-              {resetBtn && !isConfirmed && (
-                <button onClick={resetBtn} className={styles.resetBtn} title="Borrar resultado">
-                  ↺
-                </button>
-              )}
-            </>
-          )}
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="-"
+                    maxLength="2"
+                    value={value?.a === '' || value?.a === undefined ? '' : value?.a}
+                    onChange={e => {
+                      const val = e.target.value.replace(/[^0-9]/g, '')
+                      onChange('a', val)
+                    }}
+                    style={{
+                      borderColor: value?.a === '' || value?.a === undefined ? '#ff0000' : '#00d9ff',
+                      borderWidth: value?.a === '' || value?.a === undefined ? '2px' : '1px',
+                      backgroundColor: value?.a === '' || value?.a === undefined ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 217, 255, 0.1)',
+                      boxShadow: value?.a === '' || value?.a === undefined ? '0 0 8px rgba(255, 0, 0, 0.3)' : 'none',
+                    }}
+                    className={styles.input}
+                  />
+                  {saveBtn && (
+                    <button onClick={saveBtn} className={styles.saveBtn}>
+                      ✓
+                    </button>
+                  )}
+                </div>
+                {showWinnerSelector && (value?.winner) && (
+                  <span style={{ fontSize: '0.85rem', color: '#00d9ff' }}>
+                    Ganador: {value.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}
+                  </span>
+                )}
+              </>
+            ) : (
+              <>
+                {(value?.h !== undefined && value?.h !== '') || actual?.h !== undefined ? (
+                  <>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <span className={styles.gol}>{value?.h ?? actual?.h}</span>
+                      <span>-</span>
+                      <span className={styles.gol}>{value?.a ?? actual?.a}</span>
+                      {resetBtn && !isConfirmed && (
+                        <button onClick={resetBtn} className={styles.resetBtn} title="Borrar resultado">
+                          ↺
+                        </button>
+                      )}
+                    </div>
+                    {showWinnerSelector && ((isAdmin ? actual : value)?.winner) && (
+                      <span style={{ fontSize: '0.85rem', color: '#00d9ff' }}>
+                        Ganador: {(isAdmin ? actual : value).winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <span className={styles.noResult}>- -</span>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         <div className={styles.team}>
