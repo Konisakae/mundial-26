@@ -154,3 +154,19 @@
   outline: none;
   background: rgba(0, 217, 255, 0.2);
 }
+
+.saveBtn {
+  padding: 0.25rem 0.5rem;
+  background: rgba(0, 217, 255, 0.2);
+  border: 1px solid #00d9ff;
+  border-radius: 0.25rem;
+  color: #00d9ff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.saveBtn:hover {
+  background: rgba(0, 217, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+}
