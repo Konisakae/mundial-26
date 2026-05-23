@@ -12,7 +12,8 @@
 }
 
 .matchHeader {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
@@ -67,13 +68,12 @@
   font-size: 0.65rem;
   flex-shrink: 0;
   color: #94a3b8;
-  margin-left: auto;
 }
 
 .dateTime {
   display: flex;
   gap: 0.5rem;
-  margin-left: auto;
+  justify-self: center;
 }
 
 .date {
