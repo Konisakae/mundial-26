@@ -78,8 +78,13 @@ export default function Grupos({ actuals }) {
                 </div>
 
                 <div className={styles.rows}>
-                  {standings.map((team, i) => (
-                    <div key={team.name} className={styles.row}>
+                  {standings.map((team, i) => {
+                    let rowClass = styles.row
+                    if (i === 0) rowClass += ` ${styles.rowFirst}`
+                    else if (i === 1) rowClass += ` ${styles.rowSecond}`
+                    else if (i === 3) rowClass += ` ${styles.rowFourth}`
+                    return (
+                      <div key={team.name} className={rowClass}>
                       <div className={styles.teamCell}>
                         <span className={styles.flag}>{team.flag}</span>
                         <span className={styles.name}>{isMobile ? team.code : team.name}</span>
@@ -91,8 +96,9 @@ export default function Grupos({ actuals }) {
                       <div className={styles.stat} style={{ fontWeight: 'bold', color: '#00d9ff' }}>
                         {team.pts}
                       </div>
-                    </div>
-                  ))}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </div>

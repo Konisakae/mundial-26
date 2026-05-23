@@ -66,6 +66,21 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
+.rowFirst {
+  background: rgba(255, 198, 0, 0.15);
+  border-left: 3px solid #ffc600;
+}
+
+.rowSecond {
+  background: rgba(192, 192, 192, 0.15);
+  border-left: 3px solid #c0c0c0;
+}
+
+.rowFourth {
+  background: rgba(255, 0, 110, 0.1);
+  border-left: 3px solid #ff006e;
+}
+
 .teamCell {
   display: flex;
   align-items: center;
