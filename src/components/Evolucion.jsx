@@ -11,9 +11,11 @@ import {
   Filler,
 } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
+import { useMemo } from 'react'
 import { MATCHES } from '../data/matches'
 import { calcTotalPts } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
+import { generateInitials } from '../utils/initials'
 import styles from '../styles/Evolucion.module.css'
 
 ChartJS.register(
@@ -31,6 +33,7 @@ ChartJS.register(
 export default function Evolucion({ participants, predictions, actuals }) {
   const matchIds = MATCHES.map(m => m.id)
   const maxMatchId = Math.max(...matchIds)
+  const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   // Find the last match ID that has actual results
   let lastMatchWithResults = 0
@@ -170,6 +173,22 @@ export default function Evolucion({ participants, predictions, actuals }) {
     <div className={styles.evolucion}>
       <div className={styles.chartContainer}>
         <Line data={chartData} options={options} />
+      </div>
+      <div className={styles.customLegend}>
+        {participants.map((p, i) => {
+          const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
+          return (
+            <div key={p} className={styles.legendItem}>
+              <div
+                className={styles.legendAvatar}
+                style={{ background: color.b, color: color.t }}
+              >
+                {initialsMap[p]}
+              </div>
+              <span className={styles.legendLabel}>{p}</span>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
