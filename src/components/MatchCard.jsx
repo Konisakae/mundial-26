@@ -33,33 +33,27 @@ export default function MatchCard({
           {editable ? (
             <>
               <input
-                type="number"
-                min="0"
-                max="20"
+                type="text"
+                inputMode="numeric"
                 placeholder="-"
+                maxLength="2"
                 value={value?.h === '' || value?.h === undefined ? '' : value?.h}
-                onChange={e => onChange('h', e.target.value)}
-                onKeyDown={e => {
-                  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && (!value?.h || value?.h === '')) {
-                    e.preventDefault()
-                    onChange('h', '0')
-                  }
+                onChange={e => {
+                  const val = e.target.value.replace(/[^0-9]/g, '')
+                  onChange('h', val)
                 }}
                 className={styles.input}
               />
               <span>-</span>
               <input
-                type="number"
-                min="0"
-                max="20"
+                type="text"
+                inputMode="numeric"
                 placeholder="-"
+                maxLength="2"
                 value={value?.a === '' || value?.a === undefined ? '' : value?.a}
-                onChange={e => onChange('a', e.target.value)}
-                onKeyDown={e => {
-                  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && (!value?.a || value?.a === '')) {
-                    e.preventDefault()
-                    onChange('a', '0')
-                  }
+                onChange={e => {
+                  const val = e.target.value.replace(/[^0-9]/g, '')
+                  onChange('a', val)
                 }}
                 className={styles.input}
               />
