@@ -15,32 +15,3 @@
   justify-content: center;
 }
 
-.customLegend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1.5rem 0;
-  justify-content: center;
-}
-
-.legendItem {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-}
-
-.legendAvatar {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.75rem;
-}
-
-.legendLabel {
-  color: #cbd5e1;
-}
