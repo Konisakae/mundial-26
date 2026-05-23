@@ -15,8 +15,11 @@ export default function Apuestas({
   predictions,
   savePred,
   actuals,
+  getCurrentJornada,
+  confirmJornada,
 }) {
-  const [jornada, setJornada] = useState(1)
+  // Para fases no-grupo, usar jornada como dummy variable
+  const jornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
 
   if (!participant) {
     return <div className={styles.noParticipant}>Selecciona un participante primero</div>
@@ -31,7 +34,21 @@ export default function Apuestas({
 
   const pIdx = participant ? participant.charCodeAt(0) : 0
   const pAv = AVATAR_COLORS[pIdx % AVATAR_COLORS.length]
-  const userPreds = predictions[participant] || {}
+  const userPreds = predictions[participant]?.predictions || {}
+  const confirmed = predictions[participant]?.confirmed || { 1: false, 2: false, 3: false }
+  const isCurrentJornadalConfirmed = confirmed[jornada] || false
+
+  // Validar si todos los partidos de la jornada actual están rellenos
+  const allFilled = phase === 'G' && matches.every(m => {
+    const pred = userPreds[m.id]
+    return pred && pred.h !== '' && pred.h !== undefined && pred.a !== '' && pred.a !== undefined
+  })
+
+  const handleConfirmJornada = () => {
+    if (allFilled && confirmJornada) {
+      confirmJornada(participant, jornada)
+    }
+  }
 
   return (
     <div className={styles.apuestas}>
@@ -53,17 +70,34 @@ export default function Apuestas({
             <option value="F">Final</option>
           </select>
         </div>
-        {phase === 'G' && (
-          <div className={styles.jornadalSelect}>
-            <label>Jornada:</label>
-            <select value={jornada} onChange={e => setJornada(parseInt(e.target.value))} className={styles.select}>
-              {[1, 2, 3].map(j => (
-                <option key={j} value={j}>Jornada {j}</option>
-              ))}
-            </select>
-          </div>
-        )}
       </div>
+
+      {phase === 'G' && (
+        <div className={styles.jornadaProgressSection}>
+          <div className={styles.jornadaProgress}>
+            {[1, 2, 3].map(j => (
+              <div key={j} className={styles.jornadaTab}>
+                <span className={styles.jornadaLabel}>Jornada {j}</span>
+                <span className={styles.jornadaStatus}>
+                  {confirmed[j] ? '✓' : j === jornada ? '🔄' : '🔒'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {phase === 'G' && !isCurrentJornadalConfirmed && (
+        <div className={styles.jornadaTitle}>
+          Jornada {jornada}
+        </div>
+      )}
+
+      {phase === 'G' && isCurrentJornadalConfirmed && (
+        <div className={styles.jornadaCompleted}>
+          ✓ Jornada {jornada} confirmada
+        </div>
+      )}
 
       <div className={styles.matches}>
         {matches.map(match => {
@@ -79,10 +113,26 @@ export default function Apuestas({
               actual={actual}
               showActual={true}
               editable={true}
+              isConfirmed={isCurrentJornadalConfirmed}
             />
           )
         })}
       </div>
+
+      {phase === 'G' && !isCurrentJornadalConfirmed && (
+        <div className={styles.confirmSection}>
+          <button
+            onClick={handleConfirmJornada}
+            disabled={!allFilled}
+            className={styles.confirmBtn}
+          >
+            Confirmar jornada {jornada}
+          </button>
+          {!allFilled && (
+            <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

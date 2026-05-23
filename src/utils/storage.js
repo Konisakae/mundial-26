@@ -11,4 +11,81 @@ const set = (key, value) => {
   try { localStorage.setItem(key, JSON.stringify(value)) } catch {}
 }
 
-export const storage = { get, set }
+// Migrar formato antiguo de predicciones al nuevo
+// Formato antiguo: { "Participant": { [matchId]: { h, a }, ... } }
+// Formato nuevo: { "Participant": { predictions: {...}, confirmed: {1: false, 2: false, 3: false} } }
+const migrateOldFormat = (oldData) => {
+  if (!oldData || typeof oldData !== 'object') return {}
+
+  const newData = {}
+
+  for (const [participantName, participantData] of Object.entries(oldData)) {
+    // Si ya tiene estructura nueva (tiene 'predictions' y 'confirmed'), no migrar
+    if (participantData.predictions && participantData.confirmed) {
+      newData[participantName] = participantData
+      continue
+    }
+
+    // Si tiene estructura antigua (es un objeto con matchIds directamente), migrar
+    const predictions = {}
+    const confirmed = { 1: false, 2: false, 3: false }
+
+    for (const [key, value] of Object.entries(participantData)) {
+      if (value && typeof value === 'object' && (value.h !== undefined || value.a !== undefined)) {
+        predictions[key] = value
+      }
+    }
+
+    newData[participantName] = { predictions, confirmed }
+  }
+
+  return newData
+}
+
+// Asegurar que la estructura de predicciones es nueva
+// Si es formato antiguo, migrar
+// Si es nueva, devolver como está
+const ensureNewFormat = (predictions) => {
+  if (!predictions) return {}
+
+  // Detectar si es formato antiguo checando el primer participante
+  const firstParticipant = Object.values(predictions)[0]
+  if (firstParticipant && !firstParticipant.predictions) {
+    // Es formato antiguo, migrar
+    return migrateOldFormat(predictions)
+  }
+
+  return predictions
+}
+
+// Obtener estructura de predicciones para un participante asegurando que tenga la estructura nueva
+const getPredictionsStructure = (participant, allPredictions = {}) => {
+  if (!allPredictions[participant]) {
+    return {
+      predictions: {},
+      confirmed: { 1: false, 2: false, 3: false }
+    }
+  }
+
+  const data = allPredictions[participant]
+
+  // Si ya tiene estructura nueva, devolverla
+  if (data.predictions && data.confirmed) {
+    return data
+  }
+
+  // Si tiene estructura antigua, convertir
+  const predictions = {}
+  for (const [key, value] of Object.entries(data)) {
+    if (value && typeof value === 'object' && (value.h !== undefined || value.a !== undefined)) {
+      predictions[key] = value
+    }
+  }
+
+  return {
+    predictions,
+    confirmed: { 1: false, 2: false, 3: false }
+  }
+}
+
+export const storage = { get, set, ensureNewFormat, getPredictionsStructure, migrateOldFormat }

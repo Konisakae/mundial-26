@@ -28,7 +28,9 @@ export default function App() {
     setParticipants(parts)
     storage.set('wc26_participants', parts)
 
-    const preds = storage.get('wc26_predictions', {})
+    let preds = storage.get('wc26_predictions', {})
+    // Migrar a formato nuevo si es necesario
+    preds = storage.ensureNewFormat(preds)
     const acts = storage.get('wc26_actuals', {})
     setPredictions(preds)
     setActuals(acts)
@@ -39,7 +41,13 @@ export default function App() {
     if (!participant) return
     const next = {
       ...predictions,
-      [participant]: { ...(predictions[participant] || {}), [matchId]: { h, a } },
+      [participant]: {
+        predictions: {
+          ...(predictions[participant]?.predictions || {}),
+          [matchId]: { h, a },
+        },
+        confirmed: predictions[participant]?.confirmed || { 1: false, 2: false, 3: false },
+      },
     }
     setPredictions(next)
     storage.set('wc26_predictions', next)
@@ -64,7 +72,42 @@ export default function App() {
     storage.set('wc26_participants', next)
   }
 
-  const totalPts = calcTotalPts(participant, predictions, actuals, MATCHES)
+  // Obtener jornada actual (primera no confirmada)
+  const getCurrentJornada = (part) => {
+    const confirmed = predictions[part]?.confirmed || { 1: false, 2: false, 3: false }
+    if (!confirmed[1]) return 1
+    if (!confirmed[2]) return 2
+    if (!confirmed[3]) return 3
+    return 3 // Si todas están confirmadas, devolver 3
+  }
+
+  // Confirmar jornada de un participante
+  const confirmJornada = (part, jornada) => {
+    if (!part) return
+    const next = {
+      ...predictions,
+      [part]: {
+        predictions: predictions[part]?.predictions || {},
+        confirmed: {
+          ...(predictions[part]?.confirmed || { 1: false, 2: false, 3: false }),
+          [jornada]: true,
+        },
+      },
+    }
+    setPredictions(next)
+    storage.set('wc26_predictions', next)
+  }
+
+  // Obtener predicciones en formato compatible con calcTotalPts (estructura antigua)
+  const getPredictionsForScoring = () => {
+    const result = {}
+    for (const [participantName, data] of Object.entries(predictions)) {
+      result[participantName] = data.predictions || {}
+    }
+    return result
+  }
+
+  const totalPts = calcTotalPts(participant, getPredictionsForScoring(), actuals, MATCHES)
 
   if (loading) return (
     <div className={styles.loading}>Cargando...</div>
@@ -107,6 +150,8 @@ export default function App() {
             predictions={predictions}
             savePred={savePred}
             actuals={actuals}
+            getCurrentJornada={getCurrentJornada}
+            confirmJornada={confirmJornada}
           />
         )}
         {tab === 'todas' && (
@@ -116,21 +161,21 @@ export default function App() {
             setPhase={setPhase}
             group={group}
             setGroup={setGroup}
-            predictions={predictions}
+            predictions={getPredictionsForScoring()}
             actuals={actuals}
           />
         )}
         {tab === 'clasificacion' && (
           <Clasificacion
             participants={participants}
-            predictions={predictions}
+            predictions={getPredictionsForScoring()}
             actuals={actuals}
           />
         )}
         {tab === 'evolucion' && (
           <Evolucion
             participants={participants}
-            predictions={predictions}
+            predictions={getPredictionsForScoring()}
             actuals={actuals}
           />
         )}

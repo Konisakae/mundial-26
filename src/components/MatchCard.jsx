@@ -13,6 +13,7 @@ export default function MatchCard({
   editable,
   saveBtn,
   resetBtn,
+  isConfirmed = false,
 }) {
   const h = TEAMS[match.h]
   const a = TEAMS[match.a]
@@ -43,7 +44,7 @@ export default function MatchCard({
         </div>
 
         <div className={styles.score}>
-          {editable ? (
+          {editable && !isConfirmed ? (
             <>
               <input
                 type="text"
@@ -56,7 +57,10 @@ export default function MatchCard({
                   onChange('h', val)
                 }}
                 style={{
-                  borderColor: value?.h === '' || value?.h === undefined ? '#ff3333' : '#00d9ff',
+                  borderColor: value?.h === '' || value?.h === undefined ? '#ff0000' : '#00d9ff',
+                  borderWidth: value?.h === '' || value?.h === undefined ? '2px' : '1px',
+                  backgroundColor: value?.h === '' || value?.h === undefined ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 217, 255, 0.1)',
+                  boxShadow: value?.h === '' || value?.h === undefined ? '0 0 8px rgba(255, 0, 0, 0.3)' : 'none',
                 }}
                 className={styles.input}
               />
@@ -72,7 +76,10 @@ export default function MatchCard({
                   onChange('a', val)
                 }}
                 style={{
-                  borderColor: value?.a === '' || value?.a === undefined ? '#ff3333' : '#00d9ff',
+                  borderColor: value?.a === '' || value?.a === undefined ? '#ff0000' : '#00d9ff',
+                  borderWidth: value?.a === '' || value?.a === undefined ? '2px' : '1px',
+                  backgroundColor: value?.a === '' || value?.a === undefined ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 217, 255, 0.1)',
+                  boxShadow: value?.a === '' || value?.a === undefined ? '0 0 8px rgba(255, 0, 0, 0.3)' : 'none',
                 }}
                 className={styles.input}
               />
@@ -93,7 +100,7 @@ export default function MatchCard({
               ) : (
                 <span className={styles.noResult}>- -</span>
               )}
-              {resetBtn && (
+              {resetBtn && !isConfirmed && (
                 <button onClick={resetBtn} className={styles.resetBtn} title="Borrar resultado">
                   ↺
                 </button>

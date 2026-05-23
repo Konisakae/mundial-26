@@ -80,8 +80,105 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+.jornadaProgressSection {
+  margin-top: 0.5rem;
+}
+
+.jornadaProgress {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.jornadaTab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.375rem;
+  flex: 1;
+}
+
+.jornadaLabel {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.jornadaStatus {
+  font-size: 1rem;
+  margin-left: auto;
+}
+
+.jornadaTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #00d9ff;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid #00d9ff;
+}
+
+.jornadaCompleted {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #00ff00;
+  padding: 1rem;
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
 .matches {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.confirmSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.confirmBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 217, 255, 0.2);
+  border: 2px solid #00d9ff;
+  border-radius: 0.375rem;
+  color: #00d9ff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background: rgba(0, 217, 255, 0.3);
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.5);
+}
+
+.confirmBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+}
+
+.validationMsg {
+  font-size: 0.875rem;
+  color: #ff6464;
+  text-align: center;
+  margin: 0;
 }
