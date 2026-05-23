@@ -19,8 +19,11 @@ export default function MatchCard({
   return (
     <div className={styles.matchCard}>
       <div className={styles.matchHeader}>
-        <span className={styles.date}>{match.dt}</span>
-        <span className={styles.time}>{match.tm}</span>
+        <div className={styles.groupBadge}>{match.gr}</div>
+        <div className={styles.dateTime}>
+          <span className={styles.date}>{match.dt}</span>
+          <span className={styles.time}>{match.tm}</span>
+        </div>
       </div>
 
       <div className={styles.matchBody}>

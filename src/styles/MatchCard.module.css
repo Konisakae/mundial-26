@@ -13,13 +13,34 @@
 
 .matchHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
   padding: 0.5rem 1rem;
   background: rgba(0, 0, 0, 0.2);
   font-size: 0.75rem;
   color: #94a3b8;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.groupBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: rgba(0, 217, 255, 0.2);
+  border: 1px solid #00d9ff;
+  border-radius: 0.375rem;
+  color: #00d9ff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.dateTime {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
 }
 
 .date {
