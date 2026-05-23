@@ -160,6 +160,23 @@ export default function App() {
     }
   }, [simulatedJornadas])
 
+  // Borrar todos los datos simulados
+  const clearAllData = () => {
+    if (!window.confirm('¿Borrar toda la simulación? No se puede deshacer.')) return
+
+    setActuals({})
+    setPredictions({})
+    setSimulatedJornadas({ 1: false, 2: false, 3: false })
+    setR16Substitutions({})
+    setSelectedThirds({})
+
+    storage.set('wc26_actuals', {})
+    storage.set('wc26_predictions', {})
+    storage.set('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
+    storage.set('wc26_r16Substitutions', {})
+    storage.set('wc26_selectedThirds', {})
+  }
+
   // Confirmar terceros lugares seleccionados y generar dieciseisavos
   const confirmThirdPlaces = (selectedMap) => {
     if (Object.keys(selectedMap).length !== 8) return
@@ -231,6 +248,7 @@ export default function App() {
         setTab={setTab}
         simulate={simulate}
         simulatedJornadas={simulatedJornadas}
+        clearAllData={clearAllData}
       />
 
       <div className={styles.content}>

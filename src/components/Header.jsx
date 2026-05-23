@@ -11,6 +11,7 @@ export default function Header({
   tab, setTab,
   simulate,
   simulatedJornadas,
+  clearAllData,
 }) {
   const [newName, setNewName] = useState('')
   const [pinVal, setPinVal] = useState('')
@@ -81,6 +82,14 @@ export default function Header({
                   style={{ opacity: simulatedJornadas[1] && simulatedJornadas[2] ? 1 : 0.5 }}
                 >
                   SJ3 {simulatedJornadas[3] ? '✓' : simulatedJornadas[1] && simulatedJornadas[2] ? '' : '🔒'}
+                </button>
+
+                <button
+                  onClick={clearAllData}
+                  className={styles.clearBtn}
+                  title="Borrar toda la simulación"
+                >
+                  🗑️
                 </button>
               </>
             )}
