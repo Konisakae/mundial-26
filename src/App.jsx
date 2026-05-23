@@ -323,7 +323,7 @@ export default function App() {
             simulatedJornadas={simulatedJornadas}
           />
         )}
-        {tab === 'grupos' && <Grupos actuals={actuals} />}
+        {tab === 'grupos' && <Grupos actuals={actuals} selectedThirds={selectedThirds} />}
         {tab === 'apuestas' && (
           <Apuestas
             participant={participant}

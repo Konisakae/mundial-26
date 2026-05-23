@@ -4,9 +4,12 @@ import { GROUP_COLORS } from '../data/groupColors'
 import { useIsMobile } from '../hooks/useIsMobile'
 import styles from '../styles/Grupos.module.css'
 
-export default function Grupos({ actuals }) {
+export default function Grupos({ actuals, selectedThirds = {} }) {
   const isMobile = useIsMobile()
   const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+
+  // Extraer qué grupos fueron seleccionados para R16
+  const selectedGroups = new Set(Object.values(selectedThirds))
 
   const getGroupStandings = (groupId) => {
     const groupMatches = MATCHES.filter(m => m.ph === 'G' && m.gr === groupId)
@@ -89,7 +92,13 @@ export default function Grupos({ actuals }) {
                     let rowClass = styles.row
                     if (i === 0) rowClass += ` ${styles.rowFirst}`
                     else if (i === 1) rowClass += ` ${styles.rowSecond}`
-                    else if (i === 2) rowClass += ` ${styles.rowThird}`
+                    else if (i === 2) {
+                      if (selectedGroups.size > 0 && !selectedGroups.has(groupId)) {
+                        rowClass += ` ${styles.rowFourth}`
+                      } else {
+                        rowClass += ` ${styles.rowThird}`
+                      }
+                    }
                     else if (i === 3) rowClass += ` ${styles.rowFourth}`
                     return (
                       <div key={team.name} className={rowClass}>
