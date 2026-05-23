@@ -37,9 +37,13 @@ export default function MatchCard({
                 min="0"
                 max="20"
                 placeholder="-"
-                value={value?.h ?? ''}
-                onChange={e => onChange('h', e.target.value)}
-                onFocus={e => !value?.h && onChange('h', '0')}
+                value={value?.h === '' || value?.h === undefined ? '' : value?.h}
+                onChange={e => onChange('h', e.target.value || '0')}
+                onFocus={e => {
+                  if (!value?.h && value?.h !== 0) {
+                    onChange('h', '0')
+                  }
+                }}
                 className={styles.input}
               />
               <span>-</span>
@@ -48,9 +52,13 @@ export default function MatchCard({
                 min="0"
                 max="20"
                 placeholder="-"
-                value={value?.a ?? ''}
-                onChange={e => onChange('a', e.target.value)}
-                onFocus={e => !value?.a && onChange('a', '0')}
+                value={value?.a === '' || value?.a === undefined ? '' : value?.a}
+                onChange={e => onChange('a', e.target.value || '0')}
+                onFocus={e => {
+                  if (!value?.a && value?.a !== 0) {
+                    onChange('a', '0')
+                  }
+                }}
                 className={styles.input}
               />
               {saveBtn && (
@@ -61,7 +69,7 @@ export default function MatchCard({
             </>
           ) : (
             <>
-              {value?.h !== undefined && value?.h !== '' && actual?.h !== undefined ? (
+              {(value?.h !== undefined && value?.h !== '') || actual?.h !== undefined ? (
                 <>
                   <span className={styles.gol}>{value?.h ?? actual?.h}</span>
                   <span>-</span>
