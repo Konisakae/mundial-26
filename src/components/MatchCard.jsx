@@ -39,6 +39,7 @@ export default function MatchCard({
                 placeholder="-"
                 value={value?.h ?? ''}
                 onChange={e => onChange('h', e.target.value)}
+                onFocus={e => !value?.h && onChange('h', '0')}
                 className={styles.input}
               />
               <span>-</span>
@@ -49,6 +50,7 @@ export default function MatchCard({
                 placeholder="-"
                 value={value?.a ?? ''}
                 onChange={e => onChange('a', e.target.value)}
+                onFocus={e => !value?.a && onChange('a', '0')}
                 className={styles.input}
               />
               {saveBtn && (
