@@ -24,6 +24,11 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
     }
   }
 
+  const handleReset = (matchId) => {
+    saveActual(matchId, undefined, undefined)
+    setEditing({ ...editing, [matchId]: undefined })
+  }
+
   return (
     <div className={styles.resultados}>
       <div className={styles.controls}>
@@ -102,6 +107,15 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
                       <span className={styles.gol}>{actual?.h ?? '-'}</span>
                       <span>-</span>
                       <span className={styles.gol}>{actual?.a ?? '-'}</span>
+                      {isAdmin && actual && (
+                        <button
+                          onClick={() => handleReset(match.id)}
+                          className={styles.resetBtn}
+                          title="Borrar resultado"
+                        >
+                          ↺
+                        </button>
+                      )}
                     </>
                   )}
                 </div>

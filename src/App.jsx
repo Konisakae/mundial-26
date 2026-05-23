@@ -46,7 +46,12 @@ export default function App() {
   }
 
   const saveActual = (matchId, h, a) => {
-    const next = { ...actuals, [matchId]: { h, a } }
+    const next = { ...actuals }
+    if (h === undefined || a === undefined) {
+      delete next[matchId]
+    } else {
+      next[matchId] = { h, a }
+    }
     setActuals(next)
     storage.set('wc26_actuals', next)
   }

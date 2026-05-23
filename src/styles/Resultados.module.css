@@ -170,3 +170,20 @@
   background: rgba(0, 217, 255, 0.3);
   box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
 }
+
+.resetBtn {
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 0, 110, 0.2);
+  border: 1px solid #ff006e;
+  border-radius: 0.25rem;
+  color: #ff006e;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 0.5rem;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 0, 110, 0.3);
+  box-shadow: 0 0 8px rgba(255, 0, 110, 0.5);
+}
