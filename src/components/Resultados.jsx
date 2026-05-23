@@ -41,10 +41,11 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
           <label>Fase:</label>
           <select value={phase} onChange={e => setPhase(e.target.value)} className={styles.select}>
             <option value="G">Grupos</option>
-            <option value="R16">16avos</option>
-            <option value="QF">Cuartos</option>
-            <option value="SF">Semis</option>
-            <option value="F">Final</option>
+            <option value="R16">Dieciseisavos</option>
+            <option value="OCT">Octavos</option>
+            <option value="CTO">Cuartos</option>
+            <option value="SEMI">Semifinales</option>
+            <option value="FIN">Final</option>
           </select>
         </div>
         {phase === 'G' && (
