@@ -108,6 +108,7 @@ export default function Apuestas({
                 editable={!isBlocked}
                 isConfirmed={isConfirmed || isBlocked}
                 r16Substitutions={r16Substitutions}
+                selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}
               />
