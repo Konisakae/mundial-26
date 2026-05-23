@@ -262,14 +262,14 @@ export default function MatchCard({
         </div>
 
         <div className={styles.team}>
-          {awayOptions.length > 0 && isAdmin ? (
+          {awayOptions.length > 0 && isAdmin && !selectedThirds[match.id] ? (
             <select
               className={styles.thirdSelector}
               onChange={(e) => {
                 const group = e.target.value
                 if (onSelectThird) onSelectThird(match.id, group)
               }}
-              value={selectedThirds[match.id] || ''}
+              value={''}
               disabled={!groupsCompleted}
               title={!groupsCompleted ? 'Completa la jornada 3 para seleccionar terceros' : ''}
             >
