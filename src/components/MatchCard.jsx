@@ -264,7 +264,7 @@ export default function MatchCard({
         <div className={styles.team}>
           {awayOptions.length > 0 && isAdmin ? (
             selectedThirds[match.id] ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
+              <div style={{ position: 'relative', width: '100%' }}>
                 <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
                 <button
                   onClick={() => {
@@ -272,7 +272,17 @@ export default function MatchCard({
                   }}
                   className={styles.resetBtn}
                   title="Cambiar tercero"
-                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                  style={{
+                    position: 'absolute',
+                    right: '-2rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    padding: '0.25rem 0.5rem',
+                    fontSize: '0.75rem',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
                 >
                   ↺
                 </button>
