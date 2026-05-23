@@ -136,7 +136,6 @@ export default function Apuestas({
             <button
               key={j}
               onClick={() => setSelectedJornada(j)}
-              disabled={!confirmed[j] && j !== currentJornada}
               className={`${styles.tabBtn} ${selectedJornada === j ? styles.tabActive : ''} ${confirmed[j] ? styles.tabConfirmed : j === currentJornada ? styles.tabCurrent : styles.tabPending}`}
             >
               Jornada {j}
