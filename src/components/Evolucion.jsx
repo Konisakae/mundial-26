@@ -82,10 +82,10 @@ export default function Evolucion({ participants, predictions, actuals }) {
     }
   }
 
+  const visibleMatchIds = matchIds.filter(id => id <= lastMatchWithResults)
+
   const chartData = {
-    labels: matchIds
-      .filter(id => id <= lastMatchWithResults)
-      .map(id => `P${id}`),
+    labels: visibleMatchIds.map(id => `P${id}`),
     datasets,
   }
 
@@ -137,7 +137,7 @@ export default function Evolucion({ participants, predictions, actuals }) {
     scales: {
       x: {
         min: 0,
-        max: 10,
+        max: Math.max(10, visibleMatchIds.length - 1),
         grid: {
           color: 'rgba(255,255,255,0.05)',
           drawBorder: false,
@@ -146,8 +146,8 @@ export default function Evolucion({ participants, predictions, actuals }) {
           color: '#94a3b8',
           font: { size: 11 },
           callback: function(value) {
-            if (typeof value === 'number' && value < matchIds.length) {
-              return `P${matchIds[value]}`
+            if (typeof value === 'number' && value < visibleMatchIds.length) {
+              return `P${visibleMatchIds[value]}`
             }
             return value
           },
