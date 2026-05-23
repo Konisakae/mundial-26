@@ -340,11 +340,23 @@ export default function App() {
   }
 
   const generateOctavosMatches = () => {
-    // Verificar que todos los R16 estén completos (solo necesita tener resultado h y a)
+    // Verificar que todos los R16 estén completos
     const r16Matches = MATCHES.filter(m => m.ph === 'R16')
     const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
 
     if (!r16Completed) return
+
+    // Si r16Substitutions está vacío, generar primero
+    let currentR16Subs = r16Substitutions
+    if (Object.keys(currentR16Subs).length === 0) {
+      const groupWinners = getAllGroupWinners(actuals)
+      const subs = {}
+      Object.entries(groupWinners).forEach(([group, winners]) => {
+        if (winners.first) subs[`1.º ${group}`] = winners.first
+        if (winners.second) subs[`2.º ${group}`] = winners.second
+      })
+      currentR16Subs = subs
+    }
 
     // Mapeo de ganadores R16 → Octavos
     const octavosSubs = {}
@@ -356,8 +368,8 @@ export default function App() {
       if (!match || !actual) return null
 
       // Resolver códigos de equipo
-      const h = r16Substitutions[match.h] || match.h
-      const a = r16Substitutions[match.a] || match.a
+      const h = currentR16Subs[match.h] || match.h
+      const a = currentR16Subs[match.a] || match.a
 
       // Determinar ganador
       if (actual.winner) return actual.winner === 'h' ? h : a
@@ -366,20 +378,20 @@ export default function App() {
       return hScore > aScore ? h : aScore > hScore ? a : null
     }
 
-    // Mapeo: { matchId_R16: [matchId_OCT, posición ('h' o 'a'), matchId_R16_emparejado, posición_emparejada] }
+    // Mapeo: P73-P88 a P89-P96
     const r16ToOctavos = {
-      73: [89, 'h', 75, 'a'],
-      74: [90, 'h', 77, 'a'],
-      76: [91, 'h', 78, 'a'],
-      79: [92, 'h', 80, 'a'],
-      83: [93, 'h', 84, 'a'],
-      81: [94, 'h', 82, 'a'],
-      86: [95, 'h', 88, 'a'],
-      85: [96, 'h', 87, 'a'],
+      73: [89, 75],
+      74: [90, 77],
+      76: [91, 78],
+      79: [92, 80],
+      83: [93, 84],
+      81: [94, 82],
+      86: [95, 88],
+      85: [96, 87],
     }
 
     // Generar substituciones
-    Object.entries(r16ToOctavos).forEach(([r16Id, [octId, octPos, r16IdPair, octPosPair]]) => {
+    Object.entries(r16ToOctavos).forEach(([r16Id, [octId, r16IdPair]]) => {
       const winner1 = getWinner(Number(r16Id))
       const winner2 = getWinner(Number(r16IdPair))
 
