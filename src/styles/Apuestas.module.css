@@ -98,6 +98,8 @@
   justify-content: space-between;
   gap: 0.5rem;
   transition: all 0.2s;
+  border: 2px solid transparent;
+  box-shadow: none;
 }
 
 .tabIcon {
@@ -106,7 +108,7 @@
 
 .tabConfirmed {
   background: rgba(0, 217, 255, 0.1);
-  border: 1px solid #00d9ff;
+  border: 2px solid transparent;
   color: #00d9ff;
 }
 
@@ -118,7 +120,7 @@
 
 .tabCurrent {
   background: rgba(255, 100, 100, 0.1);
-  border: 1px solid #ff6464;
+  border: 2px solid transparent;
   color: #ff6464;
 }
 
@@ -130,7 +132,7 @@
 
 .tabPending {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid transparent;
   color: #94a3b8;
   cursor: pointer;
   transition: all 0.2s;
@@ -138,7 +140,10 @@
 
 .tabPending:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.tabPending.tabActive {
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .tabActive {
