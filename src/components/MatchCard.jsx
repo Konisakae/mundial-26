@@ -17,6 +17,7 @@ export default function MatchCard({
   resetBtn,
   isConfirmed = false,
   r16Substitutions = {},
+  octavosSubstitutions = {},
   selectedThirds = {},
   availableThirds = {},
   onSelectThird = null,
@@ -39,9 +40,9 @@ export default function MatchCard({
   const showWinnerSelector = isElimination && isDraw && (editable || (isAdmin && actual))
   const showWinnerDisplay = isElimination && (userHasPrediction || adminHasActual)
 
-  // Resolver nombres de equipos, con substituciones para dieciseisavos
+  // Resolver nombres de equipos, con substituciones para R16 y octavos
   const resolveTeamCode = (code) => {
-    const substituted = r16Substitutions[code] || code
+    let substituted = octavosSubstitutions[code] || r16Substitutions[code] || code
     return TEAMS[substituted]
   }
 

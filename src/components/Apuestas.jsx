@@ -20,6 +20,7 @@ export default function Apuestas({
   getCurrentJornada,
   confirmJornada,
   r16Substitutions = {},
+  octavosSubstitutions = {},
   availableThirds = {},
   selectedThirds = {},
 }) {
@@ -108,6 +109,7 @@ export default function Apuestas({
                 editable={!isBlocked}
                 isConfirmed={isConfirmed || isBlocked}
                 r16Substitutions={r16Substitutions}
+                octavosSubstitutions={octavosSubstitutions}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}
@@ -184,6 +186,7 @@ export default function Apuestas({
                 showActual={true}
                 editable={true}
                 r16Substitutions={r16Substitutions}
+                octavosSubstitutions={octavosSubstitutions}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}

@@ -25,6 +25,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [simulatedJornadas, setSimulatedJornadas] = useState({ 1: false, 2: false, 3: false })
   const [r16Substitutions, setR16Substitutions] = useState({})
+  const [octavosSubstitutions, setOctavosSubstitutions] = useState({})
   const [selectedThirds, setSelectedThirds] = useState({})
 
   useEffect(() => {
@@ -38,12 +39,14 @@ export default function App() {
     const acts = storage.get('wc26_actuals', {})
     const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
     const subs = storage.get('wc26_r16Substitutions', {})
+    const octSubs = storage.get('wc26_octavosSubstitutions', {})
     const selThirds = storage.get('wc26_selectedThirds', {})
 
     setPredictions(preds)
     setActuals(acts)
     setSimulatedJornadas(simJornadas)
     setR16Substitutions(subs)
+    setOctavosSubstitutions(octSubs)
     setSelectedThirds(selThirds)
     setLoading(false)
 
@@ -252,6 +255,11 @@ export default function App() {
     }
   }, [simulatedJornadas])
 
+  // Generar octavos cuando se completen todos los R16
+  useEffect(() => {
+    generateOctavosMatches()
+  }, [actuals, r16Substitutions])
+
   // Regenerar R16 cuando se cambia a la fase R16 en Apuestas
   useEffect(() => {
     if (phase === 'R16') {
@@ -329,6 +337,58 @@ export default function App() {
 
     setR16Substitutions(subs)
     storage.set('wc26_r16Substitutions', subs)
+  }
+
+  const generateOctavosMatches = () => {
+    // Verificar que todos los R16 estén completos
+    const r16Matches = MATCHES.filter(m => m.ph === 'R16')
+    const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.winner !== undefined)
+
+    if (!r16Completed) return
+
+    // Mapeo de ganadores R16 → Octavos
+    const octavosSubs = {}
+
+    // Función para obtener el ganador de un partido
+    const getWinner = (matchId) => {
+      const match = MATCHES.find(m => m.id === matchId)
+      const actual = actuals[matchId]
+      if (!match || !actual) return null
+
+      // Resolver códigos de equipo
+      const h = r16Substitutions[match.h] || match.h
+      const a = r16Substitutions[match.a] || match.a
+
+      // Determinar ganador
+      if (actual.winner) return actual.winner === 'h' ? h : a
+      const hScore = Number(actual.h)
+      const aScore = Number(actual.a)
+      return hScore > aScore ? h : aScore > hScore ? a : null
+    }
+
+    // Mapeo: { matchId_R16: [matchId_OCT, posición ('h' o 'a'), matchId_R16_emparejado, posición_emparejada] }
+    const r16ToOctavos = {
+      73: [89, 'h', 75, 'a'],
+      74: [90, 'h', 77, 'a'],
+      76: [91, 'h', 78, 'a'],
+      79: [92, 'h', 80, 'a'],
+      83: [93, 'h', 84, 'a'],
+      81: [94, 'h', 82, 'a'],
+      86: [95, 'h', 88, 'a'],
+      85: [96, 'h', 87, 'a'],
+    }
+
+    // Generar substituciones
+    Object.entries(r16ToOctavos).forEach(([r16Id, [octId, octPos, r16IdPair, octPosPair]]) => {
+      const winner1 = getWinner(Number(r16Id))
+      const winner2 = getWinner(Number(r16IdPair))
+
+      if (winner1) octavosSubs[`Gan. P${r16Id}`] = winner1
+      if (winner2) octavosSubs[`Gan. P${r16IdPair}`] = winner2
+    })
+
+    setOctavosSubstitutions(octavosSubs)
+    storage.set('wc26_octavosSubstitutions', octavosSubs)
   }
 
   // Obtener predicciones en formato compatible con calcTotalPts (estructura antigua)
@@ -420,6 +480,7 @@ export default function App() {
             setWinner={setWinner}
             isAdmin={isAdmin}
             r16Substitutions={r16Substitutions}
+            octavosSubstitutions={octavosSubstitutions}
             selectedThirds={selectedThirds}
             availableThirds={availableThirds}
             onSelectThird={(matchId, group) => {
@@ -453,6 +514,7 @@ export default function App() {
             getCurrentJornada={getCurrentJornada}
             confirmJornada={confirmJornada}
             r16Substitutions={r16Substitutions}
+            octavosSubstitutions={octavosSubstitutions}
             availableThirds={availableThirds}
             selectedThirds={selectedThirds}
           />
