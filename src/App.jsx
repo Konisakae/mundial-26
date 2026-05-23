@@ -424,6 +424,7 @@ export default function App() {
             confirmJornada={confirmJornada}
             r16Substitutions={r16Substitutions}
             availableThirds={availableThirds}
+            selectedThirds={selectedThirds}
           />
         )}
         {tab === 'todas' && (

@@ -20,6 +20,7 @@ export default function Apuestas({
   confirmJornada,
   r16Substitutions = {},
   availableThirds = {},
+  selectedThirds = {},
 }) {
   const [selectedJornada, setSelectedJornada] = useState(1)
   const currentJornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
