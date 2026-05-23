@@ -258,10 +258,6 @@ export default function App() {
     }
   }, [simulatedJornadas])
 
-  // Generar octavos cuando se completen todos los R16
-  useEffect(() => {
-    generateOctavosMatches()
-  }, [actuals, r16Substitutions])
 
   // Regenerar R16 cuando se cambia a la fase R16 en Apuestas
   useEffect(() => {
@@ -343,22 +339,22 @@ export default function App() {
   }
 
   const confirmR16 = () => {
-    generateOctavosMatches()
+    generateOctavosMatches(r16Substitutions, selectedThirds, availableThirds, actuals)
     setR16Confirmed(true)
     storage.set('wc26_r16Confirmed', true)
   }
 
-  const generateOctavosMatches = () => {
+  const generateOctavosMatches = (r16Subs, selectedThirds, availThirds, actualResults) => {
     // Verificar que todos los R16 estén completos
     const r16Matches = MATCHES.filter(m => m.ph === 'R16')
-    const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
+    const r16Completed = r16Matches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
 
     if (!r16Completed) return
 
-    // Si r16Substitutions está vacío, generar primero (incluyendo terceros)
-    let currentR16Subs = { ...r16Substitutions }
+    // Si r16Subs está vacío, generar primero (incluyendo terceros)
+    let currentR16Subs = { ...r16Subs }
     if (Object.keys(currentR16Subs).length === 0) {
-      const groupWinners = getAllGroupWinners(actuals)
+      const groupWinners = getAllGroupWinners(actualResults)
       Object.entries(groupWinners).forEach(([group, winners]) => {
         if (winners.first) currentR16Subs[`1.º ${group}`] = winners.first
         if (winners.second) currentR16Subs[`2.º ${group}`] = winners.second
@@ -367,11 +363,11 @@ export default function App() {
     }
 
     // Agregar substituciones de terceros seleccionados si existen
-    if (selectedThirds && availableThirds) {
-      Object.entries(selectedThirds).forEach(([matchId, group]) => {
-        const teamCode = availableThirds[group]
-        if (teamCode) {
-          currentR16Subs[`3.º ${group}`] = teamCode
+    // selectedThirds es { matchId: group, ... } entonces lo convertimos a { group: teamCode, ... }
+    if (selectedThirds && availThirds) {
+      Object.entries(selectedThirds).forEach(([matchId, selectedGroup]) => {
+        if (selectedGroup && selectedGroup !== 'completed' && availThirds[selectedGroup]) {
+          currentR16Subs[`3.º ${selectedGroup}`] = availThirds[selectedGroup]
         }
       })
     }
@@ -382,7 +378,7 @@ export default function App() {
     // Función para obtener el ganador de un partido
     const getWinner = (matchId) => {
       const match = MATCHES.find(m => m.id === matchId)
-      const actual = actuals[matchId]
+      const actual = actualResults[matchId]
       if (!match || !actual) return null
 
       // Resolver códigos de equipo
