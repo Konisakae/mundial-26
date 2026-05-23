@@ -86,12 +86,14 @@ export default function MatchCard({
             {match.gr}
           </div>
         )}
-        <div className={styles.dateTime}>
-          <span className={styles.date}>{match.dt}</span>
-          <span className={styles.time}>{match.tm}</span>
-        </div>
-        <div className={styles.matchId}>
-          P{match.id}
+        <div className={styles.rightSection}>
+          <div className={styles.dateTime}>
+            <span className={styles.date}>{match.dt}</span>
+            <span className={styles.time}>{match.tm}</span>
+          </div>
+          <div className={styles.matchId}>
+            P{match.id}
+          </div>
         </div>
       </div>
 
