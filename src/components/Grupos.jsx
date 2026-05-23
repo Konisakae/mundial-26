@@ -56,7 +56,14 @@ export default function Grupos({ actuals }) {
           const standings = getGroupStandings(groupId)
 
           return (
-            <div key={groupId} className={styles.groupCard}>
+            <div
+              key={groupId}
+              className={styles.groupCard}
+              style={{
+                borderColor: GROUP_COLORS[groupId]?.border,
+                borderWidth: '2px',
+              }}
+            >
               <div
                 className={styles.groupTitle}
                 style={{
