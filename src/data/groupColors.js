@@ -10,5 +10,5 @@ export const GROUP_COLORS = {
   I: { bg: 'rgba(100, 255, 200, 0.2)', border: '#64ffc8', text: '#64ffc8' },    // Aqua
   J: { bg: 'rgba(255, 200, 100, 0.2)', border: '#ffc864', text: '#ffc864' },    // Peach
   K: { bg: 'rgba(150, 100, 255, 0.2)', border: '#9664ff', text: '#9664ff' },    // Violet
-  L: { bg: 'rgba(13, 115, 119, 0.2)', border: '#0d7377', text: '#0d7377' },     // Petroleo
+  L: { bg: 'rgba(0, 180, 200, 0.2)', border: '#00b4c8', text: '#00b4c8' },      // Turquoise
 }
