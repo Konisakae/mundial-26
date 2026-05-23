@@ -82,6 +82,7 @@ export default function Grupos({ actuals }) {
                     let rowClass = styles.row
                     if (i === 0) rowClass += ` ${styles.rowFirst}`
                     else if (i === 1) rowClass += ` ${styles.rowSecond}`
+                    else if (i === 2) rowClass += ` ${styles.rowThird}`
                     else if (i === 3) rowClass += ` ${styles.rowFourth}`
                     return (
                       <div key={team.name} className={rowClass}>

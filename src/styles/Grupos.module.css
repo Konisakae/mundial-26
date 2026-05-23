@@ -76,6 +76,11 @@
   border-left: 3px solid #00d9ff;
 }
 
+.rowThird {
+  background: rgba(255, 193, 7, 0.15);
+  border-left: 3px solid #ffc107;
+}
+
 .rowFourth {
   background: rgba(255, 0, 110, 0.1);
   border-left: 3px solid #ff006e;
