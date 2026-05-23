@@ -66,7 +66,7 @@ export default function Evolucion({ participants, predictions, actuals }) {
       backgroundColor: color.b + '20',
       fill: true,
       tension: 0.4,
-      pointRadius: 4,
+      pointRadius: 0,
       pointHoverRadius: 6,
       pointBackgroundColor: color.b,
       pointBorderColor: '#354a65',
