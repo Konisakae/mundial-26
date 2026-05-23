@@ -74,7 +74,7 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
                 style={{
                   borderColor: GROUP_COLORS[groupId]?.border,
                   color: GROUP_COLORS[groupId]?.text,
-                  WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.6)',
+                  WebkitTextStroke: '0.3px rgba(255, 255, 255, 0.6)',
                 }}
               >
                 GRUPO {groupId}
