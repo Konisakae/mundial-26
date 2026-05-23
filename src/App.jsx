@@ -228,15 +228,17 @@ export default function App() {
   useEffect(() => {
     if (phase === 'R16') {
       const resultCount = Object.values(actuals).filter(a => a?.h !== undefined).length
-      if (resultCount >= 72 && Object.keys(r16Substitutions).length === 0) {
-        const groupWinners = getAllGroupWinners(actuals)
-        const newSubs = {}
-        Object.entries(groupWinners).forEach(([group, winners]) => {
-          if (winners.first) newSubs[`1.º ${group}`] = winners.first
-          if (winners.second) newSubs[`2.º ${group}`] = winners.second
-        })
-        if (Object.keys(newSubs).length > 0) {
+      if (resultCount >= 72) {
+        // Verificar si r16Substitutions tiene los primeros (debería tener al menos 12 entradas)
+        if (Object.keys(r16Substitutions).length < 12) {
+          const groupWinners = getAllGroupWinners(actuals)
+          const newSubs = { ...r16Substitutions }
+          Object.entries(groupWinners).forEach(([group, winners]) => {
+            if (winners.first) newSubs[`1.º ${group}`] = winners.first
+            if (winners.second) newSubs[`2.º ${group}`] = winners.second
+          })
           setR16Substitutions(newSubs)
+          storage.set('wc26_r16Substitutions', newSubs)
         }
       }
     }
