@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { MATCHES } from '../data/matches'
+import { getMatchesForJornada } from '../utils/jornadas'
 import { initials } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
 import MatchCard from './MatchCard'
@@ -14,15 +16,22 @@ export default function Apuestas({
   savePred,
   actuals,
 }) {
+  const [jornada, setJornada] = useState(1)
+
   if (!participant) {
     return <div className={styles.noParticipant}>Selecciona un participante primero</div>
   }
 
-  const matches = MATCHES.filter(m => m.ph === phase && (phase === 'G' ? m.gr === group : true))
+  let matches
+  if (phase === 'G') {
+    matches = getMatchesForJornada(MATCHES, jornada)
+  } else {
+    matches = MATCHES.filter(m => m.ph === phase)
+  }
+
   const pIdx = participant ? participant.charCodeAt(0) : 0
   const pAv = AVATAR_COLORS[pIdx % AVATAR_COLORS.length]
   const userPreds = predictions[participant] || {}
-  const groups = phase === 'G' ? ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'] : []
 
   return (
     <div className={styles.apuestas}>
@@ -44,12 +53,12 @@ export default function Apuestas({
             <option value="F">Final</option>
           </select>
         </div>
-        {groups.length > 0 && (
-          <div className={styles.groupSelect}>
-            <label>Grupo:</label>
-            <select value={group} onChange={e => setGroup(e.target.value)} className={styles.select}>
-              {groups.map(g => (
-                <option key={g} value={g}>Grupo {g}</option>
+        {phase === 'G' && (
+          <div className={styles.jornadalSelect}>
+            <label>Jornada:</label>
+            <select value={jornada} onChange={e => setJornada(parseInt(e.target.value))} className={styles.select}>
+              {[1, 2, 3].map(j => (
+                <option key={j} value={j}>Jornada {j}</option>
               ))}
             </select>
           </div>

@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { MATCHES } from '../data/matches'
+import { getMatchesForJornada, JORNADAS } from '../utils/jornadas'
 import MatchCard from './MatchCard'
 import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({ phase, setPhase, group, setGroup, actuals, saveActual, isAdmin }) {
   const [editing, setEditing] = useState({})
+  const [jornada, setJornada] = useState(1)
 
-  const matches = MATCHES.filter(m => m.ph === phase && (phase === 'G' ? m.gr === group : true))
-
-  const groups = phase === 'G' ? ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'] : []
+  let matches
+  if (phase === 'G') {
+    matches = getMatchesForJornada(MATCHES, jornada)
+  } else {
+    matches = MATCHES.filter(m => m.ph === phase)
+  }
 
   const handleInputChange = (matchId, field, value) => {
     const curr = editing[matchId] || actuals[matchId] || { h: '', a: '' }
@@ -42,12 +47,12 @@ export default function Resultados({ phase, setPhase, group, setGroup, actuals, 
             <option value="F">Final</option>
           </select>
         </div>
-        {groups.length > 0 && (
-          <div className={styles.groupSelect}>
-            <label>Grupo:</label>
-            <select value={group} onChange={e => setGroup(e.target.value)} className={styles.select}>
-              {groups.map(g => (
-                <option key={g} value={g}>Grupo {g}</option>
+        {phase === 'G' && (
+          <div className={styles.jornadalSelect}>
+            <label>Jornada:</label>
+            <select value={jornada} onChange={e => setJornada(parseInt(e.target.value))} className={styles.select}>
+              {[1, 2, 3].map(j => (
+                <option key={j} value={j}>Jornada {j}</option>
               ))}
             </select>
           </div>
