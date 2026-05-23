@@ -340,9 +340,9 @@ export default function App() {
   }
 
   const generateOctavosMatches = () => {
-    // Verificar que todos los R16 estén completos
+    // Verificar que todos los R16 estén completos (solo necesita tener resultado h y a)
     const r16Matches = MATCHES.filter(m => m.ph === 'R16')
-    const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.winner !== undefined)
+    const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
 
     if (!r16Completed) return
 
