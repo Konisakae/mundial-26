@@ -179,6 +179,9 @@ export default function Apuestas({
                 actual={actual}
                 showActual={true}
                 editable={true}
+                r16Substitutions={r16Substitutions}
+                selectedThirds={selectedThirds}
+                availableThirds={availableThirds}
               />
             )
           })}
