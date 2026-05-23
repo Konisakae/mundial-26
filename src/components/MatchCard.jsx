@@ -263,27 +263,43 @@ export default function MatchCard({
 
         <div className={styles.team}>
           {awayOptions.length > 0 && isAdmin ? (
-            <select
-              className={styles.thirdSelector}
-              onChange={(e) => {
-                const group = e.target.value
-                if (onSelectThird) onSelectThird(match.id, group)
-              }}
-              value={selectedThirds[match.id] || ''}
-              disabled={!groupsCompleted}
-              title={!groupsCompleted ? 'Completa la jornada 3 para seleccionar terceros' : ''}
-            >
-              <option value="">Seleccionar 3º...</option>
-              {awayOptions.map(group => {
-                const thirdTeam = availableThirds[group]
-                const isUsedInOtherMatch = Object.entries(selectedThirds).some(([mId, g]) => g === group && mId !== match.id)
-                return (
-                  <option key={group} value={group} disabled={isUsedInOtherMatch}>
-                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsedInOtherMatch ? '(usado)' : ''}
-                  </option>
-                )
-              })}
-            </select>
+            selectedThirds[match.id] ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
+                <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
+                <button
+                  onClick={() => {
+                    if (onSelectThird) onSelectThird(match.id, '')
+                  }}
+                  className={styles.resetBtn}
+                  title="Cambiar tercero"
+                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                >
+                  ↺
+                </button>
+              </div>
+            ) : (
+              <select
+                className={styles.thirdSelector}
+                onChange={(e) => {
+                  const group = e.target.value
+                  if (onSelectThird) onSelectThird(match.id, group)
+                }}
+                value={''}
+                disabled={!groupsCompleted}
+                title={!groupsCompleted ? 'Completa la jornada 3 para seleccionar terceros' : ''}
+              >
+                <option value="">Seleccionar 3º...</option>
+                {awayOptions.map(group => {
+                  const thirdTeam = availableThirds[group]
+                  const isUsedInOtherMatch = Object.entries(selectedThirds).some(([mId, g]) => g === group && mId !== match.id)
+                  return (
+                    <option key={group} value={group} disabled={isUsedInOtherMatch}>
+                      {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsedInOtherMatch ? '(usado)' : ''}
+                    </option>
+                  )
+                })}
+              </select>
+            )
           ) : (
             <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
           )}
