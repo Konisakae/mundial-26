@@ -381,9 +381,36 @@ export default function App() {
       const actual = actualResults[matchId]
       if (!match || !actual) return null
 
+      // Función auxiliar para resolver referencias a terceros
+      const resolveTeamRef = (ref) => {
+        // Si es una referencia directa (1.º A, 2.º B), buscar en substituciones
+        if (currentR16Subs[ref]) return currentR16Subs[ref]
+
+        // Si es una referencia con múltiples opciones (3.º A/B/C), buscar cuál fue seleccionada
+        if (ref.includes('3.º') && ref.includes('/')) {
+          // Extraer los grupos posibles
+          const match_ref = ref.match(/3\.º\s*(.+)/i)
+          if (match_ref) {
+            const possibleGroups = match_ref[1].split('/').map(g => g.trim())
+            // Buscar cuál grupo fue seleccionado para este matchId
+            const selectedGroup = selectedThirds[matchId]
+            if (selectedGroup && possibleGroups.includes(selectedGroup)) {
+              const teamCode = currentR16Subs[`3.º ${selectedGroup}`]
+              if (teamCode) return teamCode
+            }
+          }
+        }
+
+        // Si es una referencia simple de tercero (3.º A)
+        if (currentR16Subs[ref]) return currentR16Subs[ref]
+
+        // Si no se puede resolver, devolver la referencia tal cual
+        return ref
+      }
+
       // Resolver códigos de equipo
-      const h = currentR16Subs[match.h] || match.h
-      const a = currentR16Subs[match.a] || match.a
+      const h = resolveTeamRef(match.h)
+      const a = resolveTeamRef(match.a)
 
       // Determinar ganador
       if (actual.winner) return actual.winner === 'h' ? h : a
