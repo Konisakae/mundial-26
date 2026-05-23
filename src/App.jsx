@@ -101,7 +101,7 @@ export default function App() {
   // Simular datos de prueba
   const simulate = (level) => {
     let maxMatchId = 0
-    const confirmedJornadas = { 1: false, 2: false, 3: false }
+    let confirmedJornadas = { 1: false, 2: false, 3: false }
 
     if (level === 1) {
       // Simular 1: primeros 24 partidos (3 jornadas completas)
