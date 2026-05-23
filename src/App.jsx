@@ -224,6 +224,24 @@ export default function App() {
     }
   }, [simulatedJornadas])
 
+  // Regenerar R16 cuando se cambia a la fase R16 en Apuestas
+  useEffect(() => {
+    if (phase === 'R16') {
+      const resultCount = Object.values(actuals).filter(a => a?.h !== undefined).length
+      if (resultCount >= 72 && Object.keys(r16Substitutions).length === 0) {
+        const groupWinners = getAllGroupWinners(actuals)
+        const newSubs = {}
+        Object.entries(groupWinners).forEach(([group, winners]) => {
+          if (winners.first) newSubs[`1.º ${group}`] = winners.first
+          if (winners.second) newSubs[`2.º ${group}`] = winners.second
+        })
+        if (Object.keys(newSubs).length > 0) {
+          setR16Substitutions(newSubs)
+        }
+      }
+    }
+  }, [phase, actuals])
+
   // Borrar todos los datos simulados
   const clearAllData = () => {
     if (!window.confirm('¿Borrar toda la simulación? No se puede deshacer.')) return
