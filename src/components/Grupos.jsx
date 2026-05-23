@@ -1,9 +1,11 @@
 import { MATCHES } from '../data/matches'
 import { TEAMS } from '../data/teams'
 import { GROUP_COLORS } from '../data/groupColors'
+import { useIsMobile } from '../hooks/useIsMobile'
 import styles from '../styles/Grupos.module.css'
 
 export default function Grupos({ actuals }) {
+  const isMobile = useIsMobile()
   const groups = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
 
   const getGroupStandings = (groupId) => {
@@ -14,8 +16,8 @@ export default function Grupos({ actuals }) {
       const h = TEAMS[match.h].n
       const a = TEAMS[match.a].n
 
-      if (!teams[h]) teams[h] = { name: h, flag: TEAMS[match.h].f, pj: 0, g: 0, gc: 0, pts: 0 }
-      if (!teams[a]) teams[a] = { name: a, flag: TEAMS[match.a].f, pj: 0, g: 0, gc: 0, pts: 0 }
+      if (!teams[h]) teams[h] = { name: h, code: match.h, flag: TEAMS[match.h].f, pj: 0, g: 0, gc: 0, pts: 0 }
+      if (!teams[a]) teams[a] = { name: a, code: match.a, flag: TEAMS[match.a].f, pj: 0, g: 0, gc: 0, pts: 0 }
 
       teams[h].pj++
       teams[a].pj++
@@ -81,7 +83,7 @@ export default function Grupos({ actuals }) {
                     <div key={team.name} className={styles.row}>
                       <div className={styles.teamCell}>
                         <span className={styles.flag}>{team.flag}</span>
-                        <span className={styles.name}>{team.name}</span>
+                        <span className={styles.name}>{isMobile ? team.code : team.name}</span>
                       </div>
                       <div className={styles.stat}>{team.pj}</div>
                       <div className={styles.stat}>{team.g}</div>
