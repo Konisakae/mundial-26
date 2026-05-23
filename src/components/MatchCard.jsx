@@ -40,7 +40,7 @@ export default function MatchCard({
                 value={value?.h === '' || value?.h === undefined ? '' : value?.h}
                 onChange={e => {
                   const newVal = e.target.value
-                  if ((!value?.h || value?.h === '') && newVal === '1') {
+                  if ((value?.h === undefined || value?.h === '') && newVal === '1') {
                     onChange('h', '0')
                   } else {
                     onChange('h', newVal || '0')
@@ -62,7 +62,7 @@ export default function MatchCard({
                 value={value?.a === '' || value?.a === undefined ? '' : value?.a}
                 onChange={e => {
                   const newVal = e.target.value
-                  if ((!value?.a || value?.a === '') && newVal === '1') {
+                  if ((value?.a === undefined || value?.a === '') && newVal === '1') {
                     onChange('a', '0')
                   } else {
                     onChange('a', newVal || '0')
