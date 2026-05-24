@@ -165,20 +165,19 @@ export default function Apuestas({
             { value: 'FIN', label: 'Final' },
           ]}
         />
+        {phase === 'G' && (
+          <CustomSelect
+            value={selectedJornada}
+            onChange={setSelectedJornada}
+            label="Jornada:"
+            options={[
+              { value: 1, label: 'Jornada 1' },
+              { value: 2, label: 'Jornada 2' },
+              { value: 3, label: 'Jornada 3' },
+            ]}
+          />
+        )}
       </div>
-
-      {phase === 'G' && (
-        <CustomSelect
-          value={selectedJornada}
-          onChange={setSelectedJornada}
-          label="Jornada:"
-          options={[
-            { value: 1, label: 'Jornada 1' },
-            { value: 2, label: 'Jornada 2' },
-            { value: 3, label: 'Jornada 3' },
-          ]}
-        />
-      )}
 
       {phase === 'G' ? (
         <div className={styles.jornadasContainer}>
