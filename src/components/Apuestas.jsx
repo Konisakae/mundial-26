@@ -91,12 +91,12 @@ export default function Apuestas({
     const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
     const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
-    const confirmSection = status === 'progreso' && !allCompleted && (
+    const confirmSection = status !== 'confirmado' && (status === 'progreso' || prevCompleted) && (
       <div className={styles.confirmSection}>
         <button
           disabled={!allFilled}
           className={styles.confirmBtn}
-          style={{ opacity: 0.5, cursor: 'not-allowed' }}
+          style={{ opacity: allFilled ? 1 : 0.5, cursor: allFilled ? 'pointer' : 'not-allowed' }}
           title="Los resultados se confirman automáticamente cuando están completos"
         >
           Confirmar {phaseLabel.toLowerCase()}
