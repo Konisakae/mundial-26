@@ -19,6 +19,7 @@ export default function Apuestas({
   actuals,
   getCurrentJornada,
   confirmJornada,
+  confirmR16Prediction,
   r16Substitutions = {},
   octavosSubstitutions = {},
   octavosGroupInfo = {},
@@ -308,10 +309,14 @@ export default function Apuestas({
             return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
           })
           const groupsCompleted = confirmed[1] && confirmed[2] && confirmed[3]
+          const r16Confirmed = confirmed['R16'] || false
 
           let status = groupsCompleted ? 'progreso' : 'pendiente'
           let borderClass = styles.jornadaDefault
-          if (allCompleted) {
+          if (r16Confirmed) {
+            status = 'confirmado'
+            borderClass = styles.jornadaConfirmed
+          } else if (allCompleted) {
             status = 'confirmado'
             borderClass = styles.jornadaConfirmed
           } else if (allFilled || groupsCompleted) {
@@ -323,8 +328,8 @@ export default function Apuestas({
           const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
           const handleConfirm = () => {
-            if (allFilled && confirmJornada) {
-              confirmJornada(participant, 'R16')
+            if (allFilled && confirmR16Prediction) {
+              confirmR16Prediction(participant)
             }
           }
 

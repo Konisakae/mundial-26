@@ -197,6 +197,22 @@ export default function App() {
     storage.set('wc26_predictions', next)
   }
 
+  const confirmR16Prediction = (part) => {
+    if (!part) return
+    const next = {
+      ...predictions,
+      [part]: {
+        predictions: predictions[part]?.predictions || {},
+        confirmed: {
+          ...(predictions[part]?.confirmed || { 1: false, 2: false, 3: false }),
+          'R16': true,
+        },
+      },
+    }
+    setPredictions(next)
+    storage.set('wc26_predictions', next)
+  }
+
   // Simular datos de una jornada específica
   const simulate = (jornada) => {
     if (jornada < 1 || jornada > 3) return
@@ -995,6 +1011,7 @@ export default function App() {
             actuals={actuals}
             getCurrentJornada={getCurrentJornada}
             confirmJornada={confirmJornada}
+            confirmR16Prediction={confirmR16Prediction}
             r16Substitutions={r16Substitutions}
             octavosSubstitutions={octavosSubstitutions}
             octavosGroupInfo={octavosGroupInfo}
