@@ -390,6 +390,15 @@ export default function MatchCard({
           </div>
         </div>
       )}
+
+      {match.id === 104 && actual && (actual.h !== undefined || actual.a !== undefined) && (
+        <div className={styles.champion}>
+          <span className={styles.championLabel}>Campeón:</span>
+          <span className={styles.championValue}>
+            {actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : actual.winner === 'a' ? getTeamDisplay(match.a, a, isMobile) : '—'}
+          </span>
+        </div>
+      )}
     </div>
   )
 }
