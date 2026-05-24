@@ -91,6 +91,22 @@ export default function Apuestas({
     const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
     const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
+    const confirmSection = status === 'progreso' && !allCompleted && (
+      <div className={styles.confirmSection}>
+        <button
+          disabled={!allFilled}
+          className={styles.confirmBtn}
+          style={{ opacity: 0.5, cursor: 'not-allowed' }}
+          title="Los resultados se confirman automáticamente cuando están completos"
+        >
+          Confirmar {phaseLabel.toLowerCase()}
+        </button>
+        {!allFilled && (
+          <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+        )}
+      </div>
+    )
+
     return (
       <div className={`${styles.jornadaSection} ${borderClass}`}>
         <div className={styles.jornadaHeader}>
@@ -99,6 +115,8 @@ export default function Apuestas({
             <span className={badgeClass}>{badgeText}</span>
           </h3>
         </div>
+
+        {confirmSection}
 
         <div className={styles.matches}>
           {phaseMatches.map(match => {
@@ -132,6 +150,8 @@ export default function Apuestas({
             )
           })}
         </div>
+
+        {confirmSection}
       </div>
     )
   }
