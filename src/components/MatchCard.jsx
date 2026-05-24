@@ -19,6 +19,14 @@ export default function MatchCard({
   r16Substitutions = {},
   octavosSubstitutions = {},
   octavosGroupInfo = {},
+  cuartosSubstitutions = {},
+  cuartosGroupInfo = {},
+  semifinalSubstitutions = {},
+  semifinalGroupInfo = {},
+  tercerPuestoSubstitutions = {},
+  tercerPuestoGroupInfo = {},
+  finalSubstitutions = {},
+  finalGroupInfo = {},
   selectedThirds = {},
   availableThirds = {},
   onSelectThird = null,
@@ -131,16 +139,20 @@ export default function MatchCard({
   // Si se selecciona un tercero, mostrar "3º [GRUPO]"
   const selectedThirdGroup = selectedThirds[match.id]
 
-  // Buscar info de grupo en octavosGroupInfo si es una referencia a ganador
-  const homeOctavoGroupInfo = octavosGroupInfo[match.h]
-  const awayOctavoGroupInfo = octavosGroupInfo[match.a]
+  // Buscar info de grupo en todos los groupInfo maps (para cualquier fase eliminatoria)
+  const homeGroupInfoFromSubs = octavosGroupInfo[match.h] || cuartosGroupInfo[match.h] ||
+                                 semifinalGroupInfo[match.h] || tercerPuestoGroupInfo[match.h] ||
+                                 finalGroupInfo[match.h]
+  const awayGroupInfoFromSubs = octavosGroupInfo[match.a] || cuartosGroupInfo[match.a] ||
+                                 semifinalGroupInfo[match.a] || tercerPuestoGroupInfo[match.a] ||
+                                 finalGroupInfo[match.a]
 
   const homeDisplay = (homeOptions.length > 0 && selectedThirdGroup)
     ? { position: '3', group: selectedThirdGroup }
-    : (homeOctavoGroupInfo || homeGroupInfo || { position: '-', group: '-' })
+    : (homeGroupInfoFromSubs || homeGroupInfo || { position: '-', group: '-' })
   const awayDisplay = (awayOptions.length > 0 && selectedThirdGroup)
     ? { position: '3', group: selectedThirdGroup }
-    : (awayOctavoGroupInfo || awayGroupInfo || { position: '-', group: '-' })
+    : (awayGroupInfoFromSubs || awayGroupInfo || { position: '-', group: '-' })
 
   return (
     <div className={styles.matchCard}>

@@ -7,7 +7,8 @@ import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({
   phase, setPhase, group, setGroup, actuals, saveActual, setWinner, isAdmin, r16Substitutions,
-  octavosSubstitutions, octavosGroupInfo, r16Confirmed, confirmR16, selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
+  octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo,
+  tercerPuestoSubstitutions, tercerPuestoGroupInfo, finalSubstitutions, finalGroupInfo, r16Confirmed, confirmR16, selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -90,6 +91,14 @@ export default function Resultados({
               r16Substitutions={r16Substitutions}
               octavosSubstitutions={octavosSubstitutions}
               octavosGroupInfo={octavosGroupInfo}
+              cuartosSubstitutions={cuartosSubstitutions}
+              cuartosGroupInfo={cuartosGroupInfo}
+              semifinalSubstitutions={semifinalSubstitutions}
+              semifinalGroupInfo={semifinalGroupInfo}
+              tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+              tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+              finalSubstitutions={finalSubstitutions}
+              finalGroupInfo={finalGroupInfo}
               selectedThirds={selectedThirds}
               availableThirds={availableThirds}
               onSelectThird={onSelectThird}

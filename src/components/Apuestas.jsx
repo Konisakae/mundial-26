@@ -22,6 +22,14 @@ export default function Apuestas({
   r16Substitutions = {},
   octavosSubstitutions = {},
   octavosGroupInfo = {},
+  cuartosSubstitutions = {},
+  cuartosGroupInfo = {},
+  semifinalSubstitutions = {},
+  semifinalGroupInfo = {},
+  tercerPuestoSubstitutions = {},
+  tercerPuestoGroupInfo = {},
+  finalSubstitutions = {},
+  finalGroupInfo = {},
   availableThirds = {},
   selectedThirds = {},
 }) {
@@ -112,6 +120,14 @@ export default function Apuestas({
                 r16Substitutions={r16Substitutions}
                 octavosSubstitutions={octavosSubstitutions}
                 octavosGroupInfo={octavosGroupInfo}
+                cuartosSubstitutions={cuartosSubstitutions}
+                cuartosGroupInfo={cuartosGroupInfo}
+                semifinalSubstitutions={semifinalSubstitutions}
+                semifinalGroupInfo={semifinalGroupInfo}
+                tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+                tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+                finalSubstitutions={finalSubstitutions}
+                finalGroupInfo={finalGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}
@@ -190,6 +206,14 @@ export default function Apuestas({
                 r16Substitutions={r16Substitutions}
                 octavosSubstitutions={octavosSubstitutions}
                 octavosGroupInfo={octavosGroupInfo}
+                cuartosSubstitutions={cuartosSubstitutions}
+                cuartosGroupInfo={cuartosGroupInfo}
+                semifinalSubstitutions={semifinalSubstitutions}
+                semifinalGroupInfo={semifinalGroupInfo}
+                tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+                tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+                finalSubstitutions={finalSubstitutions}
+                finalGroupInfo={finalGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}

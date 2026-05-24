@@ -27,6 +27,14 @@ export default function App() {
   const [r16Substitutions, setR16Substitutions] = useState({})
   const [octavosSubstitutions, setOctavosSubstitutions] = useState({})
   const [octavosGroupInfo, setOctavosGroupInfo] = useState({})
+  const [cuartosSubstitutions, setCuartosSubstitutions] = useState({})
+  const [cuartosGroupInfo, setCuartosGroupInfo] = useState({})
+  const [semifinalSubstitutions, setSemifinalSubstitutions] = useState({})
+  const [semifinalGroupInfo, setSemifinalGroupInfo] = useState({})
+  const [tercerPuestoSubstitutions, setTercerPuestoSubstitutions] = useState({})
+  const [tercerPuestoGroupInfo, setTercerPuestoGroupInfo] = useState({})
+  const [finalSubstitutions, setFinalSubstitutions] = useState({})
+  const [finalGroupInfo, setFinalGroupInfo] = useState({})
   const [r16Confirmed, setR16Confirmed] = useState(false)
   const [selectedThirds, setSelectedThirds] = useState({})
 
@@ -43,6 +51,14 @@ export default function App() {
     const subs = storage.get('wc26_r16Substitutions', {})
     const octSubs = storage.get('wc26_octavosSubstitutions', {})
     const octGroupInfo = storage.get('wc26_octavosGroupInfo', {})
+    const ctoSubs = storage.get('wc26_cuartosSubstitutions', {})
+    const ctoGroupInfo = storage.get('wc26_cuartosGroupInfo', {})
+    const semiSubs = storage.get('wc26_semifinalSubstitutions', {})
+    const semiGroupInfo = storage.get('wc26_semifinalGroupInfo', {})
+    const tercerSubs = storage.get('wc26_tercerPuestoSubstitutions', {})
+    const tercerGroupInfo = storage.get('wc26_tercerPuestoGroupInfo', {})
+    const finalSubs = storage.get('wc26_finalSubstitutions', {})
+    const finalGroupInfo = storage.get('wc26_finalGroupInfo', {})
     const r16Conf = storage.get('wc26_r16Confirmed', false)
     const selThirds = storage.get('wc26_selectedThirds', {})
 
@@ -52,6 +68,14 @@ export default function App() {
     setR16Substitutions(subs)
     setOctavosSubstitutions(octSubs)
     setOctavosGroupInfo(octGroupInfo)
+    setCuartosSubstitutions(ctoSubs)
+    setCuartosGroupInfo(ctoGroupInfo)
+    setSemifinalSubstitutions(semiSubs)
+    setSemifinalGroupInfo(semiGroupInfo)
+    setTercerPuestoSubstitutions(tercerSubs)
+    setTercerPuestoGroupInfo(tercerGroupInfo)
+    setFinalSubstitutions(finalSubs)
+    setFinalGroupInfo(finalGroupInfo)
     setR16Confirmed(r16Conf)
     setSelectedThirds(selThirds)
     setLoading(false)
@@ -271,6 +295,22 @@ export default function App() {
     }
   }, [actuals])
 
+  // Generar cuartos cuando octavos estén completos
+  useEffect(() => {
+    generateEliminationMatches('OCT', 'CTO', octavosSubstitutions, setCuartosSubstitutions, setCuartosGroupInfo, actuals)
+  }, [actuals, octavosSubstitutions])
+
+  // Generar semifinales cuando cuartos estén completos
+  useEffect(() => {
+    generateEliminationMatches('CTO', 'SEMI', cuartosSubstitutions, setSemifinalSubstitutions, setSemifinalGroupInfo, actuals)
+  }, [actuals, cuartosSubstitutions])
+
+  // Generar tercer puesto y final cuando semifinales estén completos
+  useEffect(() => {
+    generateEliminationMatches('SEMI', '3P', semifinalSubstitutions, setTercerPuestoSubstitutions, setTercerPuestoGroupInfo, actuals)
+    generateEliminationMatches('SEMI', 'FIN', semifinalSubstitutions, setFinalSubstitutions, setFinalGroupInfo, actuals)
+  }, [actuals, semifinalSubstitutions])
+
 
   // Regenerar R16 cuando se cambia a la fase R16 en Apuestas
   useEffect(() => {
@@ -302,6 +342,14 @@ export default function App() {
     setR16Substitutions({})
     setOctavosSubstitutions({})
     setOctavosGroupInfo({})
+    setCuartosSubstitutions({})
+    setCuartosGroupInfo({})
+    setSemifinalSubstitutions({})
+    setSemifinalGroupInfo({})
+    setTercerPuestoSubstitutions({})
+    setTercerPuestoGroupInfo({})
+    setFinalSubstitutions({})
+    setFinalGroupInfo({})
     setSelectedThirds({})
 
     storage.set('wc26_actuals', {})
@@ -310,6 +358,14 @@ export default function App() {
     storage.set('wc26_r16Substitutions', {})
     storage.set('wc26_octavosSubstitutions', {})
     storage.set('wc26_octavosGroupInfo', {})
+    storage.set('wc26_cuartosSubstitutions', {})
+    storage.set('wc26_cuartosGroupInfo', {})
+    storage.set('wc26_semifinalSubstitutions', {})
+    storage.set('wc26_semifinalGroupInfo', {})
+    storage.set('wc26_tercerPuestoSubstitutions', {})
+    storage.set('wc26_tercerPuestoGroupInfo', {})
+    storage.set('wc26_finalSubstitutions', {})
+    storage.set('wc26_finalGroupInfo', {})
     storage.set('wc26_selectedThirds', {})
   }
 
@@ -359,6 +415,92 @@ export default function App() {
     generateOctavosMatches(r16Substitutions, selectedThirds, availableThirds, actuals)
     setR16Confirmed(true)
     storage.set('wc26_r16Confirmed', true)
+  }
+
+  // Función genérica para generar matches de cualquier fase eliminatoria
+  const generateEliminationMatches = (sourcePhase, targetPhase, sourceSubstitutions, targetSetter, targetGroupSetter, actualResults) => {
+    const sourceMatches = MATCHES.filter(m => m.ph === sourcePhase)
+    const sourceCompleted = sourceMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
+
+    if (!sourceCompleted) return
+
+    const subs = {}
+    const groupInfo = {}
+
+    // Función auxiliar para extraer info de grupo
+    const extractGroupInfoFromRef = (ref, matchId) => {
+      if (ref.includes('3.º') && ref.includes('/')) {
+        const selectedGroup = selectedThirds[matchId]
+        if (selectedGroup) {
+          return { position: '3', group: selectedGroup }
+        }
+      }
+      const match = ref.match(/^(\d+)\.º\s*([A-Z])$/i)
+      if (match) {
+        return { position: match[1], group: match[2] }
+      }
+      return null
+    }
+
+    // Función para obtener ganador
+    const getWinner = (matchId) => {
+      const match = MATCHES.find(m => m.id === matchId)
+      const actual = actualResults[matchId]
+      if (!match || !actual) return null
+
+      const resolveTeamRef = (ref) => {
+        if (sourceSubstitutions[ref]) return sourceSubstitutions[ref]
+        if (ref.includes('3.º') && ref.includes('/')) {
+          const match_ref = ref.match(/3\.º\s*(.+)/i)
+          if (match_ref) {
+            const possibleGroups = match_ref[1].split('/').map(g => g.trim())
+            const selectedGroup = selectedThirds[matchId]
+            if (selectedGroup && possibleGroups.includes(selectedGroup)) {
+              const teamCode = sourceSubstitutions[`3.º ${selectedGroup}`]
+              if (teamCode) return teamCode
+            }
+          }
+        }
+        if (sourceSubstitutions[ref]) return sourceSubstitutions[ref]
+        return ref
+      }
+
+      const h = resolveTeamRef(match.h)
+      const a = resolveTeamRef(match.a)
+
+      if (actual.winner) return actual.winner === 'h' ? h : a
+      const hScore = Number(actual.h)
+      const aScore = Number(actual.a)
+      return hScore > aScore ? h : aScore > hScore ? a : null
+    }
+
+    // Mapeo genérico para fases eliminatorias
+    const phaseMappings = {
+      'OCT': { 89: [97, 98], 90: [99, 100], 91: 97, 92: 98, 93: 99, 94: 100 },
+      'CTO': { 97: [101, 102], 98: 101, 99: 101, 100: 102 },
+      'SEMI': { 101: [103, 104], 102: 104 },
+      '3P': { 102: 103 },
+      'FIN': {}
+    }
+
+    const mapping = phaseMappings[targetPhase]
+    if (mapping) {
+      sourceMatches.forEach(m => {
+        const winner = getWinner(m.id)
+        if (winner) {
+          subs[`Gan. P${m.id}`] = winner
+          const groupInfoVal = extractGroupInfoFromRef(m.h, m.id) || extractGroupInfoFromRef(m.a, m.id)
+          if (groupInfoVal) {
+            groupInfo[`Gan. P${m.id}`] = groupInfoVal
+          }
+        }
+      })
+    }
+
+    targetSetter(subs)
+    targetGroupSetter(groupInfo)
+    storage.set(`wc26_${targetPhase.toLowerCase()}Substitutions`, subs)
+    storage.set(`wc26_${targetPhase.toLowerCase()}GroupInfo`, groupInfo)
   }
 
   const generateOctavosMatches = (r16Subs, selectedThirds, availThirds, actualResults) => {
@@ -627,6 +769,14 @@ export default function App() {
             r16Substitutions={r16Substitutions}
             octavosSubstitutions={octavosSubstitutions}
             octavosGroupInfo={octavosGroupInfo}
+            cuartosSubstitutions={cuartosSubstitutions}
+            cuartosGroupInfo={cuartosGroupInfo}
+            semifinalSubstitutions={semifinalSubstitutions}
+            semifinalGroupInfo={semifinalGroupInfo}
+            tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+            tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+            finalSubstitutions={finalSubstitutions}
+            finalGroupInfo={finalGroupInfo}
             r16Confirmed={r16Confirmed}
             confirmR16={confirmR16}
             selectedThirds={selectedThirds}
@@ -664,6 +814,14 @@ export default function App() {
             r16Substitutions={r16Substitutions}
             octavosSubstitutions={octavosSubstitutions}
             octavosGroupInfo={octavosGroupInfo}
+            cuartosSubstitutions={cuartosSubstitutions}
+            cuartosGroupInfo={cuartosGroupInfo}
+            semifinalSubstitutions={semifinalSubstitutions}
+            semifinalGroupInfo={semifinalGroupInfo}
+            tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+            tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+            finalSubstitutions={finalSubstitutions}
+            finalGroupInfo={finalGroupInfo}
             availableThirds={availableThirds}
             selectedThirds={selectedThirds}
           />
