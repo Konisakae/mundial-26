@@ -655,13 +655,13 @@ export default function App() {
 
     // P103 es tercer puesto (perdedores de semis)
     if (semi101.loser && semi102.loser) {
-      tercerSubs['Gan. P101'] = semi101.loser
-      tercerSubs['Gan. P102'] = semi102.loser
+      tercerSubs['Per. P101'] = semi101.loser
+      tercerSubs['Per. P102'] = semi102.loser
       if (semi101.loserGroupInfo) {
-        tercerGroupInfo['Gan. P101'] = semi101.loserGroupInfo
+        tercerGroupInfo['Per. P101'] = semi101.loserGroupInfo
       }
       if (semi102.loserGroupInfo) {
-        tercerGroupInfo['Gan. P102'] = semi102.loserGroupInfo
+        tercerGroupInfo['Per. P102'] = semi102.loserGroupInfo
       }
     }
 
