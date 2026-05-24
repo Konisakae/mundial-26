@@ -109,21 +109,6 @@ export default function Resultados({
           )
         })}
       </div>
-
-      {phase === 'R16' && !r16Confirmed && isAdmin && (
-        <div className={styles.confirmSection}>
-          <button
-            onClick={confirmR16}
-            disabled={matches.some(m => actuals[m.id]?.h === undefined || actuals[m.id]?.h === '' || actuals[m.id]?.a === undefined || actuals[m.id]?.a === '')}
-            className={styles.confirmBtn}
-          >
-            Confirmar Dieciseisavos
-          </button>
-          {matches.some(m => actuals[m.id]?.h === undefined || actuals[m.id]?.h === '' || actuals[m.id]?.a === undefined || actuals[m.id]?.a === '') && (
-            <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
-          )}
-        </div>
-      )}
     </div>
   )
 }
