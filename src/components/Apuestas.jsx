@@ -184,14 +184,40 @@ export default function Apuestas({
           {renderJornada(selectedJornada)}
         </div>
       ) : phase === 'R16' ? (
-        <div className={`${styles.jornadaSection} ${styles.jornadaDefault}`}>
-          <div className={styles.jornadaHeader}>
-            <h3 className={styles.jornadaHeading}>
-              Dieciseisavos
-            </h3>
-          </div>
+        (() => {
+          const r16Matches = MATCHES.filter(m => m.ph === 'R16')
+          const allFilled = r16Matches.every(m => {
+            const pred = userPreds[m.id]
+            return pred && pred.h !== '' && pred.h !== undefined && pred.a !== '' && pred.a !== undefined
+          })
+          const allCompleted = r16Matches.every(m => {
+            const actual = actuals[m.id]
+            return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
+          })
 
-          <div className={styles.matches}>
+          let status = 'pendiente'
+          let borderClass = styles.jornadaDefault
+          if (allCompleted) {
+            status = 'confirmado'
+            borderClass = styles.jornadaConfirmed
+          } else if (allFilled) {
+            status = 'progreso'
+            borderClass = styles.jornadaCurrent
+          }
+
+          const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
+          const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
+
+          return (
+            <div className={`${styles.jornadaSection} ${borderClass}`}>
+              <div className={styles.jornadaHeader}>
+                <h3 className={styles.jornadaHeading}>
+                  Dieciseisavos
+                  <span className={badgeClass}>{badgeText}</span>
+                </h3>
+              </div>
+
+              <div className={styles.matches}>
             {MATCHES.filter(m => m.ph === phase).map(match => {
               const pred = userPreds[match.id] || { h: '', a: '' }
               const actual = actuals[match.id]
@@ -221,9 +247,11 @@ export default function Apuestas({
                   onSetPredictedWinner={setPredictedWinner}
                 />
               )
-            })}
-          </div>
-        </div>
+              })}
+              </div>
+            </div>
+          )
+        })()
       ) : (
         <div className={styles.matches}>
           {MATCHES.filter(m => m.ph === phase).map(match => {
