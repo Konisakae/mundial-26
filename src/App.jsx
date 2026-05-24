@@ -499,8 +499,19 @@ export default function App() {
 
     targetSetter(subs)
     targetGroupSetter(groupInfo)
-    storage.set(`wc26_${targetPhase.toLowerCase()}Substitutions`, subs)
-    storage.set(`wc26_${targetPhase.toLowerCase()}GroupInfo`, groupInfo)
+
+    // Mapear nombres de fases a keys de localStorage
+    const storageKeys = {
+      'CTO': 'cuartos',
+      'SEMI': 'semifinal',
+      '3P': 'tercerPuesto',
+      'FIN': 'final'
+    }
+    const key = storageKeys[targetPhase]
+    if (key) {
+      storage.set(`wc26_${key}Substitutions`, subs)
+      storage.set(`wc26_${key}GroupInfo`, groupInfo)
+    }
   }
 
   const generateOctavosMatches = (r16Subs, selectedThirds, availThirds, actualResults) => {
