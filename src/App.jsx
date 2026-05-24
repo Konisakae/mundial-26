@@ -442,26 +442,43 @@ export default function App() {
     const octMatches = MATCHES.filter(m => m.ph === 'OCT')
     const octCompleted = octMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
 
-    console.log('generateCuartosMatches:', { octMatches: octMatches.length, octCompleted, octavosSubs: Object.keys(octavosSubs).length })
-
     if (!octCompleted) return
     if (Object.keys(octavosSubs).length === 0) return
 
     const subs = {}
     const groupInfo = {}
 
-    const getWinner = (matchId) => {
+    const getWinnerAndGroupInfo = (matchId) => {
       const match = MATCHES.find(m => m.id === matchId)
       const actual = actualResults[matchId]
-      if (!match || !actual) return null
+      if (!match || !actual) return { winner: null, groupInfo: null }
 
       const h = octavosSubs[match.h] || match.h
       const a = octavosSubs[match.a] || match.a
 
-      if (actual.winner) return actual.winner === 'h' ? h : a
-      const hScore = Number(actual.h)
-      const aScore = Number(actual.a)
-      return hScore > aScore ? h : aScore > hScore ? a : null
+      let winner, winningRef
+      if (actual.winner) {
+        winner = actual.winner === 'h' ? h : a
+        winningRef = actual.winner === 'h' ? match.h : match.a
+      } else {
+        const hScore = Number(actual.h)
+        const aScore = Number(actual.a)
+        if (hScore > aScore) {
+          winner = h
+          winningRef = match.h
+        } else if (aScore > hScore) {
+          winner = a
+          winningRef = match.a
+        }
+      }
+
+      // Extraer info de grupo del reference del ganador (e.g., "Gan. P73")
+      let gInfo = null
+      if (winningRef && octavosGroupInfoVal && octavosGroupInfoVal[winningRef]) {
+        gInfo = octavosGroupInfoVal[winningRef]
+      }
+
+      return { winner, groupInfo: gInfo }
     }
 
     // Mapeo: P89-P96 a P97-P100
@@ -476,29 +493,23 @@ export default function App() {
       const octIdNum = Number(octId)
       const octIdPairNum = Number(octIdPair)
 
-      const winner1 = getWinner(octIdNum)
-      const winner2 = getWinner(octIdPairNum)
+      const { winner: winner1, groupInfo: gInfo1 } = getWinnerAndGroupInfo(octIdNum)
+      const { winner: winner2, groupInfo: gInfo2 } = getWinnerAndGroupInfo(octIdPairNum)
 
       if (winner1) {
         subs[`Gan. P${octId}`] = winner1
-        // Copiar groupInfo de octavos
-        const octGroupKey = `Gan. P${octId}`
-        if (octavosGroupInfoVal && octavosGroupInfoVal[octGroupKey]) {
-          groupInfo[octGroupKey] = octavosGroupInfoVal[octGroupKey]
+        if (gInfo1) {
+          groupInfo[`Gan. P${octId}`] = gInfo1
         }
       }
 
       if (winner2) {
         subs[`Gan. P${octIdPair}`] = winner2
-        // Copiar groupInfo de octavos
-        const octGroupKey = `Gan. P${octIdPair}`
-        if (octavosGroupInfoVal && octavosGroupInfoVal[octGroupKey]) {
-          groupInfo[octGroupKey] = octavosGroupInfoVal[octGroupKey]
+        if (gInfo2) {
+          groupInfo[`Gan. P${octIdPair}`] = gInfo2
         }
       }
     })
-
-    console.log('Cuartos generados:', { subs: Object.keys(subs).length, groupInfo: Object.keys(groupInfo).length, subsKeys: Object.keys(subs) })
 
     setCuartosSubstitutions(subs)
     setCuartosGroupInfo(groupInfo)
@@ -516,18 +527,37 @@ export default function App() {
     const subs = {}
     const groupInfo = {}
 
-    const getWinner = (matchId) => {
+    const getWinnerAndGroupInfo = (matchId) => {
       const match = MATCHES.find(m => m.id === matchId)
       const actual = actualResults[matchId]
-      if (!match || !actual) return null
+      if (!match || !actual) return { winner: null, groupInfo: null }
 
       const h = cuartosSubs[match.h] || match.h
       const a = cuartosSubs[match.a] || match.a
 
-      if (actual.winner) return actual.winner === 'h' ? h : a
-      const hScore = Number(actual.h)
-      const aScore = Number(actual.a)
-      return hScore > aScore ? h : aScore > hScore ? a : null
+      let winner, winningRef
+      if (actual.winner) {
+        winner = actual.winner === 'h' ? h : a
+        winningRef = actual.winner === 'h' ? match.h : match.a
+      } else {
+        const hScore = Number(actual.h)
+        const aScore = Number(actual.a)
+        if (hScore > aScore) {
+          winner = h
+          winningRef = match.h
+        } else if (aScore > hScore) {
+          winner = a
+          winningRef = match.a
+        }
+      }
+
+      // Extraer info de grupo del reference del ganador (e.g., "Gan. P97")
+      let gInfo = null
+      if (winningRef && cuartosGroupInfoVal && cuartosGroupInfoVal[winningRef]) {
+        gInfo = cuartosGroupInfoVal[winningRef]
+      }
+
+      return { winner, groupInfo: gInfo }
     }
 
     // Mapeo: P97-P100 a P101-P102
@@ -540,27 +570,24 @@ export default function App() {
       const ctoIdNum = Number(ctoId)
       const ctoIdPairNum = Number(ctoIdPair)
 
-      const winner1 = getWinner(ctoIdNum)
-      const winner2 = getWinner(ctoIdPairNum)
+      const { winner: winner1, groupInfo: gInfo1 } = getWinnerAndGroupInfo(ctoIdNum)
+      const { winner: winner2, groupInfo: gInfo2 } = getWinnerAndGroupInfo(ctoIdPairNum)
 
       if (winner1) {
         subs[`Gan. P${ctoId}`] = winner1
-        const ctoGroupKey = `Gan. P${ctoId}`
-        if (cuartosGroupInfoVal && cuartosGroupInfoVal[ctoGroupKey]) {
-          groupInfo[ctoGroupKey] = cuartosGroupInfoVal[ctoGroupKey]
+        if (gInfo1) {
+          groupInfo[`Gan. P${ctoId}`] = gInfo1
         }
       }
 
       if (winner2) {
         subs[`Gan. P${ctoIdPair}`] = winner2
-        const ctoGroupKey = `Gan. P${ctoIdPair}`
-        if (cuartosGroupInfoVal && cuartosGroupInfoVal[ctoGroupKey]) {
-          groupInfo[ctoGroupKey] = cuartosGroupInfoVal[ctoGroupKey]
+        if (gInfo2) {
+          groupInfo[`Gan. P${ctoIdPair}`] = gInfo2
         }
       }
     })
 
-    console.log('Semifinales generadas:', { subs: Object.keys(subs).length, groupInfo: Object.keys(groupInfo).length })
     setSemifinalSubstitutions(subs)
     setSemifinalGroupInfo(groupInfo)
     storage.set('wc26_semifinalSubstitutions', subs)
@@ -579,61 +606,74 @@ export default function App() {
     const finalSubs = {}
     const finalGroupInfo = {}
 
-    const getWinner = (matchId) => {
+    const getWinnerAndLoserWithGroupInfo = (matchId) => {
       const match = MATCHES.find(m => m.id === matchId)
       const actual = actualResults[matchId]
-      if (!match || !actual) return null
+      if (!match || !actual) return { winner: null, winnerGroupInfo: null, loser: null, loserGroupInfo: null, winningRef: null, losingRef: null }
 
       const h = semifinalSubs[match.h] || match.h
       const a = semifinalSubs[match.a] || match.a
 
-      if (actual.winner) return actual.winner === 'h' ? h : a
-      const hScore = Number(actual.h)
-      const aScore = Number(actual.a)
-      return hScore > aScore ? h : aScore > hScore ? a : null
-    }
+      let winner, winningRef, loser, losingRef
+      if (actual.winner) {
+        winner = actual.winner === 'h' ? h : a
+        winningRef = actual.winner === 'h' ? match.h : match.a
+        loser = actual.winner === 'h' ? a : h
+        losingRef = actual.winner === 'h' ? match.a : match.h
+      } else {
+        const hScore = Number(actual.h)
+        const aScore = Number(actual.a)
+        if (hScore > aScore) {
+          winner = h
+          winningRef = match.h
+          loser = a
+          losingRef = match.a
+        } else if (aScore > hScore) {
+          winner = a
+          winningRef = match.a
+          loser = h
+          losingRef = match.h
+        }
+      }
 
-    const getLoser = (matchId) => {
-      const match = MATCHES.find(m => m.id === matchId)
-      const actual = actualResults[matchId]
-      if (!match || !actual) return null
+      // Extraer info de grupo de los references
+      let winnerGroupInfo = null
+      let loserGroupInfo = null
+      if (winningRef && semifinalGroupInfoVal && semifinalGroupInfoVal[winningRef]) {
+        winnerGroupInfo = semifinalGroupInfoVal[winningRef]
+      }
+      if (losingRef && semifinalGroupInfoVal && semifinalGroupInfoVal[losingRef]) {
+        loserGroupInfo = semifinalGroupInfoVal[losingRef]
+      }
 
-      const h = semifinalSubs[match.h] || match.h
-      const a = semifinalSubs[match.a] || match.a
-
-      if (actual.winner) return actual.winner === 'h' ? a : h
-      const hScore = Number(actual.h)
-      const aScore = Number(actual.a)
-      return hScore > aScore ? a : aScore > hScore ? h : null
+      return { winner, winnerGroupInfo, loser, loserGroupInfo, winningRef, losingRef }
     }
 
     // P101 y P102 son semifinales
-    const winner101 = getWinner(101)
-    const loser101 = getLoser(101)
-    const winner102 = getWinner(102)
-    const loser102 = getLoser(102)
+    const semi101 = getWinnerAndLoserWithGroupInfo(101)
+    const semi102 = getWinnerAndLoserWithGroupInfo(102)
 
     // P103 es tercer puesto (perdedores de semis)
-    if (loser101 && loser102) {
-      tercerSubs['Gan. P101'] = loser101
-      tercerSubs['Gan. P102'] = loser102
-      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P101']) {
-        tercerGroupInfo['Gan. P101'] = semifinalGroupInfoVal['Gan. P101']
+    if (semi101.loser && semi102.loser) {
+      tercerSubs['Gan. P101'] = semi101.loser
+      tercerSubs['Gan. P102'] = semi102.loser
+      if (semi101.loserGroupInfo) {
+        tercerGroupInfo['Gan. P101'] = semi101.loserGroupInfo
       }
-      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P102']) {
-        tercerGroupInfo['Gan. P102'] = semifinalGroupInfoVal['Gan. P102']
+      if (semi102.loserGroupInfo) {
+        tercerGroupInfo['Gan. P102'] = semi102.loserGroupInfo
       }
     }
 
     // P104 es final (ganadores de semis)
-    if (winner101 && winner102) {
-      finalSubs['Gan. P101'] = winner101
-      finalSubs['Gan. P102'] = winner102
-      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P101']) {
-        finalGroupInfo['Gan. P101'] = semifinalGroupInfoVal['Gan. P101']
+    if (semi101.winner && semi102.winner) {
+      finalSubs['Gan. P101'] = semi101.winner
+      finalSubs['Gan. P102'] = semi102.winner
+      if (semi101.winnerGroupInfo) {
+        finalGroupInfo['Gan. P101'] = semi101.winnerGroupInfo
       }
-      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P102']) {
-        finalGroupInfo['Gan. P102'] = semifinalGroupInfoVal['Gan. P102']
+      if (semi102.winnerGroupInfo) {
+        finalGroupInfo['Gan. P102'] = semi102.winnerGroupInfo
       }
     }
 
