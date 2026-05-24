@@ -494,6 +494,8 @@ export default function App() {
       }
     })
 
+    console.log('Cuartos generados:', { subs: Object.keys(subs).length, groupInfo: Object.keys(groupInfo).length, subsKeys: Object.keys(subs) })
+
     setCuartosSubstitutions(subs)
     setCuartosGroupInfo(groupInfo)
     storage.set('wc26_cuartosSubstitutions', subs)
