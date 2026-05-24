@@ -49,9 +49,11 @@ export default function MatchCard({
   const showWinnerSelector = isElimination && isDraw && (editable || (isAdmin && actual))
   const showWinnerDisplay = isElimination && (userHasPrediction || adminHasActual)
 
-  // Resolver nombres de equipos, con substituciones para R16 y octavos
+  // Resolver nombres de equipos, buscando en todas las fases eliminatorias
   const resolveTeamCode = (code) => {
-    let substituted = octavosSubstitutions[code] || r16Substitutions[code] || code
+    let substituted = octavosSubstitutions[code] || cuartosSubstitutions[code] ||
+                      semifinalSubstitutions[code] || tercerPuestoSubstitutions[code] ||
+                      finalSubstitutions[code] || r16Substitutions[code] || code
     return TEAMS[substituted]
   }
 
