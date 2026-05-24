@@ -298,23 +298,23 @@ export default function App() {
   // Generar cuartos cuando octavos estén completos
   useEffect(() => {
     if (Object.keys(octavosSubstitutions).length > 0) {
-      generateCuartosMatches(octavosSubstitutions, actuals)
+      generateCuartosMatches(octavosSubstitutions, actuals, octavosGroupInfo)
     }
-  }, [actuals, octavosSubstitutions])
+  }, [actuals, octavosSubstitutions, octavosGroupInfo])
 
   // Generar semifinales cuando cuartos estén completos
   useEffect(() => {
     if (Object.keys(cuartosSubstitutions).length > 0) {
-      generateSemifinalMatches(cuartosSubstitutions, actuals)
+      generateSemifinalMatches(cuartosSubstitutions, actuals, cuartosGroupInfo)
     }
-  }, [actuals, cuartosSubstitutions])
+  }, [actuals, cuartosSubstitutions, cuartosGroupInfo])
 
   // Generar tercer puesto y final cuando semifinales estén completos
   useEffect(() => {
     if (Object.keys(semifinalSubstitutions).length > 0) {
-      generateFinalMatches(semifinalSubstitutions, actuals)
+      generateFinalMatches(semifinalSubstitutions, actuals, semifinalGroupInfo)
     }
-  }, [actuals, semifinalSubstitutions])
+  }, [actuals, semifinalSubstitutions, semifinalGroupInfo])
 
 
   // Regenerar R16 cuando se cambia a la fase R16 en Apuestas
@@ -438,7 +438,7 @@ export default function App() {
   }
 
   // Generar cuartos desde octavos
-  const generateCuartosMatches = (octavosSubs, actualResults) => {
+  const generateCuartosMatches = (octavosSubs, actualResults, octavosGroupInfoVal) => {
     const octMatches = MATCHES.filter(m => m.ph === 'OCT')
     const octCompleted = octMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
 
@@ -481,16 +481,20 @@ export default function App() {
 
       if (winner1) {
         subs[`Gan. P${octId}`] = winner1
-        const match1 = MATCHES.find(m => m.id === octIdNum)
-        const groupInfoVal1 = extractGroupInfoFromRef(match1.h, octIdNum) || extractGroupInfoFromRef(match1.a, octIdNum)
-        if (groupInfoVal1) groupInfo[`Gan. P${octId}`] = groupInfoVal1
+        // Copiar groupInfo de octavos
+        const octGroupKey = `Gan. P${octId}`
+        if (octavosGroupInfoVal && octavosGroupInfoVal[octGroupKey]) {
+          groupInfo[octGroupKey] = octavosGroupInfoVal[octGroupKey]
+        }
       }
 
       if (winner2) {
         subs[`Gan. P${octIdPair}`] = winner2
-        const match2 = MATCHES.find(m => m.id === octIdPairNum)
-        const groupInfoVal2 = extractGroupInfoFromRef(match2.h, octIdPairNum) || extractGroupInfoFromRef(match2.a, octIdPairNum)
-        if (groupInfoVal2) groupInfo[`Gan. P${octIdPair}`] = groupInfoVal2
+        // Copiar groupInfo de octavos
+        const octGroupKey = `Gan. P${octIdPair}`
+        if (octavosGroupInfoVal && octavosGroupInfoVal[octGroupKey]) {
+          groupInfo[octGroupKey] = octavosGroupInfoVal[octGroupKey]
+        }
       }
     })
 
@@ -503,7 +507,7 @@ export default function App() {
   }
 
   // Generar semifinales desde cuartos
-  const generateSemifinalMatches = (cuartosSubs, actualResults) => {
+  const generateSemifinalMatches = (cuartosSubs, actualResults, cuartosGroupInfoVal) => {
     const ctoMatches = MATCHES.filter(m => m.ph === 'CTO')
     const ctoCompleted = ctoMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
 
@@ -541,19 +545,22 @@ export default function App() {
 
       if (winner1) {
         subs[`Gan. P${ctoId}`] = winner1
-        const match1 = MATCHES.find(m => m.id === ctoIdNum)
-        const groupInfoVal1 = extractGroupInfoFromRef(match1.h, ctoIdNum) || extractGroupInfoFromRef(match1.a, ctoIdNum)
-        if (groupInfoVal1) groupInfo[`Gan. P${ctoId}`] = groupInfoVal1
+        const ctoGroupKey = `Gan. P${ctoId}`
+        if (cuartosGroupInfoVal && cuartosGroupInfoVal[ctoGroupKey]) {
+          groupInfo[ctoGroupKey] = cuartosGroupInfoVal[ctoGroupKey]
+        }
       }
 
       if (winner2) {
         subs[`Gan. P${ctoIdPair}`] = winner2
-        const match2 = MATCHES.find(m => m.id === ctoIdPairNum)
-        const groupInfoVal2 = extractGroupInfoFromRef(match2.h, ctoIdPairNum) || extractGroupInfoFromRef(match2.a, ctoIdPairNum)
-        if (groupInfoVal2) groupInfo[`Gan. P${ctoIdPair}`] = groupInfoVal2
+        const ctoGroupKey = `Gan. P${ctoIdPair}`
+        if (cuartosGroupInfoVal && cuartosGroupInfoVal[ctoGroupKey]) {
+          groupInfo[ctoGroupKey] = cuartosGroupInfoVal[ctoGroupKey]
+        }
       }
     })
 
+    console.log('Semifinales generadas:', { subs: Object.keys(subs).length, groupInfo: Object.keys(groupInfo).length })
     setSemifinalSubstitutions(subs)
     setSemifinalGroupInfo(groupInfo)
     storage.set('wc26_semifinalSubstitutions', subs)
@@ -561,7 +568,7 @@ export default function App() {
   }
 
   // Generar tercer puesto y final desde semifinales
-  const generateFinalMatches = (semifinalSubs, actualResults) => {
+  const generateFinalMatches = (semifinalSubs, actualResults, semifinalGroupInfoVal) => {
     const semiMatches = MATCHES.filter(m => m.ph === 'SEMI')
     const semiCompleted = semiMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
 
@@ -610,24 +617,24 @@ export default function App() {
     if (loser101 && loser102) {
       tercerSubs['Gan. P101'] = loser101
       tercerSubs['Gan. P102'] = loser102
-      const match101 = MATCHES.find(m => m.id === 101)
-      const groupInfo101 = extractGroupInfoFromRef(match101.h, 101) || extractGroupInfoFromRef(match101.a, 101)
-      if (groupInfo101) tercerGroupInfo['Gan. P101'] = groupInfo101
-      const match102 = MATCHES.find(m => m.id === 102)
-      const groupInfo102 = extractGroupInfoFromRef(match102.h, 102) || extractGroupInfoFromRef(match102.a, 102)
-      if (groupInfo102) tercerGroupInfo['Gan. P102'] = groupInfo102
+      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P101']) {
+        tercerGroupInfo['Gan. P101'] = semifinalGroupInfoVal['Gan. P101']
+      }
+      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P102']) {
+        tercerGroupInfo['Gan. P102'] = semifinalGroupInfoVal['Gan. P102']
+      }
     }
 
     // P104 es final (ganadores de semis)
     if (winner101 && winner102) {
       finalSubs['Gan. P101'] = winner101
       finalSubs['Gan. P102'] = winner102
-      const match101 = MATCHES.find(m => m.id === 101)
-      const groupInfo101 = extractGroupInfoFromRef(match101.h, 101) || extractGroupInfoFromRef(match101.a, 101)
-      if (groupInfo101) finalGroupInfo['Gan. P101'] = groupInfo101
-      const match102 = MATCHES.find(m => m.id === 102)
-      const groupInfo102 = extractGroupInfoFromRef(match102.h, 102) || extractGroupInfoFromRef(match102.a, 102)
-      if (groupInfo102) finalGroupInfo['Gan. P102'] = groupInfo102
+      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P101']) {
+        finalGroupInfo['Gan. P101'] = semifinalGroupInfoVal['Gan. P101']
+      }
+      if (semifinalGroupInfoVal && semifinalGroupInfoVal['Gan. P102']) {
+        finalGroupInfo['Gan. P102'] = semifinalGroupInfoVal['Gan. P102']
+      }
     }
 
     setTercerPuestoSubstitutions(tercerSubs)
