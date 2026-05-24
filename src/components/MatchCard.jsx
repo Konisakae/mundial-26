@@ -395,7 +395,12 @@ export default function MatchCard({
         <div className={styles.champion}>
           <span className={styles.championLabel}>Campeón:</span>
           <span className={styles.championValue}>
-            {actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : actual.winner === 'a' ? getTeamDisplay(match.a, a, isMobile) : '—'}
+            {(() => {
+              const hScore = Number(actual.h)
+              const aScore = Number(actual.a)
+              const winner = actual.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
+              return winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : winner === 'a' ? getTeamDisplay(match.a, a, isMobile) : '—'
+            })()}
           </span>
         </div>
       )}
