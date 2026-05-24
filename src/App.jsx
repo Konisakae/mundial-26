@@ -442,7 +442,10 @@ export default function App() {
     const octMatches = MATCHES.filter(m => m.ph === 'OCT')
     const octCompleted = octMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
 
+    console.log('generateCuartosMatches:', { octMatches: octMatches.length, octCompleted, octavosSubs: Object.keys(octavosSubs).length })
+
     if (!octCompleted) return
+    if (Object.keys(octavosSubs).length === 0) return
 
     const subs = {}
     const groupInfo = {}
