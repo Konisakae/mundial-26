@@ -52,7 +52,14 @@ export default function Apuestas({
     const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
     return phaseMatches.every(m => {
       const pred = userPreds[m.id]
-      return pred && pred.h !== '' && pred.h !== undefined && pred.a !== '' && pred.a !== undefined
+      if (!pred || pred.h === '' || pred.h === undefined || pred.a === '' || pred.a === undefined) {
+        return false
+      }
+      // En fases eliminatorias, si hay empate debe haber ganador seleccionado
+      if (pred.h === pred.a && !pred.winner) {
+        return false
+      }
+      return true
     })
   }
 
