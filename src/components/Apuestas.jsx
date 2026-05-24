@@ -194,13 +194,14 @@ export default function Apuestas({
             const actual = actuals[m.id]
             return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
           })
+          const groupsCompleted = confirmed[1] && confirmed[2] && confirmed[3]
 
-          let status = 'pendiente'
+          let status = groupsCompleted ? 'progreso' : 'pendiente'
           let borderClass = styles.jornadaDefault
           if (allCompleted) {
             status = 'confirmado'
             borderClass = styles.jornadaConfirmed
-          } else if (allFilled) {
+          } else if (allFilled || groupsCompleted) {
             status = 'progreso'
             borderClass = styles.jornadaCurrent
           }
