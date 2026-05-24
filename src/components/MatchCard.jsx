@@ -382,11 +382,16 @@ export default function MatchCard({
           )}
           <div className={styles.actualCenter}>
             Resultado: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
-            {actual.winner && (
-              <>
-                {' - Ganador: '}<span className={styles.actualValue}>{actual.winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
-              </>
-            )}
+            {(() => {
+              const hScore = Number(actual.h)
+              const aScore = Number(actual.a)
+              const winner = actual.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
+              return winner && (
+                <>
+                  {' - Ganador: '}<span className={styles.actualValue}>{winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
+                </>
+              )
+            })()}
           </div>
         </div>
       )}
