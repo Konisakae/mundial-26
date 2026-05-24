@@ -168,20 +168,16 @@ export default function Apuestas({
       </div>
 
       {phase === 'G' && (
-        <div className={styles.jornadaTabs}>
-          {[1, 2, 3].map(j => (
-            <button
-              key={j}
-              onClick={() => setSelectedJornada(j)}
-              className={`${styles.tabBtn} ${selectedJornada === j ? styles.tabActive : ''} ${confirmed[j] ? styles.tabConfirmed : j === currentJornada ? styles.tabCurrent : styles.tabPending}`}
-            >
-              Jornada {j}
-              <span className={styles.tabIcon}>
-                {confirmed[j] ? '✓' : j === currentJornada ? '🔄' : '🔒'}
-              </span>
-            </button>
-          ))}
-        </div>
+        <CustomSelect
+          value={selectedJornada}
+          onChange={setSelectedJornada}
+          label="Jornada:"
+          options={[
+            { value: 1, label: 'Jornada 1' },
+            { value: 2, label: 'Jornada 2' },
+            { value: 3, label: 'Jornada 3' },
+          ]}
+        />
       )}
 
       {phase === 'G' ? (
