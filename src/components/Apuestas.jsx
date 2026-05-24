@@ -20,6 +20,7 @@ export default function Apuestas({
   getCurrentJornada,
   confirmJornada,
   confirmR16Prediction,
+  confirmEliminationPhase,
   r16Substitutions = {},
   octavosSubstitutions = {},
   octavosGroupInfo = {},
@@ -78,12 +79,16 @@ export default function Apuestas({
     const allFilled = isPhasePredictionCompleted(phaseName)
     const allCompleted = isPhaseActualsCompleted(phaseName)
     const prevCompleted = isPreviousPhaseCompleted(phaseName)
+    const phaseConfirmed = confirmed[phaseName] || false
 
-    console.log(`renderEliminationPhase(${phaseName}):`, { allFilled, allCompleted, prevCompleted, participant })
+    console.log(`renderEliminationPhase(${phaseName}):`, { allFilled, allCompleted, prevCompleted, phaseConfirmed, participant })
 
     let status = prevCompleted ? 'progreso' : 'pendiente'
     let borderClass = styles.jornadaDefault
-    if (allCompleted) {
+    if (phaseConfirmed) {
+      status = 'confirmado'
+      borderClass = styles.jornadaConfirmed
+    } else if (allCompleted) {
       status = 'confirmado'
       borderClass = styles.jornadaConfirmed
     } else if (allFilled || prevCompleted) {
@@ -93,12 +98,19 @@ export default function Apuestas({
 
     console.log(`${phaseName} status:`, status)
 
+    const handleConfirm = () => {
+      if (allFilled && confirmEliminationPhase) {
+        confirmEliminationPhase(participant, phaseName)
+      }
+    }
+
     const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
     const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
     const confirmSection = status === 'progreso' && status !== 'confirmado' && (
       <div className={styles.confirmSection}>
         <button
+          onClick={handleConfirm}
           disabled={!allFilled}
           className={styles.confirmBtn}
         >
