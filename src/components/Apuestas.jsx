@@ -183,6 +183,47 @@ export default function Apuestas({
         <div className={styles.jornadasContainer}>
           {renderJornada(selectedJornada)}
         </div>
+      ) : phase === 'R16' ? (
+        <div className={`${styles.jornadaSection} ${styles.jornadaDefault}`}>
+          <div className={styles.jornadaHeader}>
+            <h3 className={styles.jornadaHeading}>
+              Dieciseisavos
+            </h3>
+          </div>
+
+          <div className={styles.matches}>
+            {MATCHES.filter(m => m.ph === phase).map(match => {
+              const pred = userPreds[match.id] || { h: '', a: '' }
+              const actual = actuals[match.id]
+
+              return (
+                <MatchCard
+                  key={match.id}
+                  match={match}
+                  value={pred}
+                  onChange={(field, val) => savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
+                  actual={actual}
+                  showActual={true}
+                  editable={true}
+                  r16Substitutions={r16Substitutions}
+                  octavosSubstitutions={octavosSubstitutions}
+                  octavosGroupInfo={octavosGroupInfo}
+                  cuartosSubstitutions={cuartosSubstitutions}
+                  cuartosGroupInfo={cuartosGroupInfo}
+                  semifinalSubstitutions={semifinalSubstitutions}
+                  semifinalGroupInfo={semifinalGroupInfo}
+                  tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+                  tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+                  finalSubstitutions={finalSubstitutions}
+                  finalGroupInfo={finalGroupInfo}
+                  selectedThirds={selectedThirds}
+                  availableThirds={availableThirds}
+                  onSetPredictedWinner={setPredictedWinner}
+                />
+              )
+            })}
+          </div>
+        </div>
       ) : (
         <div className={styles.matches}>
           {MATCHES.filter(m => m.ph === phase).map(match => {
