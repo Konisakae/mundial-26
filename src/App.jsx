@@ -297,18 +297,23 @@ export default function App() {
 
   // Generar cuartos cuando octavos estén completos
   useEffect(() => {
-    generateEliminationMatches('OCT', 'CTO', octavosSubstitutions, setCuartosSubstitutions, setCuartosGroupInfo, actuals)
+    if (Object.keys(octavosSubstitutions).length > 0) {
+      generateCuartosMatches(octavosSubstitutions, actuals)
+    }
   }, [actuals, octavosSubstitutions])
 
   // Generar semifinales cuando cuartos estén completos
   useEffect(() => {
-    generateEliminationMatches('CTO', 'SEMI', cuartosSubstitutions, setSemifinalSubstitutions, setSemifinalGroupInfo, actuals)
+    if (Object.keys(cuartosSubstitutions).length > 0) {
+      generateSemifinalMatches(cuartosSubstitutions, actuals)
+    }
   }, [actuals, cuartosSubstitutions])
 
   // Generar tercer puesto y final cuando semifinales estén completos
   useEffect(() => {
-    generateEliminationMatches('SEMI', '3P', semifinalSubstitutions, setTercerPuestoSubstitutions, setTercerPuestoGroupInfo, actuals)
-    generateEliminationMatches('SEMI', 'FIN', semifinalSubstitutions, setFinalSubstitutions, setFinalGroupInfo, actuals)
+    if (Object.keys(semifinalSubstitutions).length > 0) {
+      generateFinalMatches(semifinalSubstitutions, actuals)
+    }
   }, [actuals, semifinalSubstitutions])
 
 
@@ -417,56 +422,38 @@ export default function App() {
     storage.set('wc26_r16Confirmed', true)
   }
 
-  // Función genérica para generar matches de cualquier fase eliminatoria
-  const generateEliminationMatches = (sourcePhase, targetPhase, sourceSubstitutions, targetSetter, targetGroupSetter, actualResults) => {
-    const sourceMatches = MATCHES.filter(m => m.ph === sourcePhase)
-    const sourceCompleted = sourceMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
+  // Función auxiliar para extraer info de grupo de una referencia
+  const extractGroupInfoFromRef = (ref, matchId) => {
+    if (ref.includes('3.º') && ref.includes('/')) {
+      const selectedGroup = selectedThirds[matchId]
+      if (selectedGroup) {
+        return { position: '3', group: selectedGroup }
+      }
+    }
+    const match = ref.match(/^(\d+)\.º\s*([A-Z])$/i)
+    if (match) {
+      return { position: match[1], group: match[2] }
+    }
+    return null
+  }
 
-    if (!sourceCompleted) return
+  // Generar cuartos desde octavos
+  const generateCuartosMatches = (octavosSubs, actualResults) => {
+    const octMatches = MATCHES.filter(m => m.ph === 'OCT')
+    const octCompleted = octMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
+
+    if (!octCompleted) return
 
     const subs = {}
     const groupInfo = {}
 
-    // Función auxiliar para extraer info de grupo
-    const extractGroupInfoFromRef = (ref, matchId) => {
-      if (ref.includes('3.º') && ref.includes('/')) {
-        const selectedGroup = selectedThirds[matchId]
-        if (selectedGroup) {
-          return { position: '3', group: selectedGroup }
-        }
-      }
-      const match = ref.match(/^(\d+)\.º\s*([A-Z])$/i)
-      if (match) {
-        return { position: match[1], group: match[2] }
-      }
-      return null
-    }
-
-    // Función para obtener ganador
     const getWinner = (matchId) => {
       const match = MATCHES.find(m => m.id === matchId)
       const actual = actualResults[matchId]
       if (!match || !actual) return null
 
-      const resolveTeamRef = (ref) => {
-        if (sourceSubstitutions[ref]) return sourceSubstitutions[ref]
-        if (ref.includes('3.º') && ref.includes('/')) {
-          const match_ref = ref.match(/3\.º\s*(.+)/i)
-          if (match_ref) {
-            const possibleGroups = match_ref[1].split('/').map(g => g.trim())
-            const selectedGroup = selectedThirds[matchId]
-            if (selectedGroup && possibleGroups.includes(selectedGroup)) {
-              const teamCode = sourceSubstitutions[`3.º ${selectedGroup}`]
-              if (teamCode) return teamCode
-            }
-          }
-        }
-        if (sourceSubstitutions[ref]) return sourceSubstitutions[ref]
-        return ref
-      }
-
-      const h = resolveTeamRef(match.h)
-      const a = resolveTeamRef(match.a)
+      const h = octavosSubs[match.h] || match.h
+      const a = octavosSubs[match.a] || match.a
 
       if (actual.winner) return actual.winner === 'h' ? h : a
       const hScore = Number(actual.h)
@@ -474,44 +461,178 @@ export default function App() {
       return hScore > aScore ? h : aScore > hScore ? a : null
     }
 
-    // Mapeo genérico para fases eliminatorias
-    const phaseMappings = {
-      'OCT': { 89: [97, 98], 90: [99, 100], 91: 97, 92: 98, 93: 99, 94: 100 },
-      'CTO': { 97: [101, 102], 98: 101, 99: 101, 100: 102 },
-      'SEMI': { 101: [103, 104], 102: 104 },
-      '3P': { 102: 103 },
-      'FIN': {}
+    // Mapeo: P89-P96 a P97-P100
+    const octToCto = {
+      89: [97, 90],
+      91: [99, 92],
+      93: [98, 94],
+      95: [100, 96],
     }
 
-    const mapping = phaseMappings[targetPhase]
-    if (mapping) {
-      sourceMatches.forEach(m => {
-        const winner = getWinner(m.id)
-        if (winner) {
-          subs[`Gan. P${m.id}`] = winner
-          const groupInfoVal = extractGroupInfoFromRef(m.h, m.id) || extractGroupInfoFromRef(m.a, m.id)
-          if (groupInfoVal) {
-            groupInfo[`Gan. P${m.id}`] = groupInfoVal
-          }
-        }
-      })
+    Object.entries(octToCto).forEach(([octId, [ctoId, octIdPair]]) => {
+      const octIdNum = Number(octId)
+      const octIdPairNum = Number(octIdPair)
+
+      const winner1 = getWinner(octIdNum)
+      const winner2 = getWinner(octIdPairNum)
+
+      if (winner1) {
+        subs[`Gan. P${octId}`] = winner1
+        const match1 = MATCHES.find(m => m.id === octIdNum)
+        const groupInfoVal1 = extractGroupInfoFromRef(match1.h, octIdNum) || extractGroupInfoFromRef(match1.a, octIdNum)
+        if (groupInfoVal1) groupInfo[`Gan. P${octId}`] = groupInfoVal1
+      }
+
+      if (winner2) {
+        subs[`Gan. P${octIdPair}`] = winner2
+        const match2 = MATCHES.find(m => m.id === octIdPairNum)
+        const groupInfoVal2 = extractGroupInfoFromRef(match2.h, octIdPairNum) || extractGroupInfoFromRef(match2.a, octIdPairNum)
+        if (groupInfoVal2) groupInfo[`Gan. P${octIdPair}`] = groupInfoVal2
+      }
+    })
+
+    setCuartosSubstitutions(subs)
+    setCuartosGroupInfo(groupInfo)
+    storage.set('wc26_cuartosSubstitutions', subs)
+    storage.set('wc26_cuartosGroupInfo', groupInfo)
+  }
+
+  // Generar semifinales desde cuartos
+  const generateSemifinalMatches = (cuartosSubs, actualResults) => {
+    const ctoMatches = MATCHES.filter(m => m.ph === 'CTO')
+    const ctoCompleted = ctoMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
+
+    if (!ctoCompleted) return
+
+    const subs = {}
+    const groupInfo = {}
+
+    const getWinner = (matchId) => {
+      const match = MATCHES.find(m => m.id === matchId)
+      const actual = actualResults[matchId]
+      if (!match || !actual) return null
+
+      const h = cuartosSubs[match.h] || match.h
+      const a = cuartosSubs[match.a] || match.a
+
+      if (actual.winner) return actual.winner === 'h' ? h : a
+      const hScore = Number(actual.h)
+      const aScore = Number(actual.a)
+      return hScore > aScore ? h : aScore > hScore ? a : null
     }
 
-    targetSetter(subs)
-    targetGroupSetter(groupInfo)
+    // Mapeo: P97-P100 a P101-P102
+    const ctoToSemi = {
+      97: [101, 98],
+      99: [102, 100],
+    }
 
-    // Mapear nombres de fases a keys de localStorage
-    const storageKeys = {
-      'CTO': 'cuartos',
-      'SEMI': 'semifinal',
-      '3P': 'tercerPuesto',
-      'FIN': 'final'
+    Object.entries(ctoToSemi).forEach(([ctoId, [semiId, ctoIdPair]]) => {
+      const ctoIdNum = Number(ctoId)
+      const ctoIdPairNum = Number(ctoIdPair)
+
+      const winner1 = getWinner(ctoIdNum)
+      const winner2 = getWinner(ctoIdPairNum)
+
+      if (winner1) {
+        subs[`Gan. P${ctoId}`] = winner1
+        const match1 = MATCHES.find(m => m.id === ctoIdNum)
+        const groupInfoVal1 = extractGroupInfoFromRef(match1.h, ctoIdNum) || extractGroupInfoFromRef(match1.a, ctoIdNum)
+        if (groupInfoVal1) groupInfo[`Gan. P${ctoId}`] = groupInfoVal1
+      }
+
+      if (winner2) {
+        subs[`Gan. P${ctoIdPair}`] = winner2
+        const match2 = MATCHES.find(m => m.id === ctoIdPairNum)
+        const groupInfoVal2 = extractGroupInfoFromRef(match2.h, ctoIdPairNum) || extractGroupInfoFromRef(match2.a, ctoIdPairNum)
+        if (groupInfoVal2) groupInfo[`Gan. P${ctoIdPair}`] = groupInfoVal2
+      }
+    })
+
+    setSemifinalSubstitutions(subs)
+    setSemifinalGroupInfo(groupInfo)
+    storage.set('wc26_semifinalSubstitutions', subs)
+    storage.set('wc26_semifinalGroupInfo', groupInfo)
+  }
+
+  // Generar tercer puesto y final desde semifinales
+  const generateFinalMatches = (semifinalSubs, actualResults) => {
+    const semiMatches = MATCHES.filter(m => m.ph === 'SEMI')
+    const semiCompleted = semiMatches.every(m => actualResults[m.id]?.h !== undefined && actualResults[m.id]?.a !== undefined && actualResults[m.id]?.h !== '' && actualResults[m.id]?.a !== '')
+
+    if (!semiCompleted) return
+
+    const tercerSubs = {}
+    const tercerGroupInfo = {}
+    const finalSubs = {}
+    const finalGroupInfo = {}
+
+    const getWinner = (matchId) => {
+      const match = MATCHES.find(m => m.id === matchId)
+      const actual = actualResults[matchId]
+      if (!match || !actual) return null
+
+      const h = semifinalSubs[match.h] || match.h
+      const a = semifinalSubs[match.a] || match.a
+
+      if (actual.winner) return actual.winner === 'h' ? h : a
+      const hScore = Number(actual.h)
+      const aScore = Number(actual.a)
+      return hScore > aScore ? h : aScore > hScore ? a : null
     }
-    const key = storageKeys[targetPhase]
-    if (key) {
-      storage.set(`wc26_${key}Substitutions`, subs)
-      storage.set(`wc26_${key}GroupInfo`, groupInfo)
+
+    const getLoser = (matchId) => {
+      const match = MATCHES.find(m => m.id === matchId)
+      const actual = actualResults[matchId]
+      if (!match || !actual) return null
+
+      const h = semifinalSubs[match.h] || match.h
+      const a = semifinalSubs[match.a] || match.a
+
+      if (actual.winner) return actual.winner === 'h' ? a : h
+      const hScore = Number(actual.h)
+      const aScore = Number(actual.a)
+      return hScore > aScore ? a : aScore > hScore ? h : null
     }
+
+    // P101 y P102 son semifinales
+    const winner101 = getWinner(101)
+    const loser101 = getLoser(101)
+    const winner102 = getWinner(102)
+    const loser102 = getLoser(102)
+
+    // P103 es tercer puesto (perdedores de semis)
+    if (loser101 && loser102) {
+      tercerSubs['Gan. P101'] = loser101
+      tercerSubs['Gan. P102'] = loser102
+      const match101 = MATCHES.find(m => m.id === 101)
+      const groupInfo101 = extractGroupInfoFromRef(match101.h, 101) || extractGroupInfoFromRef(match101.a, 101)
+      if (groupInfo101) tercerGroupInfo['Gan. P101'] = groupInfo101
+      const match102 = MATCHES.find(m => m.id === 102)
+      const groupInfo102 = extractGroupInfoFromRef(match102.h, 102) || extractGroupInfoFromRef(match102.a, 102)
+      if (groupInfo102) tercerGroupInfo['Gan. P102'] = groupInfo102
+    }
+
+    // P104 es final (ganadores de semis)
+    if (winner101 && winner102) {
+      finalSubs['Gan. P101'] = winner101
+      finalSubs['Gan. P102'] = winner102
+      const match101 = MATCHES.find(m => m.id === 101)
+      const groupInfo101 = extractGroupInfoFromRef(match101.h, 101) || extractGroupInfoFromRef(match101.a, 101)
+      if (groupInfo101) finalGroupInfo['Gan. P101'] = groupInfo101
+      const match102 = MATCHES.find(m => m.id === 102)
+      const groupInfo102 = extractGroupInfoFromRef(match102.h, 102) || extractGroupInfoFromRef(match102.a, 102)
+      if (groupInfo102) finalGroupInfo['Gan. P102'] = groupInfo102
+    }
+
+    setTercerPuestoSubstitutions(tercerSubs)
+    setTercerPuestoGroupInfo(tercerGroupInfo)
+    setFinalSubstitutions(finalSubs)
+    setFinalGroupInfo(finalGroupInfo)
+    storage.set('wc26_tercerPuestoSubstitutions', tercerSubs)
+    storage.set('wc26_tercerPuestoGroupInfo', tercerGroupInfo)
+    storage.set('wc26_finalSubstitutions', finalSubs)
+    storage.set('wc26_finalGroupInfo', finalGroupInfo)
   }
 
   const generateOctavosMatches = (r16Subs, selectedThirds, availThirds, actualResults) => {
