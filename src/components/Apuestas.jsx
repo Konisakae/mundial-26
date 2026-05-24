@@ -78,6 +78,8 @@ export default function Apuestas({
     const allCompleted = isPhaseActualsCompleted(phaseName)
     const prevCompleted = isPreviousPhaseCompleted(phaseName)
 
+    console.log(`renderEliminationPhase(${phaseName}):`, { allFilled, allCompleted, prevCompleted, participant })
+
     let status = prevCompleted ? 'progreso' : 'pendiente'
     let borderClass = styles.jornadaDefault
     if (allCompleted) {
@@ -87,6 +89,8 @@ export default function Apuestas({
       status = 'progreso'
       borderClass = styles.jornadaCurrent
     }
+
+    console.log(`${phaseName} status:`, status)
 
     const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
     const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
@@ -318,6 +322,20 @@ export default function Apuestas({
           const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
           const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
+          const confirmSection = status === 'progreso' && status !== 'confirmado' && (
+            <div className={styles.confirmSection}>
+              <button
+                disabled={!allFilled}
+                className={styles.confirmBtn}
+              >
+                Confirmar dieciseisavos
+              </button>
+              {!allFilled && (
+                <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+              )}
+            </div>
+          )
+
           return (
             <div className={`${styles.jornadaSection} ${borderClass}`}>
               <div className={styles.jornadaHeader}>
@@ -326,6 +344,8 @@ export default function Apuestas({
                   <span className={badgeClass}>{badgeText}</span>
                 </h3>
               </div>
+
+              {confirmSection}
 
               <div className={styles.matches}>
             {MATCHES.filter(m => m.ph === phase).map(match => {
@@ -359,6 +379,8 @@ export default function Apuestas({
               )
               })}
               </div>
+
+              {confirmSection}
             </div>
           )
         })()
