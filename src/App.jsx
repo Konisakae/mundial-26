@@ -261,6 +261,16 @@ export default function App() {
     }
   }, [simulatedJornadas])
 
+  // Generar octavos automáticamente cuando todos los R16 estén completos
+  useEffect(() => {
+    const r16Matches = MATCHES.filter(m => m.ph === 'R16')
+    const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
+
+    if (r16Completed && Object.keys(r16Substitutions).length > 0) {
+      generateOctavosMatches(r16Substitutions, selectedThirds, availableThirds, actuals)
+    }
+  }, [actuals])
+
 
   // Regenerar R16 cuando se cambia a la fase R16 en Apuestas
   useEffect(() => {
