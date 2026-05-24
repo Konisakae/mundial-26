@@ -45,6 +45,97 @@ export default function Apuestas({
   const userPreds = predictions[participant]?.predictions || {}
   const confirmed = predictions[participant]?.confirmed || { 1: false, 2: false, 3: false }
 
+  // Verificar si una fase está completada
+  const isPhasePredictionCompleted = (phaseName) => {
+    const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
+    return phaseMatches.every(m => {
+      const pred = userPreds[m.id]
+      return pred && pred.h !== '' && pred.h !== undefined && pred.a !== '' && pred.a !== undefined
+    })
+  }
+
+  const isPhaseActualsCompleted = (phaseName) => {
+    const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
+    return phaseMatches.every(m => {
+      const actual = actuals[m.id]
+      return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
+    })
+  }
+
+  // Determinar si fase anterior está completada
+  const isPreviousPhaseCompleted = (currentPhase) => {
+    const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
+    const prevPhase = phaseOrder[currentPhase]
+    if (!prevPhase) return false
+    if (prevPhase === 'G') return confirmed[1] && confirmed[2] && confirmed[3]
+    return isPhaseActualsCompleted(prevPhase)
+  }
+
+  // Renderizar fase eliminatoria con estados
+  const renderEliminationPhase = (phaseName, phaseLabel) => {
+    const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
+    const allFilled = isPhasePredictionCompleted(phaseName)
+    const allCompleted = isPhaseActualsCompleted(phaseName)
+    const prevCompleted = isPreviousPhaseCompleted(phaseName)
+
+    let status = prevCompleted ? 'progreso' : 'pendiente'
+    let borderClass = styles.jornadaDefault
+    if (allCompleted) {
+      status = 'confirmado'
+      borderClass = styles.jornadaConfirmed
+    } else if (allFilled || prevCompleted) {
+      status = 'progreso'
+      borderClass = styles.jornadaCurrent
+    }
+
+    const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
+    const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
+
+    return (
+      <div className={`${styles.jornadaSection} ${borderClass}`}>
+        <div className={styles.jornadaHeader}>
+          <h3 className={styles.jornadaHeading}>
+            {phaseLabel}
+            <span className={badgeClass}>{badgeText}</span>
+          </h3>
+        </div>
+
+        <div className={styles.matches}>
+          {phaseMatches.map(match => {
+            const pred = userPreds[match.id] || { h: '', a: '' }
+            const actual = actuals[match.id]
+
+            return (
+              <MatchCard
+                key={match.id}
+                match={match}
+                value={pred}
+                onChange={(field, val) => savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
+                actual={actual}
+                showActual={true}
+                editable={true}
+                r16Substitutions={r16Substitutions}
+                octavosSubstitutions={octavosSubstitutions}
+                octavosGroupInfo={octavosGroupInfo}
+                cuartosSubstitutions={cuartosSubstitutions}
+                cuartosGroupInfo={cuartosGroupInfo}
+                semifinalSubstitutions={semifinalSubstitutions}
+                semifinalGroupInfo={semifinalGroupInfo}
+                tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+                tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+                finalSubstitutions={finalSubstitutions}
+                finalGroupInfo={finalGroupInfo}
+                selectedThirds={selectedThirds}
+                availableThirds={availableThirds}
+                onSetPredictedWinner={setPredictedWinner}
+              />
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
   // Renderizar sección de jornada
   const renderJornada = (j) => {
     const matches = getMatchesForJornada(MATCHES, j)
@@ -253,40 +344,11 @@ export default function Apuestas({
             </div>
           )
         })()
-      ) : (
-        <div className={styles.matches}>
-          {MATCHES.filter(m => m.ph === phase).map(match => {
-            const pred = userPreds[match.id] || { h: '', a: '' }
-            const actual = actuals[match.id]
-
-            return (
-              <MatchCard
-                key={match.id}
-                match={match}
-                value={pred}
-                onChange={(field, val) => savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
-                actual={actual}
-                showActual={true}
-                editable={true}
-                r16Substitutions={r16Substitutions}
-                octavosSubstitutions={octavosSubstitutions}
-                octavosGroupInfo={octavosGroupInfo}
-                cuartosSubstitutions={cuartosSubstitutions}
-                cuartosGroupInfo={cuartosGroupInfo}
-                semifinalSubstitutions={semifinalSubstitutions}
-                semifinalGroupInfo={semifinalGroupInfo}
-                tercerPuestoSubstitutions={tercerPuestoSubstitutions}
-                tercerPuestoGroupInfo={tercerPuestoGroupInfo}
-                finalSubstitutions={finalSubstitutions}
-                finalGroupInfo={finalGroupInfo}
-                selectedThirds={selectedThirds}
-                availableThirds={availableThirds}
-                onSetPredictedWinner={setPredictedWinner}
-              />
-            )
-          })}
-        </div>
-      )}
+      ) : phase === 'OCT' ? renderEliminationPhase('OCT', 'Octavos')
+      : phase === 'CTO' ? renderEliminationPhase('CTO', 'Cuartos')
+      : phase === 'SEMI' ? renderEliminationPhase('SEMI', 'Semifinales')
+      : phase === '3P' ? renderEliminationPhase('3P', 'Tercer Puesto')
+      : renderEliminationPhase('FIN', 'Final')}
     </div>
   )
 }
