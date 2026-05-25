@@ -100,7 +100,7 @@ export default function Apuestas({
 
     console.log(`renderEliminationPhase(${phaseName}):`, { allFilled, allCompleted, prevCompleted, phaseConfirmed, participant })
 
-    let status = prevCompleted ? 'progreso' : 'pendiente'
+    let status = 'pendiente'
     let borderClass = styles.jornadaDefault
     if (phaseConfirmed) {
       status = 'confirmado'
@@ -108,7 +108,7 @@ export default function Apuestas({
     } else if (allCompleted) {
       status = 'confirmado'
       borderClass = styles.jornadaConfirmed
-    } else if (allFilled || prevCompleted) {
+    } else if (prevCompleted && allFilled) {
       status = 'progreso'
       borderClass = styles.jornadaCurrent
     }
