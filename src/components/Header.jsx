@@ -104,12 +104,12 @@ export default function Header({
 
                 <button
                   onClick={simulateOctavos}
-                  disabled={!simulatedPhases?.OCT === false && !Object.keys(selectedThirds).length >= 8}
+                  disabled={Object.keys(selectedThirds).length < 8}
                   className={styles.simulateBtn}
                   title="Simular octavos: 8 partidos (89-96)"
                   style={{ opacity: (Object.keys(selectedThirds).length >= 8) ? 1 : 0.5 }}
                 >
-                  S8 {simulatedPhases?.OCT ? '✓' : ''}
+                  S8 {simulatedPhases?.OCT ? '✓' : Object.keys(selectedThirds).length >= 8 ? '' : '🔒'}
                 </button>
 
                 <button
