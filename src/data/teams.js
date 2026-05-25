@@ -19,7 +19,7 @@ export const TEAMS = {
   IRK:{n:'Irak',c:'IRK',f:'🇮🇶'},         NOR:{n:'Noruega',c:'NOR',f:'🇳🇴'},
   ARG:{n:'Argentina',c:'ARG',f:'🇦🇷'},     ALG:{n:'Argelia',c:'ALG',f:'🇩🇿'},
   AUT:{n:'Austria',c:'AUT',f:'🇦🇹'},       JOR:{n:'Jordania',c:'JOR',f:'🇯🇴'},
-  POR:{n:'Portugal',c:'POR',f:'🇵🇹'},      CON:{n:'Rep. Democrática del Congo',c:'CON',f:'🇨🇬'},
+  POR:{n:'Portugal',c:'POR',f:'🇵🇹'},      RDC:{n:'RD Congo',c:'RDC',f:'🇨🇬'},
   ING:{n:'Inglaterra',c:'ING',f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'}, CRO:{n:'Croacia',c:'CRO',f:'🇭🇷'},
   GHA:{n:'Ghana',c:'GHA',f:'🇬🇭'},         PAN:{n:'Panamá',c:'PAN',f:'🇵🇦'},
   UZB:{n:'Uzbekistán',c:'UZB',f:'🇺🇿'},   COL:{n:'Colombia',c:'COL',f:'🇨🇴'},
