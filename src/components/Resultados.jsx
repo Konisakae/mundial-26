@@ -58,6 +58,25 @@ export default function Resultados({
     return Object.keys(selectedThirds).filter(k => k !== 'completed').length
   }
 
+  // Verificar si la fase anterior está confirmada en resultados
+  const isPreviousPhaseConfirmedResults = () => {
+    if (phase === 'G') {
+      // Para jornadas: requiere que jornada anterior esté confirmada
+      if (jornada === 1) return true // Jornada 1 siempre accesible
+      return resultsConfirmed[jornada - 1]
+    } else if (phase === 'R16') {
+      // R16 requiere jornadas 1,2,3 confirmadas + enfrentamientos confirmados
+      return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
+    } else {
+      // Otras fases requieren fase anterior confirmada
+      const phaseOrder = { 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
+      const prevPhase = phaseOrder[phase]
+      return prevPhase ? resultsConfirmed[prevPhase] : false
+    }
+  }
+
+  const isPhaseBlocked = !isPreviousPhaseConfirmedResults()
+
   return (
     <div className={styles.resultados}>
       <div className={styles.controls}>
@@ -89,6 +108,19 @@ export default function Resultados({
         )}
       </div>
 
+      {isPhaseBlocked && (
+        <div style={{
+          padding: '1rem',
+          background: 'rgba(255, 100, 100, 0.1)',
+          border: '1px solid rgba(255, 100, 100, 0.3)',
+          borderRadius: '0.5rem',
+          color: '#ff6464',
+          marginBottom: '1rem'
+        }}>
+          ⚠️ Esta fase está bloqueada. Confirma la fase anterior primero.
+        </div>
+      )}
+
       <div className={styles.matches}>
         {matches.map(match => {
           const actual = actuals[match.id]
@@ -99,14 +131,14 @@ export default function Resultados({
             <MatchCard
               key={match.id}
               match={match}
-              value={isAdmin && !actual ? editing_data : null}
-              onChange={isAdmin && !actual ? (field, val) => handleInputChange(match.id, field, val) : null}
-              onReset={isAdmin && actual ? () => handleReset(match.id) : null}
+              value={isAdmin && !actual && !isPhaseBlocked ? editing_data : null}
+              onChange={isAdmin && !actual && !isPhaseBlocked ? (field, val) => handleInputChange(match.id, field, val) : null}
+              onReset={isAdmin && actual && !isPhaseBlocked ? () => handleReset(match.id) : null}
               actual={actual}
               showActual={false}
-              editable={isAdmin && !actual}
-              saveBtn={isAdmin && !actual ? () => handleSave(match.id) : null}
-              resetBtn={isAdmin && actual ? () => handleReset(match.id) : null}
+              editable={isAdmin && !actual && !isPhaseBlocked}
+              saveBtn={isAdmin && !actual && !isPhaseBlocked ? () => handleSave(match.id) : null}
+              resetBtn={isAdmin && actual && !isPhaseBlocked ? () => handleReset(match.id) : null}
               r16Substitutions={r16Substitutions}
               octavosSubstitutions={octavosSubstitutions}
               octavosGroupInfo={octavosGroupInfo}
@@ -129,7 +161,7 @@ export default function Resultados({
         })}
       </div>
 
-      {isAdmin && (
+      {isAdmin && !isPhaseBlocked && (
         <div className={styles.confirmSection}>
           {areAllMatchesFilled() && (
             <button
