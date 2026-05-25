@@ -47,25 +47,6 @@ export default function Clasificacion({ participants, predictions, actuals }) {
     return { championTeam, winners }
   }
 
-  // Obtener el campeón real
-  const getRealChampion = () => {
-    const finalMatch = actuals[104]
-    if (!finalMatch || finalMatch.h === undefined || finalMatch.a === undefined) return null
-
-    const hScore = Number(finalMatch.h)
-    const aScore = Number(finalMatch.a)
-    const winner = finalMatch.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
-    if (!winner) return null
-
-    const finalMatchData = MATCHES.find(m => m.id === 104)
-    if (!finalMatchData) return null
-
-    const teamCode = winner === 'h' ? finalMatchData.h : finalMatchData.a
-    return TEAMS[teamCode]?.n || teamCode
-  }
-
-  const realChampion = getRealChampion()
-
   const standings = participants.map((p, i) => ({
     name: p,
     pts: calcTotalPts(p, predictions, actuals, MATCHES),
@@ -74,16 +55,10 @@ export default function Clasificacion({ participants, predictions, actuals }) {
 
   return (
     <div className={styles.clasificacion}>
-      {realChampion && standings.length > 0 && (
+      {standings.length > 0 && (
         <div className={styles.championSection}>
-          <div>
-            <div className={styles.championLabel}>Campeón Real:</div>
-            <div className={styles.championValue}>{realChampion}</div>
-          </div>
-          <div className={styles.winnerSection}>
-            <div className={styles.winnerLabel}>Ganador:</div>
-            <div className={styles.winner}>{standings[0].name}</div>
-          </div>
+          <div className={styles.championLabel}>Ganador:</div>
+          <div className={styles.championValue}>{standings[0].name}</div>
         </div>
       )}
 
