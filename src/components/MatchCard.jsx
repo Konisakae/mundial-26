@@ -386,7 +386,7 @@ export default function MatchCard({
               const hScore = Number(actual.h)
               const aScore = Number(actual.a)
               const winner = actual.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
-              return winner && (
+              return winner && isElimination && (
                 <>
                   {' - Ganador: '}<span className={styles.actualValue}>{winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
                 </>
