@@ -1,7 +1,7 @@
 .resultados {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .controls {
@@ -59,8 +59,8 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  padding: 1rem;
-  margin-top: 1rem;
+  padding: 0.5rem 0;
+  margin: 0;
 }
 
 .confirmBtn {
