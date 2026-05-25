@@ -234,8 +234,8 @@ export default function MatchCard({
               {showWinnerDisplay && (
                 <span
                   onClick={() => {
-                    if (!isAdmin && onSetPredictedWinner && isDraw) onSetPredictedWinner(match.id, 'h')
-                    else if (isAdmin && onSetWinner && isDraw) onSetWinner(match.id, 'h')
+                    if (!isAdmin && onSetPredictedWinner && isDraw && !isConfirmed) onSetPredictedWinner(match.id, 'h')
+                    else if (isAdmin && onSetWinner && isDraw && !isConfirmed) onSetWinner(match.id, 'h')
                   }}
                   style={{
                     display: 'inline-block',
@@ -245,7 +245,7 @@ export default function MatchCard({
                     border: '2px solid #00d9ff',
                     marginLeft: '0.5rem',
                     background: (autoWinner === 'h' || (!showActual ? actual : value)?.winner === 'h') ? '#00d9ff' : 'transparent',
-                    cursor: isDraw ? 'pointer' : 'default',
+                    cursor: isDraw && !isConfirmed ? 'pointer' : 'default',
                   }}
                 />
               )}
@@ -351,8 +351,8 @@ export default function MatchCard({
               {showWinnerDisplay && (
                 <span
                   onClick={() => {
-                    if (!isAdmin && onSetPredictedWinner && isDraw) onSetPredictedWinner(match.id, 'a')
-                    else if (isAdmin && onSetWinner && isDraw) onSetWinner(match.id, 'a')
+                    if (!isAdmin && onSetPredictedWinner && isDraw && !isConfirmed) onSetPredictedWinner(match.id, 'a')
+                    else if (isAdmin && onSetWinner && isDraw && !isConfirmed) onSetWinner(match.id, 'a')
                   }}
                   style={{
                     display: 'inline-block',
@@ -362,7 +362,7 @@ export default function MatchCard({
                     border: '2px solid #00d9ff',
                     marginRight: '0.5rem',
                     background: (autoWinner === 'a' || (!showActual ? actual : value)?.winner === 'a') ? '#00d9ff' : 'transparent',
-                    cursor: isDraw ? 'pointer' : 'default',
+                    cursor: isDraw && !isConfirmed ? 'pointer' : 'default',
                   }}
                 />
               )}
