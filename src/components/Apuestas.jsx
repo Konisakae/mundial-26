@@ -137,7 +137,8 @@ export default function Apuestas({
     const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
     const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
-    const confirmSection = status === 'progreso' && status !== 'confirmado' && (
+    const showConfirmButton = !['SEMI', '3P', 'FIN'].includes(phaseName)
+    const confirmSection = showConfirmButton && status === 'progreso' && status !== 'confirmado' && (
       <div className={styles.confirmSection}>
         <button
           onClick={handleConfirm}
