@@ -17,9 +17,10 @@ export default function Clasificacion({ participants, predictions, actuals }) {
   }, [participants])
 
   // Obtener el campeón real (match 104 - final)
-  const finalMatch = actuals[104]
   const getRealChampion = () => {
+    const finalMatch = actuals[104]
     if (!finalMatch || finalMatch.h === undefined || finalMatch.a === undefined) return null
+
     const hScore = Number(finalMatch.h)
     const aScore = Number(finalMatch.a)
     const winner = finalMatch.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
@@ -34,8 +35,12 @@ export default function Clasificacion({ participants, predictions, actuals }) {
 
   // Obtener predicción de campeón para un participante
   const getPredictedChampion = (participant) => {
-    const pred = predictions[participant]?.predictions[104]
+    const participantPreds = predictions[participant]
+    if (!participantPreds || !participantPreds.predictions) return null
+
+    const pred = participantPreds.predictions[104]
     if (!pred || pred.h === undefined || pred.a === undefined) return null
+
     const hScore = Number(pred.h)
     const aScore = Number(pred.a)
     const winner = pred.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
