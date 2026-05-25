@@ -187,8 +187,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
     },
     scales: {
       x: {
-        min: 0,
-        max: Math.max(9, windowedMatchIds.length - 1),
+        offset: true,
         border: {
           display: true,
           color: '#ffffff',
