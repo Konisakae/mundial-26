@@ -284,10 +284,13 @@ export default function App() {
     // Obtener los 16 partidos de dieciseisavos
     const r16Matches = MATCHES.filter(m => m.ph === 'R16' && m.id >= 73 && m.id <= 88)
 
-    // Generar resultados reales simulados sin empates
+    // Generar resultados reales simulados (pueden tener empates)
     const newActuals = { ...actuals }
     r16Matches.forEach(m => {
-      newActuals[m.id] = generateNoDrawScore()
+      newActuals[m.id] = {
+        h: Math.floor(Math.random() * 4),
+        a: Math.floor(Math.random() * 4)
+      }
     })
 
     // Generar predicciones para todos los participantes sin empates
