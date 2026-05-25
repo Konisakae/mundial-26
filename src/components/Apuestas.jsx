@@ -88,7 +88,7 @@ export default function Apuestas({
     }
 
     // Para otras fases: fase anterior confirmada en ambos lados
-    return confirmed[prevPhase] && resultsConfirmed[prevPhase]
+    return !!(confirmed[prevPhase] && resultsConfirmed[prevPhase])
   }
 
   // Renderizar fase eliminatoria con estados
