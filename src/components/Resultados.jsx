@@ -9,6 +9,7 @@ export default function Resultados({
   phase, setPhase, group, setGroup, actuals, saveActual, setWinner, isAdmin, r16Substitutions,
   octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo,
   tercerPuestoSubstitutions, tercerPuestoGroupInfo, finalSubstitutions, finalGroupInfo, r16Confirmed, confirmR16, selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
+  resultsConfirmed = {}, confirmResults = null,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -37,6 +38,19 @@ export default function Resultados({
   const handleReset = (matchId) => {
     saveActual(matchId, undefined, undefined)
     setEditing({ ...editing, [matchId]: undefined })
+  }
+
+  // Verificar si todos los matches de la fase/jornada actual están rellenos
+  const areAllMatchesFilled = () => {
+    return matches.every(m => {
+      const actual = actuals[m.id]
+      return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
+    })
+  }
+
+  // Obtener identificador de la jornada/fase actual
+  const getCurrentPhaseId = () => {
+    return phase === 'G' ? jornada : phase
   }
 
   return (
@@ -109,6 +123,18 @@ export default function Resultados({
           )
         })}
       </div>
+
+      {isAdmin && areAllMatchesFilled() && (
+        <div className={styles.confirmSection}>
+          <button
+            onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
+            disabled={resultsConfirmed[getCurrentPhaseId()]}
+            className={styles.confirmBtn}
+          >
+            {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
