@@ -125,12 +125,13 @@ export default function Resultados({
 
       {isAdmin && isPhaseBlocked && (
         <div style={{
-          padding: '1rem',
+          padding: '0.5rem 0.75rem',
           background: 'rgba(255, 100, 100, 0.1)',
           border: '1px solid rgba(255, 100, 100, 0.3)',
-          borderRadius: '0.5rem',
+          borderRadius: '0.375rem',
           color: '#ff6464',
-          marginBottom: '1rem'
+          marginBottom: '0.75rem',
+          fontSize: '0.875rem'
         }}>
           ⚠️ Esta fase está bloqueada. Confirma la fase anterior primero.
         </div>
