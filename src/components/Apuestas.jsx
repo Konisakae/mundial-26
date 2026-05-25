@@ -106,10 +106,33 @@ export default function Apuestas({
     console.log(`${phaseName} status:`, status)
 
     const handleConfirm = () => {
-      if (allFilled && confirmEliminationPhase) {
+      // Validación adicional: verificar que todos los ganadores en empates estén seleccionados
+      const allWinnersSelected = phaseMatches.every(m => {
+        const pred = userPreds[m.id]
+        if (!pred || pred.h === '' || pred.h === undefined || pred.a === '' || pred.a === undefined) {
+          return false
+        }
+        if (pred.h === pred.a && !pred.winner) {
+          return false
+        }
+        return true
+      })
+
+      if (allWinnersSelected && confirmEliminationPhase) {
         confirmEliminationPhase(participant, phaseName)
       }
     }
+
+    const allWinnersSelected = phaseMatches.every(m => {
+      const pred = userPreds[m.id]
+      if (!pred || pred.h === '' || pred.h === undefined || pred.a === '' || pred.a === undefined) {
+        return false
+      }
+      if (pred.h === pred.a && !pred.winner) {
+        return false
+      }
+      return true
+    })
 
     const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
     const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
@@ -118,13 +141,13 @@ export default function Apuestas({
       <div className={styles.confirmSection}>
         <button
           onClick={handleConfirm}
-          disabled={!allFilled}
+          disabled={!allWinnersSelected}
           className={styles.confirmBtn}
         >
           Confirmar {phaseLabel.toLowerCase()}
         </button>
-        {!allFilled && (
-          <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+        {!allWinnersSelected && (
+          <p className={styles.validationMsg}>{!allFilled ? 'Rellena todos los partidos para confirmar' : 'Selecciona ganadores en empates'}</p>
         )}
       </div>
     )
@@ -346,8 +369,19 @@ export default function Apuestas({
           const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
           const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
+          const allWinnersSelected = r16Matches.every(m => {
+            const pred = userPreds[m.id]
+            if (!pred || pred.h === '' || pred.h === undefined || pred.a === '' || pred.a === undefined) {
+              return false
+            }
+            if (pred.h === pred.a && !pred.winner) {
+              return false
+            }
+            return true
+          })
+
           const handleConfirm = () => {
-            if (allFilled && confirmR16Prediction) {
+            if (allWinnersSelected && confirmR16Prediction) {
               confirmR16Prediction(participant)
             }
           }
@@ -356,13 +390,13 @@ export default function Apuestas({
             <div className={styles.confirmSection}>
               <button
                 onClick={handleConfirm}
-                disabled={!allFilled}
+                disabled={!allWinnersSelected}
                 className={styles.confirmBtn}
               >
                 Confirmar dieciseisavos
               </button>
-              {!allFilled && (
-                <p className={styles.validationMsg}>Rellena todos los partidos para confirmar</p>
+              {!allWinnersSelected && (
+                <p className={styles.validationMsg}>{!allFilled ? 'Rellena todos los partidos para confirmar' : 'Selecciona ganadores en empates'}</p>
               )}
             </div>
           )
