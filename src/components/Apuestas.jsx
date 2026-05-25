@@ -71,13 +71,13 @@ export default function Apuestas({
     })
   }
 
-  // Determinar si fase anterior está completada (en Apuestas = predicciones completas)
+  // Determinar si fase anterior está completada (en Apuestas = predicciones completas Y confirmadas)
   const isPreviousPhaseCompleted = (currentPhase) => {
     const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
     const prevPhase = phaseOrder[currentPhase]
     if (!prevPhase) return false
     if (prevPhase === 'G') return confirmed[1] && confirmed[2] && confirmed[3]
-    return isPhasePredictionCompleted(prevPhase)
+    return isPhasePredictionCompleted(prevPhase) && confirmed[prevPhase]
   }
 
   // Renderizar fase eliminatoria con estados
