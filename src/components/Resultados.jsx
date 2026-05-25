@@ -48,8 +48,14 @@ export default function Resultados({
     })
   }
 
-  // Verificar si todos los ganadores en empates están marcados
+  // Verificar si todos los ganadores en empates están marcados (solo para fases eliminatorias)
   const areAllWinnersSelected = () => {
+    // Para jornadas de grupos, solo necesita que estén rellenos
+    if (phase === 'G') {
+      return areAllMatchesFilled()
+    }
+
+    // Para fases eliminatorias, verificar ganadores en empates
     return matches.every(m => {
       const actual = actuals[m.id]
       if (!actual || actual.h === '' || actual.h === undefined || actual.a === '' || actual.a === undefined) {
