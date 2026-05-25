@@ -210,6 +210,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       },
       y: {
         beginAtZero: false,
+        offset: true,
         min: Math.floor(yMin),
         max: Math.ceil(yMax),
         border: {
