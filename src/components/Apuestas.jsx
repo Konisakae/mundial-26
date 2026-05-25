@@ -221,7 +221,9 @@ export default function Apuestas({
   const renderJornada = (j) => {
     const matches = getMatchesForJornada(MATCHES, j)
     const isConfirmed = confirmed[j]
-    const isCurrent = j === currentJornada
+    const prevJornada = j - 1
+    const isPrevResultsConfirmed = prevJornada < 1 || resultsConfirmed[prevJornada]
+    const isCurrent = j === currentJornada && isPrevResultsConfirmed
     const isBlocked = !isConfirmed && !isCurrent
 
     // Validar si todos los partidos están rellenos
