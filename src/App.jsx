@@ -39,6 +39,7 @@ export default function App() {
   const [r16Confirmed, setR16Confirmed] = useState(false)
   const [selectedThirds, setSelectedThirds] = useState({})
   const [resultsConfirmed, setResultsConfirmed] = useState({ 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
+  const [r16MatchupsConfirmed, setR16MatchupsConfirmed] = useState(false)
 
   useEffect(() => {
     const parts = DEFAULT_PARTICIPANTS
@@ -65,6 +66,7 @@ export default function App() {
     const r16Conf = storage.get('wc26_r16Confirmed', false)
     const selThirds = storage.get('wc26_selectedThirds', {})
     const resConfirmed = storage.get('wc26_resultsConfirmed', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
+    const r16MatchConf = storage.get('wc26_r16MatchupsConfirmed', false)
 
     setPredictions(preds)
     setActuals(acts)
@@ -84,6 +86,7 @@ export default function App() {
     setR16Confirmed(r16Conf)
     setSelectedThirds(selThirds)
     setResultsConfirmed(resConfirmed)
+    setR16MatchupsConfirmed(r16MatchConf)
     setLoading(false)
 
     // Si todas las jornadas están simuladas, generar R16 substituciones
@@ -240,6 +243,12 @@ export default function App() {
     const next = { ...resultsConfirmed, [jornadaOrPhase]: true }
     setResultsConfirmed(next)
     storage.set('wc26_resultsConfirmed', next)
+  }
+
+  // Confirmar enfrentamientos de R16
+  const confirmR16Matchups = () => {
+    setR16MatchupsConfirmed(true)
+    storage.set('wc26_r16MatchupsConfirmed', true)
   }
 
   // Simular datos de una jornada específica
@@ -1123,6 +1132,8 @@ export default function App() {
             simulatedJornadas={simulatedJornadas}
             resultsConfirmed={resultsConfirmed}
             confirmResults={confirmResults}
+            r16MatchupsConfirmed={r16MatchupsConfirmed}
+            confirmR16Matchups={confirmR16Matchups}
           />
         )}
         {tab === 'grupos' && <Grupos actuals={actuals} selectedThirds={selectedThirds} />}
@@ -1155,6 +1166,7 @@ export default function App() {
             availableThirds={availableThirds}
             selectedThirds={selectedThirds}
             resultsConfirmed={resultsConfirmed}
+            r16MatchupsConfirmed={r16MatchupsConfirmed}
           />
         )}
         {tab === 'todas' && (

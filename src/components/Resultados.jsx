@@ -9,7 +9,7 @@ export default function Resultados({
   phase, setPhase, group, setGroup, actuals, saveActual, setWinner, isAdmin, r16Substitutions,
   octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo,
   tercerPuestoSubstitutions, tercerPuestoGroupInfo, finalSubstitutions, finalGroupInfo, r16Confirmed, confirmR16, selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
-  resultsConfirmed = {}, confirmResults = null,
+  resultsConfirmed = {}, confirmResults = null, r16MatchupsConfirmed = false, confirmR16Matchups = null,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -51,6 +51,11 @@ export default function Resultados({
   // Obtener identificador de la jornada/fase actual
   const getCurrentPhaseId = () => {
     return phase === 'G' ? jornada : phase
+  }
+
+  // Para R16: contar terceros seleccionados
+  const getSelectedThirdsCount = () => {
+    return Object.keys(selectedThirds).filter(k => k !== 'completed').length
   }
 
   return (
@@ -133,6 +138,16 @@ export default function Resultados({
           >
             {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
           </button>
+
+          {phase === 'R16' && getSelectedThirdsCount() === 8 && (
+            <button
+              onClick={() => confirmR16Matchups && confirmR16Matchups()}
+              disabled={r16MatchupsConfirmed}
+              className={styles.confirmBtn}
+            >
+              {r16MatchupsConfirmed ? '✓ Enfrentamientos confirmados' : 'Confirmar enfrentamientos'}
+            </button>
+          )}
         </div>
       )}
     </div>

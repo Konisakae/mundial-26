@@ -35,6 +35,7 @@ export default function Apuestas({
   availableThirds = {},
   selectedThirds = {},
   resultsConfirmed = {},
+  r16MatchupsConfirmed = false,
 }) {
   const [selectedJornada, setSelectedJornada] = useState(1)
   const currentJornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
@@ -72,21 +73,21 @@ export default function Apuestas({
     })
   }
 
-  // Determinar si fase anterior está completada (confirmada en predicciones y resultados)
+  // Determinar si fase anterior está completada
+  // Solo verifica: confirmado en predicciones AND confirmado en resultados
   const isPreviousPhaseCompleted = (currentPhase) => {
     const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
     const prevPhase = phaseOrder[currentPhase]
     if (!prevPhase) return false
 
-    if (prevPhase === 'G') {
-      // Para pasar a R16: jornadas 1, 2, 3 confirmadas en predicciones + confirmadas en resultados + 8 terceros seleccionados
-      const jornadasConfirmedPred = confirmed[1] && confirmed[2] && confirmed[3]
-      const jornadasConfirmedRes = resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3]
-      const thirdsSelected = Object.keys(selectedThirds).filter(k => k !== 'completed').length >= 8
-      return jornadasConfirmedPred && jornadasConfirmedRes && (currentPhase !== 'R16' || thirdsSelected)
+    // Para R16: todas las jornadas confirmadas + enfrentamientos confirmados
+    if (currentPhase === 'R16') {
+      return confirmed[1] && confirmed[2] && confirmed[3] &&
+             resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] &&
+             r16MatchupsConfirmed
     }
 
-    // Para otras fases eliminatorias: fase anterior confirmada en predicciones y resultados
+    // Para otras fases: fase anterior confirmada en ambos lados
     return confirmed[prevPhase] && resultsConfirmed[prevPhase]
   }
 
