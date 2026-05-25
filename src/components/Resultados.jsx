@@ -3,14 +3,13 @@ import { MATCHES } from '../data/matches'
 import { getMatchesForJornada, JORNADAS } from '../utils/jornadas'
 import MatchCard from './MatchCard'
 import CustomSelect from './CustomSelect'
-import ThirdPlaceSelector from './ThirdPlaceSelector'
 import styles from '../styles/Resultados.module.css'
 
 export default function Resultados({
   phase, setPhase, group, setGroup, actuals, saveActual, setWinner, isAdmin, r16Substitutions,
   octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo,
   tercerPuestoSubstitutions, tercerPuestoGroupInfo, finalSubstitutions, finalGroupInfo, r16Confirmed, confirmR16, selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
-  resultsConfirmed = {}, confirmResults = null, r16MatchupsConfirmed = false, confirmR16Matchups = null, confirmThirds = null,
+  resultsConfirmed = {}, confirmResults = null, r16MatchupsConfirmed = false, confirmR16Matchups = null,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -90,15 +89,6 @@ export default function Resultados({
         )}
       </div>
 
-      {isAdmin && phase === 'R16' && getSelectedThirdsCount() < 8 && (
-        <ThirdPlaceSelector
-          actuals={actuals}
-          selectedThirds={selectedThirds}
-          onSelectThird={onSelectThird}
-          onConfirmThirds={confirmThirds}
-        />
-      )}
-
       <div className={styles.matches}>
         {matches.map(match => {
           const actual = actuals[match.id]
@@ -139,17 +129,19 @@ export default function Resultados({
         })}
       </div>
 
-      {isAdmin && areAllMatchesFilled() && (
+      {isAdmin && (
         <div className={styles.confirmSection}>
-          <button
-            onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
-            disabled={resultsConfirmed[getCurrentPhaseId()]}
-            className={styles.confirmBtn}
-          >
-            {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
-          </button>
+          {areAllMatchesFilled() && (
+            <button
+              onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
+              disabled={resultsConfirmed[getCurrentPhaseId()]}
+              className={styles.confirmBtn}
+            >
+              {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
+            </button>
+          )}
 
-          {phase === 'R16' && getSelectedThirdsCount() === 8 && (
+          {phase === 'R16' && (
             <button
               onClick={() => confirmR16Matchups && confirmR16Matchups()}
               disabled={r16MatchupsConfirmed}

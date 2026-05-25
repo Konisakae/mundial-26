@@ -251,13 +251,6 @@ export default function App() {
     storage.set('wc26_r16MatchupsConfirmed', true)
   }
 
-  // Confirmar terceros lugares seleccionados
-  const confirmThirds = () => {
-    const next = { ...selectedThirds, completed: true }
-    setSelectedThirds(next)
-    storage.set('wc26_selectedThirds', next)
-  }
-
   // Simular datos de una jornada específica
   const simulate = (jornada) => {
     if (jornada < 1 || jornada > 3) return
@@ -1123,35 +1116,15 @@ export default function App() {
             confirmR16={confirmR16}
             selectedThirds={selectedThirds}
             availableThirds={availableThirds}
-            onSelectThird={(groupOrMatchId, teamOrUndefined) => {
-              // Manejar dos formas de llamar: por matchId o por grupo
-              // Nueva forma: onSelectThird(group, team) - del ThirdPlaceSelector
-              // Antigua forma: onSelectThird(matchId, group) - del MatchCard en OCT+
-              const newSelected = { ...selectedThirds }
-
-              if (teamOrUndefined === undefined) {
-                // Nueva forma: eliminar selección
-                if (newSelected[groupOrMatchId]) {
-                  delete newSelected[groupOrMatchId]
-                }
-              } else if (teamOrUndefined === null) {
-                // Nueva forma: eliminar selección
-                if (newSelected[groupOrMatchId]) {
-                  delete newSelected[groupOrMatchId]
-                }
-              } else {
-                // Hay un segundo parámetro, seleccionar
-                newSelected[groupOrMatchId] = teamOrUndefined
-              }
-
+            onSelectThird={(matchId, group) => {
+              const newSelected = { ...selectedThirds, [matchId]: group }
               setSelectedThirds(newSelected)
               storage.set('wc26_selectedThirds', newSelected)
 
               // Actualizar r16Substitutions cuando se selecciona un tercero
-              // Si teamOrUndefined es un team (string), usarlo; si es un grupo, buscar en availableThirds
-              if (teamOrUndefined && typeof teamOrUndefined === 'string' && teamOrUndefined.length <= 3) {
-                // Es un código de equipo
-                const newSubs = { ...r16Substitutions, [`3.º ${groupOrMatchId}`]: teamOrUndefined }
+              const teamCode = availableThirds[group]
+              if (teamCode) {
+                const newSubs = { ...r16Substitutions, [`3.º ${group}`]: teamCode }
                 setR16Substitutions(newSubs)
                 storage.set('wc26_r16Substitutions', newSubs)
               }
@@ -1161,7 +1134,6 @@ export default function App() {
             confirmResults={confirmResults}
             r16MatchupsConfirmed={r16MatchupsConfirmed}
             confirmR16Matchups={confirmR16Matchups}
-            confirmThirds={confirmThirds}
           />
         )}
         {tab === 'grupos' && <Grupos actuals={actuals} selectedThirds={selectedThirds} />}
