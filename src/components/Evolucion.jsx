@@ -225,6 +225,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
         ticks: {
           color: '#cbd5e1',
           font: { size: 12 },
+          stepSize: 1,
           callback: function(value) {
             if (Number.isInteger(value)) {
               return value
