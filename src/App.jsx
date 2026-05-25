@@ -306,8 +306,12 @@ export default function App() {
     setActuals(newActuals)
     setPredictions(newPreds)
 
+    const newPhases = { ...simulatedPhases, R16: true }
+    setSimulatedPhases(newPhases)
+
     storage.set('wc26_actuals', newActuals)
     storage.set('wc26_predictions', newPreds)
+    storage.set('wc26_simulatedPhases', newPhases)
   }
 
   // Función helper para generar score sin empate
@@ -361,7 +365,7 @@ export default function App() {
   }
 
   const simulateOctavos = () => {
-    if (!r16Confirmed) return
+    if (!simulatedPhases?.R16) return
     simulateElimination('OCT')
     const newPhases = { ...simulatedPhases, OCT: true }
     setSimulatedPhases(newPhases)
