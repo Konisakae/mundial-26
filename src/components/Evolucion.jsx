@@ -188,7 +188,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
     scales: {
       x: {
         min: 0,
-        max: Math.max(10, visibleMatchIds.length - 1),
+        max: Math.max(9, windowedMatchIds.length - 1),
         border: {
           display: true,
           color: '#ffffff',
@@ -202,8 +202,8 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           color: '#cbd5e1',
           font: { size: 12 },
           callback: function(value) {
-            if (typeof value === 'number' && value < visibleMatchIds.length) {
-              return `P${visibleMatchIds[value]}`
+            if (typeof value === 'number' && value < windowedMatchIds.length) {
+              return `P${windowedMatchIds[value]}`
             }
             return value
           },
@@ -428,7 +428,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       {viewType === 'partidos' && (
         <div className={styles.navigation}>
           <button
-            onClick={() => setWindowStart(Math.max(0, windowStart - 1))}
+            onClick={() => setWindowStart(Math.max(0, windowStart - 8))}
             disabled={windowStart === 0}
             className={styles.navBtn}
           >
@@ -440,7 +440,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           </span>
 
           <button
-            onClick={() => setWindowStart(Math.min(maxWindowStart, windowStart + 1))}
+            onClick={() => setWindowStart(Math.min(maxWindowStart, windowStart + 8))}
             disabled={clampedWindowStart >= maxWindowStart}
             className={styles.navBtn}
           >
