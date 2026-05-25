@@ -7,6 +7,10 @@ import { generateInitials } from '../utils/initials'
 import styles from '../styles/Clasificacion.module.css'
 
 export default function Clasificacion({ participants, predictions, actuals }) {
+  const femaleNames = ['Laura', 'Lucía', 'Olivia', 'Eva', 'Elena', 'Charo']
+
+  const isFemale = (name) => femaleNames.some(fName => name.includes(fName))
+
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
   const colorMap = useMemo(() => {
     const map = {}
@@ -59,7 +63,7 @@ export default function Clasificacion({ participants, predictions, actuals }) {
     <div className={styles.clasificacion}>
       {standings.length > 0 && hasFinalResult && (
         <div className={styles.championSection}>
-          <div className={styles.championLabel}>Ganador:</div>
+          <div className={styles.championLabel}>{isFemale(standings[0].name) ? 'Ganadora:' : 'Ganador:'}</div>
           <div className={styles.championValue}>{standings[0].name}</div>
         </div>
       )}
