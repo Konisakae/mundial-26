@@ -137,8 +137,8 @@ export default function Apuestas({
     const badgeClass = status === 'confirmado' ? styles.badge : status === 'progreso' ? styles.badgeCurrent : styles.badgeBlocked
     const badgeText = status === 'confirmado' ? '✓ Confirmado' : status === 'progreso' ? 'En progreso' : 'Pendiente'
 
-    const showConfirmButton = !['SEMI', '3P', 'FIN'].includes(phaseName)
-    const confirmSection = showConfirmButton && status === 'progreso' && status !== 'confirmado' && (
+    const showConfirmButtonBottom = !['SEMI', '3P', 'FIN'].includes(phaseName)
+    const confirmSection = status === 'progreso' && status !== 'confirmado' && (
       <div className={styles.confirmSection}>
         <button
           onClick={handleConfirm}
@@ -152,6 +152,8 @@ export default function Apuestas({
         )}
       </div>
     )
+
+    const confirmSectionBottom = showConfirmButtonBottom && confirmSection
 
     return (
       <div className={`${styles.jornadaSection} ${borderClass}`}>
@@ -199,7 +201,7 @@ export default function Apuestas({
           })}
         </div>
 
-        {confirmSection}
+        {confirmSectionBottom}
       </div>
     )
   }
