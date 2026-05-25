@@ -53,9 +53,11 @@ export default function Clasificacion({ participants, predictions, actuals }) {
     color: colorMap[p],
   })).sort((a, b) => b.pts - a.pts)
 
+  const hasFinalResult = actuals[104]?.h !== undefined && actuals[104]?.a !== undefined
+
   return (
     <div className={styles.clasificacion}>
-      {standings.length > 0 && (
+      {standings.length > 0 && hasFinalResult && (
         <div className={styles.championSection}>
           <div className={styles.championLabel}>Ganador:</div>
           <div className={styles.championValue}>{standings[0].name}</div>
