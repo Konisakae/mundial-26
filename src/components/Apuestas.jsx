@@ -370,10 +370,10 @@ export default function Apuestas({
             const actual = actuals[m.id]
             return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
           })
-          const groupsCompleted = confirmed[1] && confirmed[2] && confirmed[3]
+          const prevCompleted = isPreviousPhaseCompleted('R16')
           const r16Confirmed = confirmed['R16'] || false
 
-          let status = groupsCompleted ? 'progreso' : 'pendiente'
+          let status = 'pendiente'
           let borderClass = styles.jornadaDefault
           if (r16Confirmed) {
             status = 'confirmado'
@@ -381,7 +381,7 @@ export default function Apuestas({
           } else if (allCompleted) {
             status = 'confirmado'
             borderClass = styles.jornadaConfirmed
-          } else if (allFilled || groupsCompleted) {
+          } else if (prevCompleted && allFilled) {
             status = 'progreso'
             borderClass = styles.jornadaCurrent
           }
