@@ -84,8 +84,8 @@ export default function Apuestas({
       return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
     }
 
-    // Para otras fases: fase anterior confirmada en predicciones
-    return !!(confirmed[prevPhase])
+    // Para otras fases: fase anterior confirmada en predicciones Y resultados
+    return !!(confirmed[prevPhase] && resultsConfirmed[prevPhase])
   }
 
   // Renderizar fase eliminatoria con estados
