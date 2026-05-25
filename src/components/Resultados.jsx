@@ -161,9 +161,9 @@ export default function Resultados({
         })}
       </div>
 
-      {isAdmin && !isPhaseBlocked && (
+      {isAdmin && (
         <div className={styles.confirmSection}>
-          {areAllMatchesFilled() && (
+          {!isPhaseBlocked && areAllMatchesFilled() && (
             <button
               onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
               disabled={resultsConfirmed[getCurrentPhaseId()]}
