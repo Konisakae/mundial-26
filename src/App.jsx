@@ -1190,6 +1190,12 @@ export default function App() {
             setGroup={setGroup}
             predictions={getPredictionsForScoring()}
             actuals={actuals}
+            r16Substitutions={r16Substitutions}
+            octavosSubstitutions={octavosSubstitutions}
+            cuartosSubstitutions={cuartosSubstitutions}
+            semifinalSubstitutions={semifinalSubstitutions}
+            tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+            finalSubstitutions={finalSubstitutions}
           />
         )}
         {tab === 'clasificacion' && (

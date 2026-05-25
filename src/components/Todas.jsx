@@ -5,10 +5,13 @@ import { AVATAR_COLORS } from '../data/colors'
 import { getMatchesForJornada } from '../utils/jornadas'
 import { generateInitials } from '../utils/initials'
 import CustomSelect from './CustomSelect'
+import TodasLayout2 from './TodasLayout2'
+import TodasLayout3 from './TodasLayout3'
 import styles from '../styles/Todas.module.css'
 
-export default function Todas({ participants, phase, setPhase, predictions, actuals }) {
+export default function Todas({ participants, phase, setPhase, predictions, actuals, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, tercerPuestoSubstitutions, finalSubstitutions }) {
   const [jornada, setJornada] = useState(1)
+  const [layoutView, setLayoutView] = useState(3)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   let matches
@@ -49,77 +52,46 @@ export default function Todas({ participants, phase, setPhase, predictions, actu
         )}
       </div>
 
-      <div className={styles.matches}>
-        {matches.map(match => {
-          const h = TEAMS[match.h]
-          const a = TEAMS[match.a]
-          const actual = actuals[match.id]
+      <div className={styles.layoutTabs}>
+        <button
+          className={`${styles.tabBtn} ${layoutView === 3 ? styles.tabActive : ''}`}
+          onClick={() => setLayoutView(3)}
+        >
+          Todas 3 (Expandible)
+        </button>
+        <button
+          className={`${styles.tabBtn} ${layoutView === 2 ? styles.tabActive : ''}`}
+          onClick={() => setLayoutView(2)}
+        >
+          Todas 2 (Tarjetas)
+        </button>
+      </div>
 
-          return (
-            <div key={match.id} className={styles.matchCard}>
-              <div className={styles.matchInfo}>
-                <div className={styles.matchHeader}>
-                  <span className={styles.date}>{match.dt}</span>
-                  <span className={styles.time}>{match.tm}</span>
-                </div>
-
-                <div className={styles.matchResult}>
-                  <div className={styles.team}>
-                    <span className={styles.flag}>{h?.f}</span>
-                    <span className={styles.name}>{h?.n}</span>
-                  </div>
-                  <div className={styles.score}>
-                    {actual ? (
-                      <>
-                        <span>{actual.h}</span>
-                        <span>-</span>
-                        <span>{actual.a}</span>
-                      </>
-                    ) : (
-                      <span className={styles.pending}>pendiente</span>
-                    )}
-                  </div>
-                  <div className={styles.team}>
-                    <span className={styles.name}>{a?.n}</span>
-                    <span className={styles.flag}>{a?.f}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.predictions}>
-                <div className={styles.predictionsHeader}>Apuestas</div>
-                <div className={styles.predictionsList}>
-                  {participants.map((p, i) => {
-                    const pred = predictions[p]?.[match.id] || { h: '', a: '' }
-                    const av = AVATAR_COLORS[i % AVATAR_COLORS.length]
-
-                    return (
-                      <div key={p} className={styles.prediction}>
-                        <div className={styles.participantName}>
-                          <div className={styles.avatar} style={{ background: av.b, color: av.t }}>
-                            {initialsMap[p]}
-                          </div>
-                          <span>{p}</span>
-                        </div>
-                        <div className={styles.predScore}>
-                          {pred.h !== '' ? (
-                            <>
-                              <span>{pred.h}</span>
-                              <span>-</span>
-                              <span>{pred.a}</span>
-                            </>
-                          ) : (
-                            <span className={styles.noPred}>-</span>
-                          )}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-          )
-        })}
+      <div className={styles.layoutContent}>
+        {layoutView === 2 && (
+          <TodasLayout2
+            participants={participants}
+            phase={phase}
+            jornada={jornada}
+            predictions={predictions}
+            actuals={actuals}
+          />
+        )}
+        {layoutView === 3 && (
+          <TodasLayout3
+            participants={participants}
+            phase={phase}
+            jornada={jornada}
+            predictions={predictions}
+            actuals={actuals}
+            r16Substitutions={r16Substitutions}
+            octavosSubstitutions={octavosSubstitutions}
+            cuartosSubstitutions={cuartosSubstitutions}
+            semifinalSubstitutions={semifinalSubstitutions}
+            tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+            finalSubstitutions={finalSubstitutions}
+          />
+        )}
       </div>
     </div>
   )

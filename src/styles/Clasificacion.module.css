@@ -86,7 +86,7 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 0.875rem;
+  font-size: 1rem;
   flex-shrink: 0;
 }
 
@@ -115,20 +115,19 @@
   color: #ffc600;
   position: relative;
   overflow: hidden;
-  animation: championPulse 2s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255, 198, 0, 0.4), inset 0 0 20px rgba(255, 198, 0, 0.1);
+  box-shadow: 0 0 20px rgba(255, 198, 0, 0.4);
 }
 
 .championSection::before {
   content: '✨';
   font-size: 1.5rem;
-  animation: spin 3s linear infinite;
+  animation: spin 4s linear infinite;
 }
 
 .championSection::after {
   content: '✨';
   font-size: 1.5rem;
-  animation: spin 3s linear infinite reverse;
+  animation: spin 4s linear infinite reverse;
 }
 
 .championLabel {
@@ -150,10 +149,10 @@
 
 @keyframes championPulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 198, 0, 0.4), inset 0 0 20px rgba(255, 198, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 198, 0, 0.4);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 198, 0, 0.8), inset 0 0 30px rgba(255, 198, 0, 0.2);
+    box-shadow: 0 0 23px rgba(255, 198, 0, 0.55);
   }
 }
 
