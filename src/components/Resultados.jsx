@@ -151,7 +151,7 @@ export default function Resultados({
           {phase === 'R16' && (
             <button
               onClick={() => confirmR16Matchups && confirmR16Matchups()}
-              disabled={r16MatchupsConfirmed}
+              disabled={r16MatchupsConfirmed || !resultsConfirmed[3]}
               className={styles.confirmBtn}
             >
               {r16MatchupsConfirmed ? '✓ Enfrentamientos confirmados' : 'Confirmar enfrentamientos'}
