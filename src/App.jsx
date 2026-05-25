@@ -280,7 +280,11 @@ export default function App() {
           a: Math.floor(Math.random() * 4)
         }
       })
-      newPreds[p] = pData
+      // Preservar confirmaciones anteriores, no sobrescribir
+      newPreds[p] = {
+        predictions: pData.predictions,
+        confirmed: pData.confirmed || { 1: false, 2: false, 3: false }
+      }
     })
 
     // Marcar jornada como simulada
@@ -319,7 +323,11 @@ export default function App() {
       r16Matches.forEach(m => {
         pData.predictions[m.id] = generateNoDrawScore()
       })
-      newPreds[p] = pData
+      // Preservar confirmaciones anteriores, no sobrescribir
+      newPreds[p] = {
+        predictions: pData.predictions,
+        confirmed: pData.confirmed || { 1: false, 2: false, 3: false }
+      }
     })
 
     setActuals(newActuals)
@@ -373,7 +381,11 @@ export default function App() {
         const score = generateNoDrawScore()
         pData.predictions[m.id] = score
       })
-      newPreds[p] = pData
+      // Preservar confirmaciones anteriores, no sobrescribir
+      newPreds[p] = {
+        predictions: pData.predictions,
+        confirmed: pData.confirmed || { 1: false, 2: false, 3: false }
+      }
     })
 
     setActuals(newActuals)
