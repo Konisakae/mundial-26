@@ -40,6 +40,7 @@ const hexToRgba = (hex, alpha = 0.8) => {
 export default function Evolucion({ participants, predictions, actuals, resultsConfirmed = {} }) {
   const [viewType, setViewType] = useState('partidos')
   const [selectedParticipant, setSelectedParticipant] = useState(null)
+  const [windowStart, setWindowStart] = useState(0)
 
   // Determinar la última fase/jornada confirmada
   const getLastConfirmedPhase = () => {
@@ -71,6 +72,12 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
 
   const visibleMatchIds = matchIds.filter(id => id <= lastMatchWithResults)
 
+  // Cálculo de ventana deslizante para "Por partidos"
+  const windowSize = 10
+  const maxWindowStart = Math.max(0, visibleMatchIds.length - windowSize)
+  const clampedWindowStart = Math.min(windowStart, maxWindowStart)
+  const windowedMatchIds = visibleMatchIds.slice(clampedWindowStart, clampedWindowStart + windowSize)
+
   const getPointsAfterMatch = (participant, upToMatchId) => {
     const matchesUpToId = MATCHES.filter(m => m.id <= upToMatchId)
 
@@ -82,21 +89,38 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
     return calcTotalPts(participant, predictions, tempActuals, matchesUpToId)
   }
 
+  // Calcular min/max de puntos en la ventana visible
+  let minPts = Infinity, maxPts = 0
+  participants.forEach(p => {
+    windowedMatchIds.forEach(id => {
+      const pts = getPointsAfterMatch(p, id)
+      minPts = Math.min(minPts, pts)
+      maxPts = Math.max(maxPts, pts)
+    })
+  })
+  minPts = isFinite(minPts) ? minPts : 0
+  // Margen del 10% arriba y abajo
+  const ptsRange = maxPts - minPts || 1
+  const yMin = Math.max(0, minPts - ptsRange * 0.1)
+  const yMax = maxPts + ptsRange * 0.1
+
   const datasets = participants.map((p, i) => {
     const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
+    const isSelected = selectedParticipant === null || selectedParticipant === p
 
-    // Generate points only up to the last match with results
-    const points = visibleMatchIds.map(id => getPointsAfterMatch(p, id))
+    // Generate points only for windowed matches
+    const points = windowedMatchIds.map(id => getPointsAfterMatch(p, id))
 
     return {
       label: p,
       data: points,
-      borderColor: color.b,
-      backgroundColor: color.b + '20',
-      fill: true,
+      borderColor: isSelected ? hexToRgba(color.b, 0.8) : hexToRgba(color.b, 0.2),
+      borderWidth: isSelected ? 2.5 : 1,
+      backgroundColor: 'transparent',
+      fill: false,
       tension: 0.4,
       cubicInterpolationMode: 'monotone',
-      pointRadius: 0,
+      pointRadius: isSelected ? 4 : 2,
       pointHoverRadius: 6,
       pointBackgroundColor: color.b,
       pointBorderColor: '#354a65',
@@ -105,7 +129,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   })
 
   const chartData = {
-    labels: visibleMatchIds.map(id => `P${id}`),
+    labels: windowedMatchIds.map(id => `P${id}`),
     datasets,
   }
 
@@ -116,12 +140,18 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       legend: {
         display: true,
         position: 'bottom',
+        maxWidth: 750,
         labels: {
           color: '#cbd5e1',
           font: { size: 12, weight: '500' },
-          padding: 15,
+          padding: 20,
           usePointStyle: true,
           boxWidth: 12,
+          boxHeight: 12,
+        },
+        onClick: (e, legendItem, legend) => {
+          const participantName = legendItem.text
+          setSelectedParticipant(selectedParticipant === participantName ? null : participantName)
         },
       },
       tooltip: {
@@ -159,13 +189,18 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       x: {
         min: 0,
         max: Math.max(10, visibleMatchIds.length - 1),
+        border: {
+          display: true,
+          color: '#ffffff',
+          width: 2,
+        },
         grid: {
           color: 'rgba(255,255,255,0.05)',
           drawBorder: false,
         },
         ticks: {
-          color: '#94a3b8',
-          font: { size: 11 },
+          color: '#cbd5e1',
+          font: { size: 12 },
           callback: function(value) {
             if (typeof value === 'number' && value < visibleMatchIds.length) {
               return `P${visibleMatchIds[value]}`
@@ -175,16 +210,21 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
         },
       },
       y: {
-        beginAtZero: true,
-        min: 0,
-        max: 50,
+        beginAtZero: false,
+        min: Math.floor(yMin),
+        max: Math.ceil(yMax),
+        border: {
+          display: true,
+          color: '#ffffff',
+          width: 2,
+        },
         grid: {
           color: 'rgba(255,255,255,0.05)',
           drawBorder: false,
         },
         ticks: {
-          color: '#94a3b8',
-          font: { size: 11 },
+          color: '#cbd5e1',
+          font: { size: 12 },
           callback: function(value) {
             if (Number.isInteger(value)) {
               return value
@@ -384,6 +424,30 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           Evolución
         </button>
       </div>
+
+      {viewType === 'partidos' && (
+        <div className={styles.navigation}>
+          <button
+            onClick={() => setWindowStart(Math.max(0, windowStart - 1))}
+            disabled={windowStart === 0}
+            className={styles.navBtn}
+          >
+            ← Anterior
+          </button>
+
+          <span className={styles.navInfo}>
+            {clampedWindowStart + 1} - {clampedWindowStart + windowedMatchIds.length} de {visibleMatchIds.length}
+          </span>
+
+          <button
+            onClick={() => setWindowStart(Math.min(maxWindowStart, windowStart + 1))}
+            disabled={clampedWindowStart >= maxWindowStart}
+            className={styles.navBtn}
+          >
+            Siguiente →
+          </button>
+        </div>
+      )}
 
       <div className={styles.chartContainer}>
         {viewType === 'partidos' && <Line data={chartData} options={options} />}
