@@ -381,7 +381,7 @@ export default function Apuestas({
           } else if (allCompleted) {
             status = 'confirmado'
             borderClass = styles.jornadaConfirmed
-          } else if (prevCompleted && allFilled) {
+          } else if (prevCompleted) {
             status = 'progreso'
             borderClass = styles.jornadaCurrent
           }
