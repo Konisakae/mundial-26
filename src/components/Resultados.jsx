@@ -48,6 +48,21 @@ export default function Resultados({
     })
   }
 
+  // Verificar si todos los ganadores en empates están marcados
+  const areAllWinnersSelected = () => {
+    return matches.every(m => {
+      const actual = actuals[m.id]
+      if (!actual || actual.h === '' || actual.h === undefined || actual.a === '' || actual.a === undefined) {
+        return false
+      }
+      // Si hay empate, debe haber ganador seleccionado
+      if (actual.h === actual.a && !actual.winner) {
+        return false
+      }
+      return true
+    })
+  }
+
   // Obtener identificador de la jornada/fase actual
   const getCurrentPhaseId = () => {
     return phase === 'G' ? jornada : phase
@@ -163,10 +178,10 @@ export default function Resultados({
 
       {isAdmin && (
         <div className={styles.confirmSection}>
-          {!isPhaseBlocked && areAllMatchesFilled() && (
+          {!isPhaseBlocked && (
             <button
               onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
-              disabled={resultsConfirmed[getCurrentPhaseId()]}
+              disabled={!areAllWinnersSelected() || resultsConfirmed[getCurrentPhaseId()]}
               className={styles.confirmBtn}
             >
               {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
