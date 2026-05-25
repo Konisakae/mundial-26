@@ -38,6 +38,7 @@ export default function App() {
   const [finalGroupInfo, setFinalGroupInfo] = useState({})
   const [r16Confirmed, setR16Confirmed] = useState(false)
   const [selectedThirds, setSelectedThirds] = useState({})
+  const [resultsConfirmed, setResultsConfirmed] = useState({ 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
 
   useEffect(() => {
     const parts = DEFAULT_PARTICIPANTS
@@ -63,6 +64,7 @@ export default function App() {
     const finalGroupInfo = storage.get('wc26_finalGroupInfo', {})
     const r16Conf = storage.get('wc26_r16Confirmed', false)
     const selThirds = storage.get('wc26_selectedThirds', {})
+    const resConfirmed = storage.get('wc26_resultsConfirmed', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
 
     setPredictions(preds)
     setActuals(acts)
@@ -81,6 +83,7 @@ export default function App() {
     setFinalGroupInfo(finalGroupInfo)
     setR16Confirmed(r16Conf)
     setSelectedThirds(selThirds)
+    setResultsConfirmed(resConfirmed)
     setLoading(false)
 
     // Si todas las jornadas están simuladas, generar R16 substituciones
@@ -230,6 +233,13 @@ export default function App() {
     }
     setPredictions(next)
     storage.set('wc26_predictions', next)
+  }
+
+  // Confirmar resultados de una jornada o fase
+  const confirmResults = (jornadaOrPhase) => {
+    const next = { ...resultsConfirmed, [jornadaOrPhase]: true }
+    setResultsConfirmed(next)
+    storage.set('wc26_resultsConfirmed', next)
   }
 
   // Simular datos de una jornada específica
@@ -1111,6 +1121,8 @@ export default function App() {
               }
             }}
             simulatedJornadas={simulatedJornadas}
+            resultsConfirmed={resultsConfirmed}
+            confirmResults={confirmResults}
           />
         )}
         {tab === 'grupos' && <Grupos actuals={actuals} selectedThirds={selectedThirds} />}
@@ -1142,6 +1154,7 @@ export default function App() {
             finalGroupInfo={finalGroupInfo}
             availableThirds={availableThirds}
             selectedThirds={selectedThirds}
+            resultsConfirmed={resultsConfirmed}
           />
         )}
         {tab === 'todas' && (
