@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { calcTotalPts } from '../utils/scoring'
-import { MATCHES, TEAMS } from '../data/matches'
+import { MATCHES } from '../data/matches'
+import { TEAMS } from '../data/teams'
 import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
 import styles from '../styles/Clasificacion.module.css'
