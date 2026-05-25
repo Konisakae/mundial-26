@@ -101,9 +101,6 @@ export default function Apuestas({
     if (phaseConfirmed) {
       status = 'confirmado'
       borderClass = styles.jornadaConfirmed
-    } else if (allCompleted) {
-      status = 'confirmado'
-      borderClass = styles.jornadaConfirmed
     } else if (prevCompleted) {
       status = 'progreso'
       borderClass = styles.jornadaCurrent
@@ -369,9 +366,6 @@ export default function Apuestas({
           let status = 'pendiente'
           let borderClass = styles.jornadaDefault
           if (r16Confirmed) {
-            status = 'confirmado'
-            borderClass = styles.jornadaConfirmed
-          } else if (allCompleted) {
             status = 'confirmado'
             borderClass = styles.jornadaConfirmed
           } else if (prevCompleted) {
