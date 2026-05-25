@@ -59,7 +59,6 @@ export default function Clasificacion({ participants, predictions, actuals }) {
     name: p,
     pts: calcTotalPts(p, predictions, actuals, MATCHES),
     color: colorMap[p],
-    champion: getPredictedChampion(p),
   })).sort((a, b) => b.pts - a.pts)
 
   return (
@@ -76,7 +75,6 @@ export default function Clasificacion({ participants, predictions, actuals }) {
           <div className={styles.pos}>Pos</div>
           <div className={styles.name}>Participante</div>
           <div className={styles.pts}>Puntos</div>
-          <div className={styles.champion}>Campeón Predicho</div>
         </div>
 
         <div className={styles.rows}>
@@ -98,7 +96,6 @@ export default function Clasificacion({ participants, predictions, actuals }) {
                 <span className={styles.nameText}>{p.name}</span>
               </div>
               <div className={styles.pts}>{p.pts}</div>
-              <div className={styles.champion}>{p.champion || '—'}</div>
             </div>
             )
           })}

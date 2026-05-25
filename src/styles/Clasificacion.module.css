@@ -12,7 +12,7 @@
 
 .header {
   display: grid;
-  grid-template-columns: 50px 1fr 80px 1fr;
+  grid-template-columns: 50px 1fr 80px;
   gap: 1rem;
   padding: 1rem;
   background: rgba(0, 217, 255, 0.1);
@@ -41,7 +41,7 @@
 
 .row {
   display: grid;
-  grid-template-columns: 50px 1fr 80px 1fr;
+  grid-template-columns: 50px 1fr 80px;
   gap: 1rem;
   align-items: center;
   padding: 1rem;
@@ -100,11 +100,6 @@
   font-weight: bold;
   color: #00d9ff;
   text-align: center;
-}
-
-.champion {
-  text-align: left;
-  font-size: 0.9rem;
 }
 
 .championSection {
