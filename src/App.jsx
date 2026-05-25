@@ -24,6 +24,7 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const [simulatedJornadas, setSimulatedJornadas] = useState({ 1: false, 2: false, 3: false })
+  const [simulatedPhases, setSimulatedPhases] = useState({ R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
   const [r16Substitutions, setR16Substitutions] = useState({})
   const [octavosSubstitutions, setOctavosSubstitutions] = useState({})
   const [octavosGroupInfo, setOctavosGroupInfo] = useState({})
@@ -48,6 +49,7 @@ export default function App() {
     preds = storage.ensureNewFormat(preds)
     const acts = storage.get('wc26_actuals', {})
     const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
+    const simPhases = storage.get('wc26_simulatedPhases', { R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
     const subs = storage.get('wc26_r16Substitutions', {})
     const octSubs = storage.get('wc26_octavosSubstitutions', {})
     const octGroupInfo = storage.get('wc26_octavosGroupInfo', {})
@@ -65,6 +67,7 @@ export default function App() {
     setPredictions(preds)
     setActuals(acts)
     setSimulatedJornadas(simJornadas)
+    setSimulatedPhases(simPhases)
     setR16Substitutions(subs)
     setOctavosSubstitutions(octSubs)
     setOctavosGroupInfo(octGroupInfo)
@@ -308,6 +311,96 @@ export default function App() {
 
     storage.set('wc26_actuals', newActuals)
     storage.set('wc26_predictions', newPreds)
+  }
+
+  // Función helper para generar score sin empate
+  const generateNoDrawScore = () => {
+    let h, a
+    do {
+      h = Math.floor(Math.random() * 4)
+      a = Math.floor(Math.random() * 4)
+    } while (h === a)
+    return { h, a }
+  }
+
+  // Función genérica para simular fase eliminatoria
+  const simulateElimination = (phaseName, allowDraws = false) => {
+    const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
+    if (phaseMatches.length === 0) return
+
+    // Generar resultados reales
+    const newActuals = { ...actuals }
+    phaseMatches.forEach(m => {
+      if (allowDraws) {
+        newActuals[m.id] = {
+          h: Math.floor(Math.random() * 4),
+          a: Math.floor(Math.random() * 4)
+        }
+      } else {
+        // Permitir empates en resultados reales
+        newActuals[m.id] = {
+          h: Math.floor(Math.random() * 4),
+          a: Math.floor(Math.random() * 4)
+        }
+      }
+    })
+
+    // Generar predicciones sin empates
+    const newPreds = { ...predictions }
+    participants.forEach(p => {
+      const pData = newPreds[p] || { predictions: {}, confirmed: { 1: false, 2: false, 3: false } }
+      phaseMatches.forEach(m => {
+        const score = generateNoDrawScore()
+        pData.predictions[m.id] = score
+      })
+      newPreds[p] = pData
+    })
+
+    setActuals(newActuals)
+    setPredictions(newPreds)
+
+    storage.set('wc26_actuals', newActuals)
+    storage.set('wc26_predictions', newPreds)
+  }
+
+  const simulateOctavos = () => {
+    if (!r16Confirmed) return
+    simulateElimination('OCT')
+    const newPhases = { ...simulatedPhases, OCT: true }
+    setSimulatedPhases(newPhases)
+    storage.set('wc26_simulatedPhases', newPhases)
+  }
+
+  const simulateCuartos = () => {
+    if (!simulatedPhases?.OCT) return
+    simulateElimination('CTO')
+    const newPhases = { ...simulatedPhases, CTO: true }
+    setSimulatedPhases(newPhases)
+    storage.set('wc26_simulatedPhases', newPhases)
+  }
+
+  const simulateSemis = () => {
+    if (!simulatedPhases?.CTO) return
+    simulateElimination('SEMI')
+    const newPhases = { ...simulatedPhases, SEMI: true }
+    setSimulatedPhases(newPhases)
+    storage.set('wc26_simulatedPhases', newPhases)
+  }
+
+  const simulateThirdPlace = () => {
+    if (!simulatedPhases?.SEMI) return
+    simulateElimination('3P')
+    const newPhases = { ...simulatedPhases, '3P': true }
+    setSimulatedPhases(newPhases)
+    storage.set('wc26_simulatedPhases', newPhases)
+  }
+
+  const simulateFinal = () => {
+    if (!simulatedPhases?.SEMI) return
+    simulateElimination('FIN')
+    const newPhases = { ...simulatedPhases, FIN: true }
+    setSimulatedPhases(newPhases)
+    storage.set('wc26_simulatedPhases', newPhases)
   }
 
   // Validar automáticamente ganadores cuando todas las jornadas estén simuladas
@@ -966,7 +1059,13 @@ export default function App() {
         setTab={setTab}
         simulate={simulate}
         simulate16={simulate16}
+        simulateOctavos={simulateOctavos}
+        simulateCuartos={simulateCuartos}
+        simulateSemis={simulateSemis}
+        simulateThirdPlace={simulateThirdPlace}
+        simulateFinal={simulateFinal}
         simulatedJornadas={simulatedJornadas}
+        simulatedPhases={simulatedPhases}
         selectedThirds={selectedThirds}
         clearAllData={clearAllData}
       />

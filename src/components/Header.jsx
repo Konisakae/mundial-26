@@ -11,7 +11,13 @@ export default function Header({
   tab, setTab,
   simulate,
   simulate16,
+  simulateOctavos,
+  simulateCuartos,
+  simulateSemis,
+  simulateThirdPlace,
+  simulateFinal,
   simulatedJornadas,
+  simulatedPhases,
   selectedThirds,
   clearAllData,
 }) {
@@ -94,6 +100,56 @@ export default function Header({
                   style={{ opacity: (simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3] && Object.keys(selectedThirds).length >= 8) ? 1 : 0.5 }}
                 >
                   S16 {Object.keys(selectedThirds).length >= 8 ? '✓' : ''}
+                </button>
+
+                <button
+                  onClick={simulateOctavos}
+                  disabled={!simulatedPhases?.OCT === false && !Object.keys(selectedThirds).length >= 8}
+                  className={styles.simulateBtn}
+                  title="Simular octavos: 8 partidos (89-96)"
+                  style={{ opacity: (Object.keys(selectedThirds).length >= 8) ? 1 : 0.5 }}
+                >
+                  S8 {simulatedPhases?.OCT ? '✓' : ''}
+                </button>
+
+                <button
+                  onClick={simulateCuartos}
+                  disabled={!simulatedPhases?.OCT}
+                  className={styles.simulateBtn}
+                  title="Simular cuartos: 4 partidos (97-100)"
+                  style={{ opacity: simulatedPhases?.OCT ? 1 : 0.5 }}
+                >
+                  S4 {simulatedPhases?.CTO ? '✓' : simulatedPhases?.OCT ? '' : '🔒'}
+                </button>
+
+                <button
+                  onClick={simulateSemis}
+                  disabled={!simulatedPhases?.CTO}
+                  className={styles.simulateBtn}
+                  title="Simular semifinales: 2 partidos (101-102)"
+                  style={{ opacity: simulatedPhases?.CTO ? 1 : 0.5 }}
+                >
+                  S2 {simulatedPhases?.SEMI ? '✓' : simulatedPhases?.CTO ? '' : '🔒'}
+                </button>
+
+                <button
+                  onClick={simulateThirdPlace}
+                  disabled={!simulatedPhases?.SEMI}
+                  className={styles.simulateBtn}
+                  title="Simular tercer puesto: 1 partido (103)"
+                  style={{ opacity: simulatedPhases?.SEMI ? 1 : 0.5 }}
+                >
+                  S3P {simulatedPhases?.['3P'] ? '✓' : simulatedPhases?.SEMI ? '' : '🔒'}
+                </button>
+
+                <button
+                  onClick={simulateFinal}
+                  disabled={!simulatedPhases?.SEMI}
+                  className={styles.simulateBtn}
+                  title="Simular final: 1 partido (104)"
+                  style={{ opacity: simulatedPhases?.SEMI ? 1 : 0.5 }}
+                >
+                  SF {simulatedPhases?.FIN ? '✓' : simulatedPhases?.SEMI ? '' : '🔒'}
                 </button>
 
                 <button
