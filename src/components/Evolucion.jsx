@@ -163,6 +163,27 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
         padding: 10,
         cornerRadius: 4,
       },
+      zoom: {
+        limits: {
+          y: { min: 0, max: 300 },
+        },
+        zoom: {
+          wheel: {
+            enabled: true,
+            speed: 0.1,
+          },
+          pinch: {
+            enabled: true,
+          },
+          mode: 'xy',
+        },
+        pan: {
+          enabled: true,
+          mode: 'xy',
+          modifierKey: 'ctrl',
+          scaleMode: 'xy',
+        },
+      },
     },
     scales: {
       x: {
