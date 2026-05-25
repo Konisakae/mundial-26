@@ -47,7 +47,7 @@ export default function Apuestas({
   const userPreds = predictions[participant]?.predictions || {}
   const confirmed = predictions[participant]?.confirmed || { 1: false, 2: false, 3: false }
 
-  // Verificar si una fase está completada
+  // Verificar si una fase está completada en predicciones
   const isPhasePredictionCompleted = (phaseName) => {
     const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
     return phaseMatches.every(m => {
@@ -71,13 +71,31 @@ export default function Apuestas({
     })
   }
 
-  // Determinar si fase anterior está completada (en Apuestas = predicciones completas Y confirmadas)
+  // Verificar si una jornada está rellenada en resultados reales
+  const isJornadaActualsCompleted = (jornada) => {
+    const matches = MATCHES.filter(m => m.ph === 'G' && m.jd === jornada)
+    return matches.every(m => {
+      const actual = actuals[m.id]
+      return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
+    })
+  }
+
+  // Determinar si fase anterior está completada (predicciones completas + confirmadas + resultados reales completos)
   const isPreviousPhaseCompleted = (currentPhase) => {
     const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
     const prevPhase = phaseOrder[currentPhase]
     if (!prevPhase) return false
-    if (prevPhase === 'G') return confirmed[1] && confirmed[2] && confirmed[3]
-    return isPhasePredictionCompleted(prevPhase) && confirmed[prevPhase]
+
+    if (prevPhase === 'G') {
+      // Para pasar a R16: jornadas 1, 2, 3 confirmadas + completadas en actuals + 8 terceros seleccionados
+      const jornadasConfirmed = confirmed[1] && confirmed[2] && confirmed[3]
+      const jornadasActualsCompleted = isJornadaActualsCompleted(1) && isJornadaActualsCompleted(2) && isJornadaActualsCompleted(3)
+      const thirdsSelected = currentPhase === 'R16' && Object.keys(selectedThirds).filter(k => k !== 'completed').length >= 8
+      return jornadasConfirmed && jornadasActualsCompleted && (currentPhase !== 'R16' || thirdsSelected)
+    }
+
+    // Para otras fases eliminatorias: fase anterior confirmada + completada en predicciones + completada en actuals
+    return confirmed[prevPhase] && isPhasePredictionCompleted(prevPhase) && isPhaseActualsCompleted(prevPhase)
   }
 
   // Renderizar fase eliminatoria con estados
