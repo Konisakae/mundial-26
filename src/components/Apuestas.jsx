@@ -74,21 +74,16 @@ export default function Apuestas({
   }
 
   // Determinar si fase anterior está completada
-  // Solo verifica: confirmado en predicciones AND confirmado en resultados
+  // Para todas las fases eliminatorias: solo requiere que jornadas 1,2,3 estén confirmadas en resultados + enfrentamientos confirmados
   const isPreviousPhaseCompleted = (currentPhase) => {
-    const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
-    const prevPhase = phaseOrder[currentPhase]
-    if (!prevPhase) return false
+    const eliminationPhases = ['R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN']
 
-    // Para R16: todas las jornadas confirmadas + enfrentamientos confirmados
-    if (currentPhase === 'R16') {
-      return confirmed[1] && confirmed[2] && confirmed[3] &&
-             resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] &&
-             r16MatchupsConfirmed
+    // Si es una fase eliminatoria, requiere: grupos confirmados en resultados + enfrentamientos confirmados
+    if (eliminationPhases.includes(currentPhase)) {
+      return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
     }
 
-    // Para otras fases: fase anterior confirmada en ambos lados
-    return !!(confirmed[prevPhase] && resultsConfirmed[prevPhase])
+    return false
   }
 
   // Renderizar fase eliminatoria con estados
@@ -99,8 +94,6 @@ export default function Apuestas({
     const prevCompleted = isPreviousPhaseCompleted(phaseName)
     const phaseConfirmed = confirmed[phaseName] || false
 
-    console.log(`renderEliminationPhase(${phaseName}):`, { allFilled, allCompleted, prevCompleted, phaseConfirmed, participant })
-
     let status = 'pendiente'
     let borderClass = styles.jornadaDefault
     if (phaseConfirmed) {
@@ -109,12 +102,10 @@ export default function Apuestas({
     } else if (allCompleted) {
       status = 'confirmado'
       borderClass = styles.jornadaConfirmed
-    } else if (prevCompleted && allFilled) {
+    } else if (prevCompleted) {
       status = 'progreso'
       borderClass = styles.jornadaCurrent
     }
-
-    console.log(`${phaseName} status:`, status)
 
     const handleConfirm = () => {
       // Validación adicional: verificar que todos los ganadores en empates estén seleccionados
