@@ -5,9 +5,10 @@ import { getMatchesForJornada } from '../utils/jornadas'
 import { calcPts } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
+import CustomSelect from './CustomSelect'
 import styles from '../styles/TodasLayout3.module.css'
 
-export default function TodasLayout3({ participants, phase, jornada, predictions, actuals, r16Substitutions = {}, octavosSubstitutions = {}, cuartosSubstitutions = {}, semifinalSubstitutions = {}, tercerPuestoSubstitutions = {}, finalSubstitutions = {} }) {
+export default function TodasLayout3({ participants, phase, setPhase, jornada, setJornada, predictions, actuals, r16Substitutions = {}, octavosSubstitutions = {}, cuartosSubstitutions = {}, semifinalSubstitutions = {}, tercerPuestoSubstitutions = {}, finalSubstitutions = {} }) {
   const [expandedParticipant, setExpandedParticipant] = useState(null)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
@@ -40,6 +41,32 @@ export default function TodasLayout3({ participants, phase, jornada, predictions
   } else {
     matches = MATCHES.filter(m => m.ph === phase)
   }
+
+  // Detectar jornadas/fases con datos
+  const jornadasWithData = [1, 2, 3].filter(j => {
+    const jMatches = getMatchesForJornada(MATCHES, j)
+    return jMatches.some(m => actuals[m.id] || participants.some(p => predictions[p]?.[m.id]))
+  })
+
+  const phasesWithData = ['G', 'R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN'].filter(ph => {
+    const pMatches = ph === 'G' ? getMatchesForJornada(MATCHES, jornada) : MATCHES.filter(m => m.ph === ph)
+    return pMatches.some(m => actuals[m.id] || participants.some(p => predictions[p]?.[m.id]))
+  })
+
+  // Si la jornada actual no tiene datos, cambiar a la primera que sí tenga
+  useEffect(() => {
+    if (phase === 'G' && !jornadasWithData.includes(jornada) && jornadasWithData.length > 0) {
+      setJornada(jornadasWithData[0])
+    }
+  }, [phase, jornada, jornadasWithData])
+
+  // Si la fase actual no tiene datos, cambiar a la primera que sí tenga
+  useEffect(() => {
+    if (phase !== 'G' && !phasesWithData.includes(phase) && phasesWithData.length > 0) {
+      const firstPhaseWithData = phasesWithData.find(p => p !== 'G')
+      if (firstPhaseWithData) setPhase(firstPhaseWithData)
+    }
+  }, [phasesWithData])
 
   // Calcular stats por participante
   const stats = useMemo(() => {
@@ -81,6 +108,34 @@ export default function TodasLayout3({ participants, phase, jornada, predictions
 
   return (
     <div className={styles.layout3}>
+      <div className={styles.controls}>
+        <CustomSelect
+          value={phase}
+          onChange={setPhase}
+          label="Fase:"
+          options={[
+            { value: 'G', label: 'Grupos' },
+            { value: 'R16', label: 'Dieciseisavos' },
+            { value: 'OCT', label: 'Octavos' },
+            { value: 'CTO', label: 'Cuartos' },
+            { value: 'SEMI', label: 'Semifinales' },
+            { value: '3P', label: 'Tercer Puesto' },
+            { value: 'FIN', label: 'Final' },
+          ].filter(opt => phasesWithData.includes(opt.value))}
+        />
+        {phase === 'G' && (
+          <CustomSelect
+            value={jornada}
+            onChange={e => setJornada(parseInt(e))}
+            label="Jornada:"
+            options={[
+              { value: 1, label: 'Jornada 1' },
+              { value: 2, label: 'Jornada 2' },
+              { value: 3, label: 'Jornada 3' },
+            ].filter(opt => jornadasWithData.includes(opt.value))}
+          />
+        )}
+      </div>
       <div className={styles.participantsList}>
         {sorted.map((p, idx) => {
           const av = AVATAR_COLORS[participants.indexOf(p) % AVATAR_COLORS.length]
@@ -113,7 +168,7 @@ export default function TodasLayout3({ participants, phase, jornada, predictions
 
               {isExpanded && (
                 <div className={styles.predictions}>
-                  {matches.map((m, mIdx) => {
+                  {matches.filter(m => predictions[p]?.[m.id] || actuals[m.id]).map((m, mIdx) => {
                     const h = getTeam(m.h)
                     const a = getTeam(m.a)
                     const pred = predictions[p]?.[m.id]

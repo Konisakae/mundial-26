@@ -167,12 +167,14 @@ export default function TodasLayout2({ participants, phase, jornada, predictions
                   {[1, 2, 3].map((jornada) => {
                     const jornadaMatches = MATCHES.filter(m => m.ph === 'G' && m.id >= (jornada - 1) * 24 + 1 && m.id <= jornada * 24)
                     let jornAciertos = 0, jornParciales = 0, jornFallos = 0, puntosJornada = 0
+                    let hasData = false
 
                     jornadaMatches.forEach(m => {
                       const pred = predictions[p]?.[m.id]
                       const actual = actuals[m.id]
 
                       if (pred && actual) {
+                        hasData = true
                         const score = calcPts(pred, actual, m) || 0
                         puntosJornada += score
 
@@ -187,6 +189,8 @@ export default function TodasLayout2({ participants, phase, jornada, predictions
                         }
                       }
                     })
+
+                    if (!hasData) return null
 
                     const ranking = rankingsByJornadaPhase[`J${jornada}-${p}`] || '-'
                     const rankingClass = ranking === 1 ? styles.rankingFirst : ranking === participants.length ? styles.rankingLast : ''
@@ -210,12 +214,14 @@ export default function TodasLayout2({ participants, phase, jornada, predictions
                   {['R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN'].map((phase) => {
                     const phaseMatches = MATCHES.filter(m => m.ph === phase)
                     let phaseAciertos = 0, parciales = 0, fallos = 0, puntosPhase = 0
+                    let hasData = false
 
                     phaseMatches.forEach(m => {
                       const pred = predictions[p]?.[m.id]
                       const actual = actuals[m.id]
 
                       if (pred && actual) {
+                        hasData = true
                         const score = calcPts(pred, actual, m) || 0
                         puntosPhase += score
 
@@ -230,6 +236,8 @@ export default function TodasLayout2({ participants, phase, jornada, predictions
                         }
                       }
                     })
+
+                    if (!hasData) return null
 
                     const phaseLabels = { R16: 'Dieciseisavos', OCT: 'Octavos', CTO: 'Cuartos', SEMI: 'Semifinales', '3P': 'Tercer Puesto', FIN: 'Final' }
                     const phaseLabelsShort = { R16: 'R16', OCT: 'R8', CTO: 'R4', SEMI: 'SF', '3P': '3P', FIN: 'F' }

@@ -1210,6 +1210,7 @@ export default function App() {
             participants={participants}
             predictions={getPredictionsForScoring()}
             actuals={actuals}
+            resultsConfirmed={resultsConfirmed}
           />
         )}
       </div>
