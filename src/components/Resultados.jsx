@@ -136,6 +136,30 @@ export default function Resultados({
         </div>
       )}
 
+      {isAdmin && (
+        <div className={styles.confirmSection}>
+          {!isPhaseBlocked && (
+            <button
+              onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
+              disabled={!areAllWinnersSelected() || resultsConfirmed[getCurrentPhaseId()]}
+              className={styles.confirmBtn}
+            >
+              {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
+            </button>
+          )}
+
+          {phase === 'R16' && (
+            <button
+              onClick={() => confirmR16Matchups && confirmR16Matchups()}
+              disabled={r16MatchupsConfirmed}
+              className={styles.confirmBtn}
+            >
+              {r16MatchupsConfirmed ? '✓ Enfrentamientos confirmados' : 'Confirmar enfrentamientos'}
+            </button>
+          )}
+        </div>
+      )}
+
       <div className={styles.matches}>
         {matches.map(match => {
           const actual = actuals[match.id]
@@ -175,30 +199,6 @@ export default function Resultados({
           )
         })}
       </div>
-
-      {isAdmin && (
-        <div className={styles.confirmSection}>
-          {!isPhaseBlocked && (
-            <button
-              onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
-              disabled={!areAllWinnersSelected() || resultsConfirmed[getCurrentPhaseId()]}
-              className={styles.confirmBtn}
-            >
-              {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
-            </button>
-          )}
-
-          {phase === 'R16' && (
-            <button
-              onClick={() => confirmR16Matchups && confirmR16Matchups()}
-              disabled={r16MatchupsConfirmed}
-              className={styles.confirmBtn}
-            >
-              {r16MatchupsConfirmed ? '✓ Enfrentamientos confirmados' : 'Confirmar enfrentamientos'}
-            </button>
-          )}
-        </div>
-      )}
     </div>
   )
 }
