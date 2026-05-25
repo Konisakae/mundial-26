@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -77,6 +77,11 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   const maxWindowStart = Math.max(0, visibleMatchIds.length - windowSize)
   const clampedWindowStart = Math.min(windowStart, maxWindowStart)
   const windowedMatchIds = visibleMatchIds.slice(clampedWindowStart, clampedWindowStart + windowSize)
+
+  // Mostrar automáticamente los últimos 10 partidos cuando se agregan nuevos
+  useEffect(() => {
+    setWindowStart(maxWindowStart)
+  }, [visibleMatchIds.length])
 
   const getPointsAfterMatch = (participant, upToMatchId) => {
     const matchesUpToId = MATCHES.filter(m => m.id <= upToMatchId)
