@@ -74,16 +74,18 @@ export default function Apuestas({
   }
 
   // Determinar si fase anterior está completada
-  // Para todas las fases eliminatorias: solo requiere que jornadas 1,2,3 estén confirmadas en resultados + enfrentamientos confirmados
   const isPreviousPhaseCompleted = (currentPhase) => {
-    const eliminationPhases = ['R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN']
+    const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
+    const prevPhase = phaseOrder[currentPhase]
+    if (!prevPhase) return false
 
-    // Si es una fase eliminatoria, requiere: grupos confirmados en resultados + enfrentamientos confirmados
-    if (eliminationPhases.includes(currentPhase)) {
+    // Para R16: jornadas confirmadas en resultados + enfrentamientos confirmados
+    if (currentPhase === 'R16') {
       return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
     }
 
-    return false
+    // Para otras fases: fase anterior confirmada en predicciones
+    return !!(confirmed[prevPhase])
   }
 
   // Renderizar fase eliminatoria con estados
