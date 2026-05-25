@@ -196,6 +196,7 @@ export default function Apuestas({
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}
+                hideChampionDisplay={true}
               />
             )
           })}
@@ -292,6 +293,7 @@ export default function Apuestas({
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
                 onSetPredictedWinner={setPredictedWinner}
+                hideChampionDisplay={true}
               />
             )
           })}

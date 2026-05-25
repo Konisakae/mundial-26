@@ -34,6 +34,7 @@ export default function MatchCard({
   groupsCompleted = false,
   onSetWinner = null,
   onSetPredictedWinner = null,
+  hideChampionDisplay = false,
 }) {
   const isMobile = useIsMobile()
 
@@ -396,7 +397,7 @@ export default function MatchCard({
         </div>
       )}
 
-      {match.id === 104 && actual && (actual.h !== undefined || actual.a !== undefined) && (
+      {!hideChampionDisplay && match.id === 104 && actual && (actual.h !== undefined || actual.a !== undefined) && (
         <div className={styles.champion}>
           <span className={styles.championLabel}>Campeón:</span>
           <span className={styles.championValue}>
