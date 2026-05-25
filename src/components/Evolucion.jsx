@@ -282,15 +282,16 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   const allPhases = ['J1', 'J2', 'J3', 'R16', 'R8', 'R4', 'SF', '3P', 'F']
   const allLabels = ['J1', 'J2', 'J3', 'R16', 'R8', 'R4', 'SF', '3P', 'F']
 
-  // Determinar qué fases mostrar: solo hasta la confirmada
+  // Determinar qué fases mostrar: todas, pero con datos null para las no confirmadas
   const lastConfirmedIdx = lastConfirmedPhase ? allPhases.indexOf(lastConfirmedPhase) : -1
-  const visiblePhases = lastConfirmedIdx >= 0 ? allPhases.slice(0, lastConfirmedIdx + 1) : []
-  const visibleLabels = lastConfirmedIdx >= 0 ? allLabels.slice(0, lastConfirmedIdx + 1) : []
 
   const rankingDatasets = participants.map((p, i) => {
     const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
-    const points = visiblePhases.map((phase) => {
-      return rankingsByPhase[p]?.[phase] || 13
+    const points = allPhases.map((phase, idx) => {
+      if (idx <= lastConfirmedIdx) {
+        return rankingsByPhase[p]?.[phase] || 13
+      }
+      return null // Datos no confirmados aparecen como vacíos
     })
 
     const isSelected = selectedParticipant === null || selectedParticipant === p
@@ -311,7 +312,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   })
 
   const rankingChartData = {
-    labels: visibleLabels,
+    labels: allLabels,
     datasets: rankingDatasets,
   }
 
