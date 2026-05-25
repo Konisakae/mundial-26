@@ -123,7 +123,7 @@ export default function Resultados({
         )}
       </div>
 
-      {isPhaseBlocked && (
+      {isAdmin && isPhaseBlocked && (
         <div style={{
           padding: '1rem',
           background: 'rgba(255, 100, 100, 0.1)',
