@@ -127,3 +127,23 @@
   letter-spacing: 0.08em;
   text-shadow: 0 0 10px rgba(255, 198, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.5);
 }
+
+.winnerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: right;
+}
+
+.winnerLabel {
+  font-weight: 600;
+  color: #00d9ff;
+  font-size: 0.95rem;
+}
+
+.winner {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: capitalize;
+}
