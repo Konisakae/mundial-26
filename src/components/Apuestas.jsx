@@ -167,16 +167,18 @@ export default function Apuestas({
           {phaseMatches.map(match => {
             const pred = userPreds[match.id] || { h: '', a: '' }
             const actual = actuals[match.id]
+            const isBlocked = status === 'pendiente'
 
             return (
               <MatchCard
                 key={match.id}
                 match={match}
                 value={pred}
-                onChange={(field, val) => savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
+                onChange={(field, val) => !isBlocked && savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
                 actual={actual}
                 showActual={true}
-                editable={true}
+                editable={!isBlocked}
+                isConfirmed={isBlocked || status === 'confirmado'}
                 r16Substitutions={r16Substitutions}
                 octavosSubstitutions={octavosSubstitutions}
                 octavosGroupInfo={octavosGroupInfo}
@@ -416,16 +418,18 @@ export default function Apuestas({
             {MATCHES.filter(m => m.ph === phase).map(match => {
               const pred = userPreds[match.id] || { h: '', a: '' }
               const actual = actuals[match.id]
+              const isBlocked = status === 'pendiente'
 
               return (
                 <MatchCard
                   key={match.id}
                   match={match}
                   value={pred}
-                  onChange={(field, val) => savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
+                  onChange={(field, val) => !isBlocked && savePred(match.id, field === 'h' ? parseInt(val) || 0 : pred.h, field === 'a' ? parseInt(val) || 0 : pred.a)}
                   actual={actual}
                   showActual={true}
-                  editable={true}
+                  editable={!isBlocked}
+                  isConfirmed={isBlocked || status === 'confirmado'}
                   r16Substitutions={r16Substitutions}
                   octavosSubstitutions={octavosSubstitutions}
                   octavosGroupInfo={octavosGroupInfo}
