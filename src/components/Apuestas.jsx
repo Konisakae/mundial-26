@@ -73,7 +73,10 @@ export default function Apuestas({
 
   // Verificar si una jornada está rellenada en resultados reales
   const isJornadaActualsCompleted = (jornada) => {
-    const matches = MATCHES.filter(m => m.ph === 'G' && m.jd === jornada)
+    // Jornada 1: IDs 1-24, Jornada 2: IDs 25-48, Jornada 3: IDs 49-72
+    const minId = (jornada - 1) * 24 + 1
+    const maxId = jornada * 24
+    const matches = MATCHES.filter(m => m.ph === 'G' && m.id >= minId && m.id <= maxId)
     return matches.every(m => {
       const actual = actuals[m.id]
       return actual && actual.h !== undefined && actual.h !== '' && actual.a !== undefined && actual.a !== ''
