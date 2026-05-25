@@ -6,7 +6,11 @@ import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
 import styles from '../styles/Clasificacion.module.css'
 
-export default function Clasificacion({ participants, predictions, actuals }) {
+export default function Clasificacion({
+  participants, predictions, actuals,
+  r16Substitutions = {}, octavosSubstitutions = {}, cuartosSubstitutions = {},
+  semifinalSubstitutions = {}, tercerPuestoSubstitutions = {}, finalSubstitutions = {}
+}) {
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
   const colorMap = useMemo(() => {
     const map = {}
@@ -15,23 +19,6 @@ export default function Clasificacion({ participants, predictions, actuals }) {
     })
     return map
   }, [participants])
-
-  // Obtener el campeón real (match 104 - final)
-  const getRealChampion = () => {
-    const finalMatch = actuals[104]
-    if (!finalMatch || finalMatch.h === undefined || finalMatch.a === undefined) return null
-
-    const hScore = Number(finalMatch.h)
-    const aScore = Number(finalMatch.a)
-    const winner = finalMatch.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
-    if (!winner) return null
-
-    const finalMatchData = MATCHES.find(m => m.id === 104)
-    if (!finalMatchData) return null
-
-    const teamCode = winner === 'h' ? finalMatchData.h : finalMatchData.a
-    return TEAMS[teamCode]?.n || teamCode
-  }
 
   // Obtener predicción de campeón para un participante
   const getPredictedChampion = (participant) => {
@@ -50,10 +37,9 @@ export default function Clasificacion({ participants, predictions, actuals }) {
     if (!finalMatchData) return null
 
     const teamCode = winner === 'h' ? finalMatchData.h : finalMatchData.a
-    return TEAMS[teamCode]?.n || teamCode
+    const teamObj = TEAMS[teamCode]
+    return teamObj?.n || teamCode
   }
-
-  const realChampion = getRealChampion()
 
   const standings = participants.map((p, i) => ({
     name: p,
@@ -64,13 +50,6 @@ export default function Clasificacion({ participants, predictions, actuals }) {
 
   return (
     <div className={styles.clasificacion}>
-      {realChampion && (
-        <div className={styles.championSection}>
-          <div className={styles.championLabel}>Campeón Real:</div>
-          <div className={styles.championValue}>{realChampion}</div>
-        </div>
-      )}
-
       <div className={styles.table}>
         <div className={styles.header}>
           <div className={styles.pos}>Pos</div>
