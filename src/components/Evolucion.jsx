@@ -205,7 +205,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
         offset: true,
         min: Math.floor(yMin),
         max: Math.ceil(yMax),
-        width: 150,
+        width: 90,
         border: {
           display: true,
           color: '#ffffff',
