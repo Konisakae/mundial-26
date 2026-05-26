@@ -139,16 +139,8 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   }
 
   const options = {
-    responsive: true,
+    responsive: false,
     maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 10,
-        right: 10,
-        top: 10,
-        bottom: 10
-      }
-    },
     plugins: {
       legend: {
         display: true,
