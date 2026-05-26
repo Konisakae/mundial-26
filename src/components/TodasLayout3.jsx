@@ -197,7 +197,25 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                           <span className={styles.vs}>vs</span>
                           <span className={styles.flag}>{a?.f}</span>
                           <div className={styles.actual}>
-                            {actual ? `${actual.h}-${actual.a}` : '—'}
+                            {actual ? (
+                              <>
+                                {actual.h === actual.a && actual.winner ? (
+                                  <>
+                                    <span className={actual.winner === 'h' ? styles.winnerScore : ''}>
+                                      {actual.h}
+                                    </span>
+                                    -
+                                    <span className={actual.winner === 'a' ? styles.winnerScore : ''}>
+                                      {actual.a}
+                                    </span>
+                                  </>
+                                ) : (
+                                  `${actual.h}-${actual.a}`
+                                )}
+                              </>
+                            ) : (
+                              '—'
+                            )}
                           </div>
                         </div>
 

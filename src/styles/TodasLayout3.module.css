@@ -269,6 +269,18 @@
   flex-shrink: 0;
 }
 
+.winnerScore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #00d9ff;
+  border-radius: 50%;
+  font-weight: 700;
+  color: #00d9ff;
+}
+
 @media (max-width: 479px) {
   .name {
     display: none;
