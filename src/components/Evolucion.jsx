@@ -141,6 +141,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     plugins: {
       legend: {
         display: true,
