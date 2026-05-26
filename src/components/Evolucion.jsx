@@ -126,7 +126,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       fill: false,
       tension: 0.4,
       cubicInterpolationMode: 'monotone',
-      pointRadius: isSelected ? 4 : 2,
+      pointRadius: showAll ? 0 : (isSelected ? 4 : 2),
       pointHoverRadius: 6,
       pointBackgroundColor: color.b,
       pointBorderColor: '#354a65',
