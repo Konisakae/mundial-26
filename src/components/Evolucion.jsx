@@ -448,7 +448,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
             className={styles.navBtn}
             title={showAll ? 'Ventana de 10 partidos' : 'Mostrar todos los partidos'}
           >
-            {showAll ? '⤣' : '⤢'}
+            {showAll ? '⟐' : '⟑'}
           </button>
         </div>
       )}
