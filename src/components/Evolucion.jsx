@@ -41,6 +41,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   const [viewType, setViewType] = useState('partidos')
   const [selectedParticipant, setSelectedParticipant] = useState(null)
   const [windowStart, setWindowStart] = useState(0)
+  const [showAll, setShowAll] = useState(false)
 
   // Determinar la última fase/jornada confirmada
   const getLastConfirmedPhase = () => {
@@ -76,7 +77,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   const windowSize = 10
   const maxWindowStart = Math.max(0, visibleMatchIds.length - windowSize)
   const clampedWindowStart = Math.min(windowStart, maxWindowStart)
-  const windowedMatchIds = visibleMatchIds.slice(clampedWindowStart, clampedWindowStart + windowSize)
+  const windowedMatchIds = showAll ? visibleMatchIds : visibleMatchIds.slice(clampedWindowStart, clampedWindowStart + windowSize)
 
   // Mostrar automáticamente los últimos 10 partidos cuando se agregan nuevos
   useEffect(() => {
@@ -422,24 +423,39 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
 
       {viewType === 'partidos' && (
         <div className={styles.navigation}>
+          {!showAll ? (
+            <>
+              <button
+                onClick={() => setWindowStart(Math.max(0, windowStart - 8))}
+                disabled={windowStart === 0}
+                className={styles.navBtn}
+              >
+                ← Anterior
+              </button>
+
+              <span className={styles.navInfo}>
+                {clampedWindowStart + 1} - {clampedWindowStart + windowedMatchIds.length} de {visibleMatchIds.length}
+              </span>
+
+              <button
+                onClick={() => setWindowStart(Math.min(maxWindowStart, windowStart + 8))}
+                disabled={clampedWindowStart >= maxWindowStart}
+                className={styles.navBtn}
+              >
+                Siguiente →
+              </button>
+            </>
+          ) : (
+            <span className={styles.navInfo}>
+              Mostrando todos los {visibleMatchIds.length} partidos
+            </span>
+          )}
+
           <button
-            onClick={() => setWindowStart(Math.max(0, windowStart - 8))}
-            disabled={windowStart === 0}
+            onClick={() => setShowAll(!showAll)}
             className={styles.navBtn}
           >
-            ← Anterior
-          </button>
-
-          <span className={styles.navInfo}>
-            {clampedWindowStart + 1} - {clampedWindowStart + windowedMatchIds.length} de {visibleMatchIds.length}
-          </span>
-
-          <button
-            onClick={() => setWindowStart(Math.min(maxWindowStart, windowStart + 8))}
-            disabled={clampedWindowStart >= maxWindowStart}
-            className={styles.navBtn}
-          >
-            Siguiente →
+            {showAll ? 'Ventana 10' : 'Mostrar todo'}
           </button>
         </div>
       )}
