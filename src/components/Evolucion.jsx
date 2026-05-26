@@ -423,7 +423,15 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
 
       {viewType === 'partidos' && (
         <div className={styles.navigation}>
-          {!showAll ? (
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className={styles.navBtn}
+            title={showAll ? 'Ventana de 10 partidos' : 'Mostrar todos los partidos'}
+          >
+            {showAll ? '⤣' : '⤢'}
+          </button>
+
+          {!showAll && (
             <>
               <button
                 onClick={() => setWindowStart(Math.max(0, windowStart - 8))}
@@ -445,19 +453,13 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
                 Siguiente →
               </button>
             </>
-          ) : (
+          )}
+
+          {showAll && (
             <span className={styles.navInfo}>
               Mostrando todos los {visibleMatchIds.length} partidos
             </span>
           )}
-
-          <button
-            onClick={() => setShowAll(!showAll)}
-            className={styles.navBtn}
-            title={showAll ? 'Ventana de 10 partidos' : 'Mostrar todos los partidos'}
-          >
-            {showAll ? '⤣' : '⤢'}
-          </button>
         </div>
       )}
 
