@@ -141,14 +141,6 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 10,
-        right: 10,
-        top: 10,
-        bottom: 10
-      }
-    },
     plugins: {
       legend: {
         display: true,
@@ -179,7 +171,8 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
     },
     scales: {
       x: {
-        offset: true,
+        min: 0,
+        max: Math.max(9, windowedMatchIds.length - 1),
         border: {
           display: true,
           color: '#ffffff',
@@ -201,11 +194,9 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
         },
       },
       y: {
-        beginAtZero: false,
-        offset: true,
-        min: Math.floor(yMin),
-        max: Math.ceil(yMax),
-        width: 90,
+        beginAtZero: true,
+        min: 0,
+        max: 50,
         border: {
           display: true,
           color: '#ffffff',
@@ -216,10 +207,8 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           drawBorder: false,
         },
         ticks: {
-          color: '#cbd5e1',
-          font: { size: 12 },
-          stepSize: 1,
-          padding: 10,
+          color: '#94a3b8',
+          font: { size: 11 },
           callback: function(value) {
             if (Number.isInteger(value)) {
               return value
