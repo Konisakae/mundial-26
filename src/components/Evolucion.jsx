@@ -39,19 +39,19 @@ const hexToRgba = (hex, alpha = 0.8) => {
 
 const ExpandIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 3 L1 1 M1 1 L1 5 M1 1 L5 1" />
-    <path d="M13 3 L15 1 M15 1 L15 5 M15 1 L11 1" />
-    <path d="M3 13 L1 15 M1 15 L1 11 M1 15 L5 15" />
-    <path d="M13 13 L15 15 M15 15 L15 11 M15 15 L11 15" />
+    <path d="M2 4 L0 2 L2 2 M4 2 L2 2" />
+    <path d="M14 4 L16 2 L14 2 M12 2 L14 2" />
+    <path d="M2 12 L0 14 L2 14 M4 14 L2 14" />
+    <path d="M14 12 L16 14 L14 14 M12 14 L14 14" />
   </svg>
 )
 
 const ContractIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M5 3 L1 1 M1 1 L1 5 M1 1 L5 1" />
-    <path d="M11 3 L15 1 M15 1 L15 5 M15 1 L11 1" />
-    <path d="M5 13 L1 15 M1 15 L1 11 M1 15 L5 15" />
-    <path d="M11 13 L15 15 M15 15 L15 11 M15 15 L11 15" />
+    <path d="M4 4 L2 2 L4 2 M2 4 L2 2" />
+    <path d="M12 4 L14 2 L12 2 M14 4 L14 2" />
+    <path d="M4 12 L2 14 L4 14 M2 12 L2 14" />
+    <path d="M12 12 L14 14 L12 14 M14 12 L14 14" />
   </svg>
 )
 
