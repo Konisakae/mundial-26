@@ -84,13 +84,16 @@ export default function MatchCard({
   const awayOptions = extractThirdGroupOptions(match.a)
 
   // Resolver equipos, considerando terceros seleccionados
-  let h, a
+  let h = null, a = null
   if (homeOptions.length > 0) {
     // Es una referencia a terceros
     const selectedGroupForMatch = selectedThirds[match.id]
     if (selectedGroupForMatch && homeOptions.includes(selectedGroupForMatch)) {
       const teamCode = availableThirds[selectedGroupForMatch]
       h = teamCode ? TEAMS[teamCode] : null
+    } else if (!selectedGroupForMatch) {
+      // Aún no seleccionado - mostrar placeholder
+      h = null
     }
   } else {
     h = resolveTeamCode(match.h)
@@ -102,6 +105,9 @@ export default function MatchCard({
     if (selectedGroupForMatch && awayOptions.includes(selectedGroupForMatch)) {
       const teamCode = availableThirds[selectedGroupForMatch]
       a = teamCode ? TEAMS[teamCode] : null
+    } else if (!selectedGroupForMatch) {
+      // Aún no seleccionado - mostrar placeholder
+      a = null
     }
   } else {
     a = resolveTeamCode(match.a)
@@ -216,7 +222,7 @@ export default function MatchCard({
                 const group = e.target.value
                 if (onSelectThird) onSelectThird(match.id, group)
               }}
-              defaultValue={selectedThirds[match.id] || ''}
+              value={selectedThirds[match.id] || ''}
             >
               <option value="">Seleccionar 3º...</option>
               {homeOptions.map(group => {

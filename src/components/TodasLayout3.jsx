@@ -8,7 +8,7 @@ import { generateInitials } from '../utils/initials'
 import CustomSelect from './CustomSelect'
 import styles from '../styles/TodasLayout3.module.css'
 
-export default function TodasLayout3({ participants, phase, setPhase, jornada, setJornada, predictions, actuals, r16Substitutions = {}, octavosSubstitutions = {}, cuartosSubstitutions = {}, semifinalSubstitutions = {}, tercerPuestoSubstitutions = {}, finalSubstitutions = {} }) {
+export default function TodasLayout3({ participants, phase, setPhase, jornada, setJornada, predictions, actuals, r16Substitutions = {}, octavosSubstitutions = {}, cuartosSubstitutions = {}, semifinalSubstitutions = {}, tercerPuestoSubstitutions = {}, finalSubstitutions = {}, selectedThirds = {}, availableThirds = {} }) {
   const [expandedParticipant, setExpandedParticipant] = useState(null)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
@@ -21,7 +21,21 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
     }
   }, [expandedParticipant])
 
-  const getTeam = (teamKey) => {
+  const getTeam = (teamKey, matchId) => {
+    // Manejar referencias a terceros (ej: "3.º A/B/C")
+    if (teamKey && teamKey.includes('3.º')) {
+      const match = teamKey.match(/3\.º\s*(.+)/i)
+      if (match) {
+        const options = match[1].split('/').map(g => g.trim())
+        const selectedGroup = selectedThirds[matchId]
+        if (selectedGroup && options.includes(selectedGroup)) {
+          const teamCode = availableThirds[selectedGroup]
+          return teamCode ? TEAMS[teamCode] : null
+        }
+      }
+      return null
+    }
+
     const substitutions = {
       R16: r16Substitutions,
       OCT: octavosSubstitutions,
@@ -169,8 +183,8 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
               {isExpanded && (
                 <div className={styles.predictions}>
                   {matches.filter(m => predictions[p]?.[m.id] || actuals[m.id]).map((m, mIdx) => {
-                    const h = getTeam(m.h)
-                    const a = getTeam(m.a)
+                    const h = getTeam(m.h, m.id)
+                    const a = getTeam(m.a, m.id)
                     const pred = predictions[p]?.[m.id]
                     const actual = actuals[m.id]
                     const isCorrect = pred && actual && pred.h === actual.h && pred.a === actual.a

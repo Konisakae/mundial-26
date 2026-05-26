@@ -156,13 +156,28 @@ export default function Resultados({
           )}
 
           {phase === 'R16' && (
-            <button
-              onClick={() => confirmR16Matchups && confirmR16Matchups()}
-              disabled={r16MatchupsConfirmed || !resultsConfirmed[3]}
-              className={styles.confirmBtn}
-            >
-              {r16MatchupsConfirmed ? '✓ Enfrentamientos confirmados' : 'Confirmar enfrentamientos'}
-            </button>
+            <>
+              {Object.keys(availableThirds).length === 0 && (
+                <div style={{
+                  padding: '0.5rem 0.75rem',
+                  background: 'rgba(255, 150, 100, 0.1)',
+                  border: '1px solid rgba(255, 150, 100, 0.3)',
+                  borderRadius: '0.375rem',
+                  color: '#ffaa66',
+                  marginBottom: '0.75rem',
+                  fontSize: '0.875rem'
+                }}>
+                  ⚠️ Los terceros no están disponibles. Completa la Jornada 3 primero.
+                </div>
+              )}
+              <button
+                onClick={() => confirmR16Matchups && confirmR16Matchups()}
+                disabled={r16MatchupsConfirmed || !resultsConfirmed[3]}
+                className={styles.confirmBtn}
+              >
+                {r16MatchupsConfirmed ? '✓ Enfrentamientos confirmados' : 'Confirmar enfrentamientos'}
+              </button>
+            </>
           )}
         </div>
       )}

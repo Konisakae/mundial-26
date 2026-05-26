@@ -1196,6 +1196,8 @@ export default function App() {
             semifinalSubstitutions={semifinalSubstitutions}
             tercerPuestoSubstitutions={tercerPuestoSubstitutions}
             finalSubstitutions={finalSubstitutions}
+            selectedThirds={selectedThirds}
+            availableThirds={availableThirds}
           />
         )}
         {tab === 'clasificacion' && (

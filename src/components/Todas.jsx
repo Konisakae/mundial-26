@@ -8,7 +8,7 @@ import TodasLayout2 from './TodasLayout2'
 import TodasLayout3 from './TodasLayout3'
 import styles from '../styles/Todas.module.css'
 
-export default function Todas({ participants, phase, setPhase, predictions, actuals, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, tercerPuestoSubstitutions, finalSubstitutions }) {
+export default function Todas({ participants, phase, setPhase, predictions, actuals, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, tercerPuestoSubstitutions, finalSubstitutions, selectedThirds = {}, availableThirds = {} }) {
   const [jornada, setJornada] = useState(1)
   const [layoutView, setLayoutView] = useState(3)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
@@ -70,6 +70,8 @@ export default function Todas({ participants, phase, setPhase, predictions, actu
               semifinalSubstitutions={semifinalSubstitutions}
               tercerPuestoSubstitutions={tercerPuestoSubstitutions}
               finalSubstitutions={finalSubstitutions}
+              selectedThirds={selectedThirds}
+              availableThirds={availableThirds}
             />
           )}
         </div>

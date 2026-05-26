@@ -417,6 +417,20 @@ export default function Apuestas({
                 </h3>
               </div>
 
+              {!r16MatchupsConfirmed && prevCompleted && (
+                <div style={{
+                  padding: '0.75rem',
+                  background: 'rgba(0, 217, 255, 0.1)',
+                  border: '1px solid rgba(0, 217, 255, 0.3)',
+                  borderRadius: '0.375rem',
+                  color: '#00d9ff',
+                  marginBottom: '1rem',
+                  fontSize: '0.875rem'
+                }}>
+                  ℹ️ Los enfrentamientos de Dieciseisavos están siendo confirmados. Los equipos se mostrarán una vez estén listos.
+                </div>
+              )}
+
               {confirmSection}
 
               <div className={styles.matches}>
