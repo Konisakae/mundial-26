@@ -423,33 +423,25 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
 
       {viewType === 'partidos' && (
         <div className={styles.navigation}>
-          {!showAll ? (
-            <>
-              <button
-                onClick={() => setWindowStart(Math.max(0, windowStart - 8))}
-                disabled={windowStart === 0}
-                className={styles.navBtn}
-              >
-                ← Anterior
-              </button>
+          <button
+            onClick={() => setWindowStart(Math.max(0, windowStart - 8))}
+            disabled={showAll || windowStart === 0}
+            className={styles.navBtn}
+          >
+            ← Anterior
+          </button>
 
-              <span className={styles.navInfo}>
-                {clampedWindowStart + 1} - {clampedWindowStart + windowedMatchIds.length} de {visibleMatchIds.length}
-              </span>
+          <span className={styles.navInfo}>
+            {showAll ? `Mostrando todos los ${visibleMatchIds.length} partidos` : `${clampedWindowStart + 1} - ${clampedWindowStart + windowedMatchIds.length} de ${visibleMatchIds.length}`}
+          </span>
 
-              <button
-                onClick={() => setWindowStart(Math.min(maxWindowStart, windowStart + 8))}
-                disabled={clampedWindowStart >= maxWindowStart}
-                className={styles.navBtn}
-              >
-                Siguiente →
-              </button>
-            </>
-          ) : (
-            <span className={styles.navInfo}>
-              Mostrando todos los {visibleMatchIds.length} partidos
-            </span>
-          )}
+          <button
+            onClick={() => setWindowStart(Math.min(maxWindowStart, windowStart + 8))}
+            disabled={showAll || clampedWindowStart >= maxWindowStart}
+            className={styles.navBtn}
+          >
+            Siguiente →
+          </button>
 
           <button
             onClick={() => setShowAll(!showAll)}
