@@ -432,7 +432,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           </button>
 
           <span className={styles.navInfo}>
-            {showAll ? `Mostrando todos los ${visibleMatchIds.length} partidos` : `${clampedWindowStart + 1} - ${clampedWindowStart + windowedMatchIds.length} de ${visibleMatchIds.length}`}
+            {showAll ? `1 - ${visibleMatchIds.length} de ${visibleMatchIds.length}` : `${clampedWindowStart + 1} - ${clampedWindowStart + windowedMatchIds.length} de ${visibleMatchIds.length}`}
           </span>
 
           <button
