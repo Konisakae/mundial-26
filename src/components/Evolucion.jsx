@@ -454,8 +454,9 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           <button
             onClick={() => setShowAll(!showAll)}
             className={styles.navBtn}
+            title={showAll ? 'Ventana de 10 partidos' : 'Mostrar todos los partidos'}
           >
-            {showAll ? 'Ventana 10' : 'Mostrar todo'}
+            {showAll ? '↙️' : '↗️'}
           </button>
         </div>
       )}
