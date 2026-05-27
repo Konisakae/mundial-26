@@ -190,6 +190,15 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                     const isCorrect = pred && actual && pred.h === actual.h && pred.a === actual.a
                     const matchPoints = pred && actual ? (calcPts(pred, actual, m) || 0) : 0
 
+                    // En eliminatorias, determinar ganador
+                    const isElimination = m.ph !== 'G'
+                    let winner = null
+                    if (isElimination && actual) {
+                      if (actual.h > actual.a) winner = 'h'
+                      else if (actual.a > actual.h) winner = 'a'
+                      else if (actual.winner) winner = actual.winner
+                    }
+
                     return (
                       <div key={m.id} className={`${styles.matchRow} ${isCorrect ? styles.correct : matchPoints === 0 ? styles.incorrect : matchPoints > 0 ? styles.partial : ''}`}>
                         <div className={styles.matchInfo}>
@@ -199,19 +208,13 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                           <div className={styles.actual}>
                             {actual ? (
                               <>
-                                {actual.h === actual.a && actual.winner ? (
-                                  <>
-                                    <span className={actual.winner === 'h' ? styles.winnerScore : ''}>
-                                      {actual.h}
-                                    </span>
-                                    -
-                                    <span className={actual.winner === 'a' ? styles.winnerScore : ''}>
-                                      {actual.a}
-                                    </span>
-                                  </>
-                                ) : (
-                                  `${actual.h}-${actual.a}`
-                                )}
+                                <span className={winner === 'h' ? styles.winnerScore : ''}>
+                                  {actual.h}
+                                </span>
+                                -
+                                <span className={winner === 'a' ? styles.winnerScore : ''}>
+                                  {actual.a}
+                                </span>
                               </>
                             ) : (
                               '—'
