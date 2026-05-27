@@ -41,12 +41,12 @@ export default function Apuestas({
   const [selectedJornada, setSelectedJornada] = useState(1)
   const currentJornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
 
-  if (!participant) {
-    return <div className={styles.noParticipant}>Selecciona un participante primero</div>
-  }
-
   const pIdx = participant ? participants.indexOf(participant) : -1
   const pAv = pIdx >= 0 ? AVATAR_COLORS[pIdx % AVATAR_COLORS.length] : null
+
+  if (!participant || pAv === null) {
+    return <div className={styles.noParticipant}>Selecciona un participante primero</div>
+  }
   const userPreds = predictions[participant]?.predictions || {}
   const confirmed = predictions[participant]?.confirmed || { 1: false, 2: false, 3: false }
 
