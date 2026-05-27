@@ -425,7 +425,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           className={`${styles.tabBtn} ${viewType === 'partidos' ? styles.tabActive : ''}`}
           onClick={() => setViewType('partidos')}
         >
-          Por partidos
+          Por partido
         </button>
         <button
           className={`${styles.tabBtn} ${viewType === 'ranking' ? styles.tabActive : ''}`}
