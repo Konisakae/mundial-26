@@ -221,9 +221,21 @@ export default function Header({
 
         {/* Tabs */}
         <div className={styles.tabs}>
+          <div className={styles.tabGroup}>
+            {[
+              ['resultados', '📊 RESULTADOS'],
+              ['grupos', '🏆 GRUPOS'],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           {[
-            ['resultados', '📊 RESULTADOS'],
-            ['grupos', '🏆 GRUPOS'],
             ['apuestas', '📝 TUS APUESTAS'],
             ['clasificacion', '🏅 CLASIFICACIÓN'],
             ['todas', '📈 ESTADÍSTICAS'],
