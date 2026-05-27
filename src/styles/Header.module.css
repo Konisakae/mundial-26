@@ -225,6 +225,7 @@
 .tab {
   flex-shrink: 0;
   padding: 0.5rem 0.5rem;
+  border: none;
   border-bottom: 2px solid transparent;
   font-size: 0.75rem;
   font-weight: bold;
@@ -232,7 +233,6 @@
   cursor: pointer;
   color: rgba(255, 255, 255, 0.35);
   background: transparent;
-  border: none;
   transition: all 0.3s;
   white-space: nowrap;
 }
