@@ -27,6 +27,7 @@ export default function Header({
   const [selectedParticipantTemp, setSelectedParticipantTemp] = useState('')
   const [participantCodeVal, setParticipantCodeVal] = useState('')
   const [showParticipantCode, setShowParticipantCode] = useState(false)
+  const [showParticipantDropdown, setShowParticipantDropdown] = useState(false)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   const handleAdd = () => {
@@ -186,16 +187,56 @@ export default function Header({
             {!showPin ? (
               <>
                 {!isAdmin && !showParticipantCode && (
-                  <select
-                    value={participant || ''}
-                    onChange={handleParticipantSelect}
-                    className={styles.participantSelect}
-                  >
-                    <option value="">Selecciona participante</option>
-                    {participants.map(p => (
-                      <option key={p} value={p}>{p}</option>
-                    ))}
-                  </select>
+                  <div className={styles.participantDropdown}>
+                    <button
+                      onClick={() => setShowParticipantDropdown(!showParticipantDropdown)}
+                      className={styles.participantDropdownBtn}
+                    >
+                      {participant ? (
+                        <>
+                          <div
+                            className={styles.avatarSmallBtn}
+                            style={{
+                              background: AVATAR_COLORS[participants.indexOf(participant) % AVATAR_COLORS.length].b,
+                              color: AVATAR_COLORS[participants.indexOf(participant) % AVATAR_COLORS.length].t,
+                            }}
+                          >
+                            {initialsMap[participant]}
+                          </div>
+                          <span>{participant}</span>
+                        </>
+                      ) : (
+                        'Selecciona participante'
+                      )}
+                      <span className={styles.chevron} style={{transform: showParticipantDropdown ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
+                    </button>
+                    {showParticipantDropdown && (
+                      <div className={styles.participantDropdownMenu}>
+                        {participants.map((p, idx) => {
+                          const av = AVATAR_COLORS[idx % AVATAR_COLORS.length]
+                          return (
+                            <button
+                              key={p}
+                              onClick={() => {
+                                setSelectedParticipantTemp(p)
+                                setShowParticipantCode(true)
+                                setShowParticipantDropdown(false)
+                              }}
+                              className={styles.participantDropdownItem}
+                            >
+                              <div
+                                className={styles.avatarDropdownItem}
+                                style={{background: av.b, color: av.t}}
+                              >
+                                {initialsMap[p]}
+                              </div>
+                              <span>{p}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
                 )}
                 {!isAdmin && showParticipantCode && (
                   <div className={styles.participantCodeInput}>
