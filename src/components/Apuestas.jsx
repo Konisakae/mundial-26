@@ -307,6 +307,10 @@ export default function Apuestas({
     )
   }
 
+  if (!participant) {
+    return <div className={styles.noParticipant}>Selecciona un participante primero</div>
+  }
+
   return (
     <div className={styles.apuestas}>
       <div className={styles.header}>
