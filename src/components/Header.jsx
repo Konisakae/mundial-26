@@ -338,41 +338,45 @@ export default function Header({
         )}
 
         {/* Tabs */}
-        <div className={styles.tabs}>
-          <div className={styles.tabGroup}>
-            {[
-              ['resultados', '📊 RESULTADOS'],
-              ['grupos', '🏆 GRUPOS'],
-            ].map(([id, label]) => (
-              <button
-                key={id}
-                onClick={() => setTab(id)}
-                className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
-              >
-                {label}
-              </button>
-            ))}
+        <div className={styles.tabsContainer}>
+          <div className={styles.tabsRow}>
+            <div className={styles.tabGroup}>
+              {[
+                ['resultados', '📊 RESULTADOS'],
+                ['grupos', '🏆 GRUPOS'],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  onClick={() => setTab(id)}
+                  className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setTab('apuestas')}
+              className={`${styles.tab} ${styles.tabStandalone} ${tab === 'apuestas' ? styles.tabActive : ''}`}
+            >
+              📝 TUS APUESTAS
+            </button>
           </div>
-          <button
-            onClick={() => setTab('apuestas')}
-            className={`${styles.tab} ${tab === 'apuestas' ? styles.tabActive : ''}`}
-          >
-            📝 TUS APUESTAS
-          </button>
-          <div className={styles.tabGroup}>
-            {[
-              ['clasificacion', '🏅 CLASIFICACIÓN'],
-              ['todas', '📈 ESTADÍSTICAS'],
-              ['evolucion', '📈 EVOLUCIÓN'],
-            ].map(([id, label]) => (
-              <button
-                key={id}
-                onClick={() => setTab(id)}
-                className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
-              >
-                {label}
-              </button>
-            ))}
+          <div className={styles.tabsRow}>
+            <div className={styles.tabGroup}>
+              {[
+                ['clasificacion', '🏅 CLASIFICACIÓN'],
+                ['todas', '📈 ESTADÍSTICAS'],
+                ['evolucion', '📈 EVOLUCIÓN'],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  onClick={() => setTab(id)}
+                  className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

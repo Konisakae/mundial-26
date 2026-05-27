@@ -386,6 +386,23 @@
   border-color: rgba(255, 255, 255, 0.4);
 }
 
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(0, 217, 255, 0.15);
+}
+
+.tabsRow {
+  display: flex;
+  overflow-x: auto;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(0, 217, 255, 0.15);
+}
+
+.tabsRow:last-child {
+  border-bottom: none;
+}
+
 .tabs {
   display: flex;
   overflow-x: auto;
@@ -425,4 +442,8 @@
   border-bottom-color: #00d9ff;
   color: #00d9ff;
   text-shadow: 0 0 8px #00d9ff55;
+}
+
+.tabStandalone {
+  margin-left: auto;
 }
