@@ -246,7 +246,7 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                           </div>
                         </div>
 
-                        <div className={styles.matchPoints}>{matchPoints} pts</div>
+                        <div className={styles.matchPoints}>{actual ? `${matchPoints} pts` : '—'}</div>
                       </div>
                     )
                   })}
