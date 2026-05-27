@@ -227,7 +227,7 @@ export default function Header({
             ['apuestas', '📝 TUS APUESTAS'],
             ['clasificacion', '🏅 CLASIFICACIÓN'],
             ['todas', '📈 ESTADÍSTICAS'],
-            ['evolucion', '📈 EVOLUCIÓN'],
+            ['evolucion', '📈 GRÁFICAS'],
           ].map(([id, label]) => (
             <button
               key={id}
