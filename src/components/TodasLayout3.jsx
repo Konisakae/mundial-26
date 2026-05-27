@@ -200,7 +200,7 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                     }
 
                     return (
-                      <div key={m.id} className={`${styles.matchRow} ${isCorrect ? styles.correct : matchPoints === 0 ? styles.incorrect : matchPoints > 0 ? styles.partial : ''}`}>
+                      <div key={m.id} className={`${styles.matchRow} ${isCorrect ? styles.correct : actual && matchPoints === 0 ? styles.incorrect : matchPoints > 0 ? styles.partial : ''}`}>
                         <div className={styles.matchInfo}>
                           <span className={styles.flag}>{h?.f}</span>
                           <span className={styles.vs}>vs</span>
