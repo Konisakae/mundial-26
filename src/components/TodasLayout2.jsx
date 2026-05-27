@@ -239,7 +239,7 @@ export default function TodasLayout2({ participants, phase, jornada, predictions
 
                     if (!hasData) return null
 
-                    const phaseLabels = { R16: 'Dieciseisavos', OCT: 'Octavos', CTO: 'Cuartos', SEMI: 'Semifinales', '3P': 'Tercer Puesto', FIN: 'Final' }
+                    const phaseLabels = { R16: 'Dieciseisavos', OCT: 'Octavos', CTO: 'Cuartos', SEMI: 'Semifinales', '3P': '3er Puesto', FIN: 'Final' }
                     const phaseLabelsShort = { R16: 'R16', OCT: 'R8', CTO: 'R4', SEMI: 'SF', '3P': '3P', FIN: 'F' }
                     const ranking = rankingsByJornadaPhase[`${phase}-${p}`] || '-'
                     const rankingClass = ranking === 1 ? styles.rankingFirst : ranking === participants.length ? styles.rankingLast : ''

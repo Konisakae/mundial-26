@@ -327,7 +327,7 @@ export default function Apuestas({
             { value: 'OCT', label: 'Octavos' },
             { value: 'CTO', label: 'Cuartos' },
             { value: 'SEMI', label: 'Semifinales' },
-            { value: '3P', label: 'Tercer Puesto' },
+            { value: '3P', label: '3er Puesto' },
             { value: 'FIN', label: 'Final' },
           ]}
         />
@@ -475,7 +475,7 @@ export default function Apuestas({
       ) : phase === 'OCT' ? renderEliminationPhase('OCT', 'Octavos')
       : phase === 'CTO' ? renderEliminationPhase('CTO', 'Cuartos')
       : phase === 'SEMI' ? renderEliminationPhase('SEMI', 'Semifinales')
-      : phase === '3P' ? renderEliminationPhase('3P', 'Tercer Puesto')
+      : phase === '3P' ? renderEliminationPhase('3P', '3er Puesto')
       : renderEliminationPhase('FIN', 'Final')}
     </div>
   )

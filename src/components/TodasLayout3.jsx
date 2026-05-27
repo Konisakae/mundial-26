@@ -133,7 +133,7 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
             { value: 'OCT', label: 'Octavos' },
             { value: 'CTO', label: 'Cuartos' },
             { value: 'SEMI', label: 'Semifinales' },
-            { value: '3P', label: 'Tercer Puesto' },
+            { value: '3P', label: '3er Puesto' },
             { value: 'FIN', label: 'Final' },
           ].filter(opt => phasesWithData.includes(opt.value))}
         />
