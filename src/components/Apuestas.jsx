@@ -8,6 +8,7 @@ import CustomSelect from './CustomSelect'
 import styles from '../styles/Apuestas.module.css'
 
 export default function Apuestas({
+  participants = [],
   participant,
   phase,
   setPhase,
