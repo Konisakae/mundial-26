@@ -235,20 +235,27 @@ export default function Header({
               </button>
             ))}
           </div>
-          {[
-            ['apuestas', '📝 TUS APUESTAS'],
-            ['clasificacion', '🏅 CLASIFICACIÓN'],
-            ['todas', '📈 ESTADÍSTICAS'],
-            ['evolucion', '📈 EVOLUCIÓN'],
-          ].map(([id, label]) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
-            >
-              {label}
-            </button>
-          ))}
+          <button
+            onClick={() => setTab('apuestas')}
+            className={`${styles.tab} ${tab === 'apuestas' ? styles.tabActive : ''}`}
+          >
+            📝 TUS APUESTAS
+          </button>
+          <div className={styles.tabGroup}>
+            {[
+              ['clasificacion', '🏅 CLASIFICACIÓN'],
+              ['todas', '📈 ESTADÍSTICAS'],
+              ['evolucion', '📈 EVOLUCIÓN'],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
