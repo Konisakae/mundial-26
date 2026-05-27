@@ -1151,6 +1151,7 @@ export default function App() {
         {tab === 'grupos' && <Grupos actuals={actuals} selectedThirds={selectedThirds} />}
         {tab === 'apuestas' && (
           <Apuestas
+            participants={participants}
             participant={participant}
             phase={phase}
             setPhase={setPhase}
