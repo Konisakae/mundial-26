@@ -163,12 +163,26 @@ export default function Header({
             )}
 
             {!showPin ? (
-              <button
-                onClick={() => isAdmin ? setIsAdmin(false) : setShowPin(true)}
-                className={`${styles.adminBtn} ${isAdmin ? styles.adminActive : ''}`}
-              >
-                {isAdmin ? '⚙️ Admin ON' : '⚙️'}
-              </button>
+              <>
+                <button
+                  onClick={() => isAdmin ? setIsAdmin(false) : setShowPin(true)}
+                  className={`${styles.adminBtn} ${isAdmin ? styles.adminActive : ''}`}
+                >
+                  {isAdmin ? '⚙️ Admin ON' : '⚙️'}
+                </button>
+                {isAdmin && (
+                  <select
+                    value={participant || ''}
+                    onChange={e => setParticipant(e.target.value)}
+                    className={styles.adminSelect}
+                  >
+                    <option value="">Participante...</option>
+                    {participants.map(p => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                )}
+              </>
             ) : (
               <div className={styles.pinInput}>
                 <input
