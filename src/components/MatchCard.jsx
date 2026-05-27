@@ -230,7 +230,7 @@ export default function MatchCard({
                 const isUsedInOtherMatch = Object.entries(selectedThirds).some(([mId, g]) => g === group && mId !== match.id)
                 return (
                   <option key={group} value={group} disabled={isUsedInOtherMatch}>
-                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsedInOtherMatch ? '(usado)' : ''}
+                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'}
                   </option>
                 )
               })}
@@ -348,7 +348,7 @@ export default function MatchCard({
                 const isUsedInOtherMatch = Object.entries(selectedThirds).some(([mId, g]) => g === group && mId !== match.id)
                 return (
                   <option key={group} value={group} disabled={isUsedInOtherMatch}>
-                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'} {isUsedInOtherMatch ? '(usado)' : ''}
+                    {group}º - {thirdTeam ? TEAMS[thirdTeam]?.n : 'N/A'}
                   </option>
                 )
               })}
