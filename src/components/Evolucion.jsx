@@ -431,7 +431,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           className={`${styles.tabBtn} ${viewType === 'ranking' ? styles.tabActive : ''}`}
           onClick={() => setViewType('ranking')}
         >
-          Evolución
+          Por jornada/fase
         </button>
       </div>
 
