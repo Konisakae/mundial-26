@@ -121,6 +121,47 @@
   color: #cbd5e1;
 }
 
+.participantCodeInput {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.participantCodeField {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  background: rgba(0, 217, 255, 0.1);
+  color: #cbd5e1;
+  outline: none;
+  transition: all 0.3s;
+  width: 120px;
+}
+
+.participantCodeField:focus {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: #00d9ff;
+  color: #00d9ff;
+  box-shadow: 0 0 8px rgba(0, 217, 255, 0.2);
+}
+
+.participantCodeBtn {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  background: rgba(0, 217, 255, 0.1);
+  color: #00d9ff;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.participantCodeBtn:hover {
+  background: rgba(0, 217, 255, 0.2);
+  border-color: #00d9ff;
+}
+
 .simulateBtn {
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
-import { ADMIN_PIN } from '../config'
+import { ADMIN_PIN, PARTICIPANT_CODES } from '../config'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -24,6 +24,9 @@ export default function Header({
   const [newName, setNewName] = useState('')
   const [pinVal, setPinVal] = useState('')
   const [showPin, setShowPin] = useState(false)
+  const [selectedParticipantTemp, setSelectedParticipantTemp] = useState('')
+  const [participantCodeVal, setParticipantCodeVal] = useState('')
+  const [showParticipantCode, setShowParticipantCode] = useState(false)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   const handleAdd = () => {
@@ -37,6 +40,24 @@ export default function Header({
     if (pinVal === ADMIN_PIN) setIsAdmin(true)
     setShowPin(false)
     setPinVal('')
+  }
+
+  const handleParticipantSelect = (e) => {
+    const selected = e.target.value
+    if (selected) {
+      setSelectedParticipantTemp(selected)
+      setShowParticipantCode(true)
+      setParticipantCodeVal('')
+    }
+  }
+
+  const handleParticipantCode = () => {
+    if (participantCodeVal === PARTICIPANT_CODES[selectedParticipantTemp]) {
+      setParticipant(selectedParticipantTemp)
+      setShowParticipantCode(false)
+      setSelectedParticipantTemp('')
+      setParticipantCodeVal('')
+    }
   }
 
   const pIdx = participant ? participants.indexOf(participant) : -1
@@ -164,10 +185,10 @@ export default function Header({
 
             {!showPin ? (
               <>
-                {!isAdmin && (
+                {!isAdmin && !showParticipantCode && (
                   <select
                     value={participant || ''}
-                    onChange={e => setParticipant(e.target.value)}
+                    onChange={handleParticipantSelect}
                     className={styles.participantSelect}
                   >
                     <option value="">Selecciona participante</option>
@@ -175,6 +196,25 @@ export default function Header({
                       <option key={p} value={p}>{p}</option>
                     ))}
                   </select>
+                )}
+                {!isAdmin && showParticipantCode && (
+                  <div className={styles.participantCodeInput}>
+                    <input
+                      type="password"
+                      placeholder="Código"
+                      value={participantCodeVal}
+                      onChange={e => setParticipantCodeVal(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleParticipantCode()}
+                      className={styles.participantCodeField}
+                      autoFocus
+                    />
+                    <button onClick={handleParticipantCode} className={styles.participantCodeBtn}>✓</button>
+                    <button onClick={() => {
+                      setShowParticipantCode(false)
+                      setSelectedParticipantTemp('')
+                      setParticipantCodeVal('')
+                    }} className={styles.participantCodeBtn} style={{background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff6464'}}>✕</button>
+                  </div>
                 )}
                 <button
                   onClick={() => isAdmin ? setIsAdmin(false) : setShowPin(true)}
