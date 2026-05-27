@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
 import { ADMIN_PIN, PARTICIPANT_CODES } from '../config'
@@ -28,7 +28,20 @@ export default function Header({
   const [participantCodeVal, setParticipantCodeVal] = useState('')
   const [showParticipantCode, setShowParticipantCode] = useState(false)
   const [showParticipantDropdown, setShowParticipantDropdown] = useState(false)
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 })
+  const dropdownRef = useRef(null)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
+
+  useEffect(() => {
+    if (showParticipantDropdown && dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect()
+      setDropdownPos({
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: rect.width
+      })
+    }
+  }, [showParticipantDropdown])
 
   const handleAdd = () => {
     const name = newName.trim()
@@ -189,6 +202,7 @@ export default function Header({
                 {!isAdmin && !showParticipantCode && (
                   <div className={styles.participantDropdown}>
                     <button
+                      ref={dropdownRef}
                       onClick={() => setShowParticipantDropdown(!showParticipantDropdown)}
                       className={styles.participantDropdownBtn}
                     >
@@ -211,7 +225,14 @@ export default function Header({
                       <span className={styles.chevron} style={{transform: showParticipantDropdown ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
                     </button>
                     {showParticipantDropdown && (
-                      <div className={styles.participantDropdownMenu}>
+                      <div
+                        className={styles.participantDropdownMenu}
+                        style={{
+                          top: `${dropdownPos.top}px`,
+                          left: `${dropdownPos.left}px`,
+                          width: `${dropdownPos.width}px`
+                        }}
+                      >
                         {participants.map((p, idx) => {
                           const av = AVATAR_COLORS[idx % AVATAR_COLORS.length]
                           return (

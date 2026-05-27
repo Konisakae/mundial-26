@@ -164,6 +164,7 @@
 
 .participantDropdown {
   position: relative;
+  z-index: 1001;
 }
 
 .participantDropdownBtn {
@@ -214,18 +215,17 @@
 }
 
 .participantDropdownMenu {
-  position: absolute;
-  top: 100%;
+  position: fixed;
   left: 0;
   right: 0;
-  margin-top: 0.25rem;
   background: #2a3f57;
   border: 1px solid rgba(0, 217, 255, 0.3);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 10000;
+  min-width: 150px;
 }
 
 .participantDropdownItem {
