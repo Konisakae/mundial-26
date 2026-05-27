@@ -208,11 +208,11 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                           <div className={styles.actual}>
                             {actual ? (
                               <>
-                                <span className={winner === 'h' ? styles.winnerScore : ''}>
+                                <span className={winner === 'h' ? styles.winnerScore : winner === 'a' ? styles.loserScore : ''}>
                                   {actual.h}
                                 </span>
                                 -
-                                <span className={winner === 'a' ? styles.winnerScore : ''}>
+                                <span className={winner === 'a' ? styles.winnerScore : winner === 'h' ? styles.loserScore : ''}>
                                   {actual.a}
                                 </span>
                               </>
@@ -228,11 +228,11 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                               <>
                                 {isElimination && (pred.h > pred.a || pred.a > pred.h || pred.winner) ? (
                                   <>
-                                    <span className={pred.h > pred.a || pred.winner === 'h' ? styles.winnerScore : ''}>
+                                    <span className={pred.h > pred.a || pred.winner === 'h' ? styles.winnerScore : pred.a > pred.h || pred.winner === 'a' ? styles.loserScore : ''}>
                                       {pred.h}
                                     </span>
                                     -
-                                    <span className={pred.a > pred.h || pred.winner === 'a' ? styles.winnerScore : ''}>
+                                    <span className={pred.a > pred.h || pred.winner === 'a' ? styles.winnerScore : pred.h > pred.a || pred.winner === 'h' ? styles.loserScore : ''}>
                                       {pred.a}
                                     </span>
                                   </>

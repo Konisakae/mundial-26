@@ -275,6 +275,10 @@
   font-size: 1.1em;
 }
 
+.loserScore {
+  font-weight: 500;
+}
+
 @media (max-width: 479px) {
   .name {
     display: none;
