@@ -320,7 +320,7 @@ export default function Apuestas({
         <CustomSelect
           value={phase}
           onChange={setPhase}
-          label="Fase:"
+          label="Ronda:"
           options={[
             { value: 'G', label: 'Grupos' },
             { value: 'R16', label: 'Dieciseisavos' },
