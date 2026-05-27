@@ -44,8 +44,8 @@ export default function Apuestas({
     return <div className={styles.noParticipant}>Selecciona un participante primero</div>
   }
 
-  const pIdx = participant ? participant.charCodeAt(0) : 0
-  const pAv = AVATAR_COLORS[pIdx % AVATAR_COLORS.length]
+  const pIdx = participant ? participants.indexOf(participant) : -1
+  const pAv = pIdx >= 0 ? AVATAR_COLORS[pIdx % AVATAR_COLORS.length] : null
   const userPreds = predictions[participant]?.predictions || {}
   const confirmed = predictions[participant]?.confirmed || { 1: false, 2: false, 3: false }
 
