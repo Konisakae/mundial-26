@@ -185,39 +185,41 @@ export default function Header({
           </div>
         </div>
 
-        {/* Participant chips */}
-        <div className={styles.participants}>
-          {participants.map((p, i) => {
-            const av = AVATAR_COLORS[i % AVATAR_COLORS.length]
-            const active = p === participant
-            return (
-              <button
-                key={p}
-                onClick={() => setParticipant(active ? '' : p)}
-                className={`${styles.chip} ${active ? styles.chipActive : ''}`}
-                style={active ? { borderColor: av.t, backgroundColor: av.b } : {}}
-              >
-                <div
-                  className={styles.avatarChip}
-                  style={{
-                    background: active ? av.t : av.b,
-                    color: active ? av.b : av.t,
-                  }}
+        {/* Participant chips - only visible in admin mode */}
+        {isAdmin && (
+          <div className={styles.participants}>
+            {participants.map((p, i) => {
+              const av = AVATAR_COLORS[i % AVATAR_COLORS.length]
+              const active = p === participant
+              return (
+                <button
+                  key={p}
+                  onClick={() => setParticipant(active ? '' : p)}
+                  className={`${styles.chip} ${active ? styles.chipActive : ''}`}
+                  style={active ? { borderColor: av.t, backgroundColor: av.b } : {}}
                 >
-                  {initialsMap[p]}
-                </div>
-                <span>{p}</span>
-              </button>
-            )
-          })}
-          <input
-            value={newName}
-            onChange={e => setNewName(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleAdd()}
-            placeholder="+ Añadir"
-            className={styles.addInput}
-          />
-        </div>
+                  <div
+                    className={styles.avatarChip}
+                    style={{
+                      background: active ? av.t : av.b,
+                      color: active ? av.b : av.t,
+                    }}
+                  >
+                    {initialsMap[p]}
+                  </div>
+                  <span>{p}</span>
+                </button>
+              )
+            })}
+            <input
+              value={newName}
+              onChange={e => setNewName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleAdd()}
+              placeholder="+ Añadir"
+              className={styles.addInput}
+            />
+          </div>
+        )}
 
         {/* Tabs */}
         <div className={styles.tabs}>
