@@ -225,8 +225,9 @@
 
 .tabGroup {
   display: flex;
-  border-right: 1px solid rgba(0, 217, 255, 0.15);
-  padding-right: 0.5rem;
+  border-right: 1px solid rgba(0, 217, 255, 0.4);
+  padding-right: 0.75rem;
+  margin-right: 0.25rem;
 }
 
 .tab {
