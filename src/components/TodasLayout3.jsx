@@ -224,7 +224,25 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
 
                         <div className={styles.scores}>
                           <div className={styles.prediction}>
-                            {pred ? `${pred.h}-${pred.a}` : '—'}
+                            {pred ? (
+                              <>
+                                {isElimination && (pred.h > pred.a || pred.a > pred.h || pred.winner) ? (
+                                  <>
+                                    <span className={pred.h > pred.a || pred.winner === 'h' ? styles.winnerScore : ''}>
+                                      {pred.h}
+                                    </span>
+                                    -
+                                    <span className={pred.a > pred.h || pred.winner === 'a' ? styles.winnerScore : ''}>
+                                      {pred.a}
+                                    </span>
+                                  </>
+                                ) : (
+                                  `${pred.h}-${pred.a}`
+                                )}
+                              </>
+                            ) : (
+                              '—'
+                            )}
                           </div>
                         </div>
 
