@@ -79,15 +79,23 @@ export default function Header({
 
   return (
     <div className={styles.header}>
+      <img
+        src="/mundial-2026-logo.svg"
+        alt="Mundial 2026"
+        className={styles.logo}
+      />
       <div className={styles.container}>
         {/* Top row */}
         <div className={styles.topRow}>
-          <div className={styles.title}>
-            <div className={styles.logo}>🏆</div>
-            <div className={styles.titleText}>MUNDIAL 2026</div>
-          </div>
 
           <div className={styles.rightControls}>
+            <button
+              onClick={() => setTab('apuestas')}
+              className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
+            >
+              📝 TUS APUESTAS
+            </button>
+
             {participant && pAv && (
               <div className={styles.scoreBox} style={{ background: 'rgba(255,255,255,0.1)' }}>
                 <div className={styles.avatarSmall} style={{ background: pAv.b, color: pAv.t }}>
@@ -342,38 +350,34 @@ export default function Header({
           <div className={styles.tabsRow}>
             <div className={styles.tabGroup}>
               {[
-                ['resultados', '📊 RESULTADOS'],
-                ['grupos', '🏆 GRUPOS'],
-              ].map(([id, label]) => (
+                ['resultados', '📊 RESULTADOS', '📊 RES'],
+                ['grupos', '🏆 GRUPOS', '🏆 GR'],
+              ].map(([id, label, short]) => (
                 <button
                   key={id}
                   onClick={() => setTab(id)}
                   className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
+                  title={label}
                 >
-                  {label}
+                  <span className={styles.tabLong}>{label}</span>
+                  <span className={styles.tabShort}>{short}</span>
                 </button>
               ))}
             </div>
-            <button
-              onClick={() => setTab('apuestas')}
-              className={`${styles.tab} ${styles.tabStandalone} ${tab === 'apuestas' ? styles.tabActive : ''}`}
-            >
-              📝 TUS APUESTAS
-            </button>
-          </div>
-          <div className={styles.tabsRow}>
             <div className={styles.tabGroup}>
               {[
-                ['clasificacion', '🏅 CLASIFICACIÓN'],
-                ['todas', '📈 ESTADÍSTICAS'],
-                ['evolucion', '📈 EVOLUCIÓN'],
-              ].map(([id, label]) => (
+                ['clasificacion', '🏅 CLASIFICACIÓN', '🏅 CLAS'],
+                ['todas', '📈 ESTADÍSTICAS', '📈 EST'],
+                ['evolucion', '📈 EVOLUCIÓN', '📈 EVO'],
+              ].map(([id, label, short]) => (
                 <button
                   key={id}
                   onClick={() => setTab(id)}
                   className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
+                  title={label}
                 >
-                  {label}
+                  <span className={styles.tabLong}>{label}</span>
+                  <span className={styles.tabShort}>{short}</span>
                 </button>
               ))}
             </div>
