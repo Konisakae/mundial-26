@@ -108,7 +108,7 @@
 
 .name {
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -165,7 +165,7 @@
 .puntos {
   font-weight: 700;
   color: #00d9ff;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   width: 5rem;
   text-align: right;
 }
