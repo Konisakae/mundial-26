@@ -43,13 +43,13 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2.5rem;
+  font-size: 2px;
   font-weight: bold;
   color: #00d9ff;
   letter-spacing: 0.05em;
   white-space: nowrap;
   z-index: 50;
-  WebkitTextStroke: '1px white';
+  WebkitTextStroke: '1.5px white';
 }
 
 .titleText {
