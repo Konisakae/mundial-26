@@ -387,8 +387,8 @@ export default function Header({
           </div>
         </div>
 
-        {/* Participant chips - only visible when admin is logged in */}
-        {isAdmin && (
+        {/* Participant chips - disabled */}
+        {false && (
           <div className={styles.participants}>
             {participants.map((p, i) => {
               const av = AVATAR_COLORS[i % AVATAR_COLORS.length]
