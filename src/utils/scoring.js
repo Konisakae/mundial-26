@@ -25,15 +25,25 @@ export const calcPts = (pred, actual, match = null) => {
     const predRes = getRes(pred.h, pred.a)
     const actualRes = getRes(actual.h, actual.a)
 
-    // Si aciertas el ganador: +2 (sea automático o manual)
+    // Si aciertas el ganador: puntos extra según la fase
+    const phaseBonus = {
+      R16: 2,
+      OCT: 3,
+      CTO: 4,
+      SEMI: 5,
+      '3P': 6,
+      FIN: 7
+    }
+    const bonusPts = phaseBonus[match.ph] || 2
+
     const predWinner = pred.winner || (Number(pred.h) > Number(pred.a) ? 'h' : Number(pred.h) < Number(pred.a) ? 'a' : null)
     const actualWinner = actual.winner || (Number(actual.h) > Number(actual.a) ? 'h' : Number(actual.h) < Number(actual.a) ? 'a' : null)
     if (predWinner && actualWinner && predWinner === actualWinner) {
-      // Ganador correcto: +2, y bonus de resultado exacto (5 en lugar de 4) si aplica
+      // Ganador correcto: puntos según fase, y bonus de resultado exacto (5 en lugar de 4) si aplica
       if (total === 4) {
         total = 5
       }
-      total += 2
+      total += bonusPts
     }
     return total
   }
