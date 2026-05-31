@@ -79,6 +79,8 @@ export default function Header({
             className={styles.logo}
           />
 
+          <div className={styles.mundialTitle}>MUNDIAL 2026</div>
+
           <div className={styles.rightControls}>
             {(participant || isAdmin) && (
               <button
