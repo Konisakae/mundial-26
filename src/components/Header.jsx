@@ -11,6 +11,7 @@ import TablerSettingsIcon from './TablerSettingsIcon'
 import TablerEditIcon from './TablerEditIcon'
 import TablerListDetailsIcon from './TablerListDetailsIcon'
 import TablerAdjustmentsAltIcon from './TablerAdjustmentsAltIcon'
+import TablerTrashIcon from './TablerTrashIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -255,8 +256,9 @@ export default function Header({
                       onClick={clearAllData}
                       className={styles.clearBtn}
                       title="Borrar toda la simulación"
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
-                      🗑️
+                      <TablerTrashIcon size={18} />
                     </button>
                   </div>
                 )}
