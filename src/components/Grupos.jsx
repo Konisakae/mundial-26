@@ -72,9 +72,8 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
               <div
                 className={styles.groupTitle}
                 style={{
-                  borderColor: GROUP_COLORS[groupId]?.border,
-                  color: GROUP_COLORS[groupId]?.text,
-                  WebkitTextStroke: '0.3px rgba(255, 255, 255, 0.6)',
+                  backgroundColor: GROUP_COLORS[groupId]?.border,
+                  color: 'white',
                 }}
               >
                 GRUPO {groupId}
