@@ -231,7 +231,7 @@ export default function Apuestas({
           {phaseMatches.map(match => {
             const pred = userPreds[match.id] || { h: '', a: '' }
             const actual = actuals[match.id]
-            const isBlocked = status === 'pendiente'
+            const isBlocked = !isAdmin && status === 'pendiente'
 
             return (
               <MatchCard
@@ -287,7 +287,7 @@ export default function Apuestas({
     const prevJornada = j - 1
     const isPrevResultsConfirmed = prevJornada < 1 || resultsConfirmed[prevJornada]
     const isCurrent = j === currentJornada && isPrevResultsConfirmed
-    const isBlocked = !isConfirmed && !isCurrent
+    const isBlocked = !isAdmin && !isConfirmed && !isCurrent
 
     // Validar si todos los partidos están rellenos
     const allFilled = matches.every(m => {
