@@ -86,23 +86,33 @@ export default function Header({
             </div>
           )}
 
-          <div className={styles.rightControls}>
-            {(participant || isAdmin) && (
+          {participant && (
+            <div className={styles.centerContent}>
               <button
                 onClick={() => setTab('apuestas')}
                 className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
               >
                 📝 TUS APUESTAS
               </button>
-            )}
-
-            {participant && pAv && (
-              <div className={styles.scoreBox} style={{ background: 'rgba(255,255,255,0.1)' }}>
-                <div className={styles.avatarSmall} style={{ background: pAv.b, color: pAv.t }}>
-                  {initialsMap[participant]}
+              {pAv && (
+                <div className={styles.scoreBox} style={{ background: 'rgba(255,255,255,0.1)' }}>
+                  <div className={styles.avatarSmall} style={{ background: pAv.b, color: pAv.t }}>
+                    {initialsMap[participant]}
+                  </div>
+                  <span className={styles.scoreText}>{totalPts} pts</span>
                 </div>
-                <span className={styles.scoreText}>{totalPts} pts</span>
-              </div>
+              )}
+            </div>
+          )}
+
+          <div className={styles.rightControls}>
+            {!participant && (participant || isAdmin) && (
+              <button
+                onClick={() => setTab('apuestas')}
+                className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
+              >
+                📝 TUS APUESTAS
+              </button>
             )}
 
             {isAdmin && (
@@ -207,7 +217,7 @@ export default function Header({
 
             {!showPin ? (
               <>
-                {!isAdmin && !showParticipantCode && (
+                {!participant && !isAdmin && !showParticipantCode && (
                   <div className={styles.participantDropdown}>
                     <button
                       ref={dropdownRef}
@@ -276,6 +286,18 @@ export default function Header({
                       </div>
                     )}
                   </div>
+                )}
+                {participant && !isAdmin && (
+                  <button
+                    onClick={() => {
+                      setParticipant('')
+                      setShowParticipantDropdown(false)
+                    }}
+                    className={styles.exitBtn}
+                    title="Salir del participante"
+                  >
+                    ✕
+                  </button>
                 )}
                 {!isAdmin && showParticipantCode && (
                   <div className={styles.participantCodeInput}>
