@@ -83,6 +83,7 @@ export default function Header({
             <div className={styles.mundialTitle}>
               <span className={styles.mundialFull}>MUNDIAL 2026</span>
               <span className={styles.mundialShort}>MUNDIAL '26</span>
+              <span className={styles.mundialMini}>M'&</span>
             </div>
           )}
 
