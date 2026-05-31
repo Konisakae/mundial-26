@@ -5,6 +5,7 @@ import { ADMIN_PIN, PARTICIPANT_CODES } from '../config'
 import TablerFlag3Icon from './TablerFlag3Icon'
 import TablerLayoutGridIcon from './TablerLayoutGridIcon'
 import TablerMedalIcon from './TablerMedalIcon'
+import TablerChartBarIcon from './TablerChartBarIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -439,8 +440,17 @@ export default function Header({
                 <span className={styles.tabLong}>CLASIFICACIÓN</span>
                 <span className={styles.tabShort}>CLAS</span>
               </button>
+              <button
+                onClick={() => setTab('todas')}
+                className={`${styles.tab} ${tab === 'todas' ? styles.tabActive : ''}`}
+                title="ESTADÍSTICAS"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              >
+                <TablerChartBarIcon size={18} />
+                <span className={styles.tabLong}>ESTADÍSTICAS</span>
+                <span className={styles.tabShort}>EST</span>
+              </button>
               {[
-                ['todas', '📈 ESTADÍSTICAS', '📈 EST'],
                 ['evolucion', '📈 EVOLUCIÓN', '📈 EVO'],
               ].map(([id, label, short]) => (
                 <button
