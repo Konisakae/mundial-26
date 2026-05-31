@@ -371,8 +371,8 @@ export default function Header({
           </div>
         </div>
 
-        {/* Participant chips - only visible in admin mode */}
-        {isAdmin && (
+        {/* Participant chips - only visible in admin mode (not in editar-apuestas) */}
+        {isAdmin && tab !== 'editar-apuestas' && (
           <div className={styles.participants}>
             {participants.map((p, i) => {
               const av = AVATAR_COLORS[i % AVATAR_COLORS.length]
