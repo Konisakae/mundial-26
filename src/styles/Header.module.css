@@ -404,10 +404,9 @@
 }
 
 .simulationsMenu {
-  position: fixed;
-  bottom: auto;
-  left: 50%;
-  transform: translateX(-50%);
+  position: absolute;
+  top: 100%;
+  right: 0;
   background: #2a3f57;
   border: 1px solid rgba(0, 217, 255, 0.3);
   border-radius: 6px;
@@ -418,9 +417,8 @@
   padding: 0.5rem;
   z-index: 10000;
   min-width: 150px;
-  max-height: 70vh;
+  max-height: 400px;
   overflow-y: auto;
-  top: 70px;
 }
 
 .clearBtn {
