@@ -436,7 +436,7 @@
   overflow-x: auto;
   align-items: stretch;
   border-bottom: 1px solid rgba(0, 217, 255, 0.15);
-  justify-content: center;
+  justify-content: space-between;
   gap: 1rem;
   padding: 0.5rem 1rem 0.5rem 1rem;
   max-width: 660px;
