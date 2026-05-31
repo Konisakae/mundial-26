@@ -228,6 +228,19 @@ export default function Header({
               </div>
             )}
 
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  setIsAdmin(false)
+                  setShowSimulations(false)
+                }}
+                className={styles.exitBtn}
+                title="Salir de admin"
+              >
+                ✕
+              </button>
+            )}
+
             {!showPin ? (
               <>
                 {!participant && !isAdmin && !showParticipantCode && (
