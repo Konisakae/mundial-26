@@ -331,6 +331,10 @@ export default function Header({
                   className={styles.pinField}
                 />
                 <button onClick={handlePin} className={styles.pinBtn}>✓</button>
+                <button onClick={() => {
+                  setShowPin(false)
+                  setPinVal('')
+                }} className={styles.pinBtn} style={{background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff6464'}}>✕</button>
               </div>
             )}
           </div>
