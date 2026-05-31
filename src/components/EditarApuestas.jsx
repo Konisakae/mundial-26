@@ -115,6 +115,7 @@ export default function EditarApuestas({
                 showActual={true}
                 editable={true}
                 isConfirmed={false}
+                isAdmin={true}
                 r16Substitutions={r16Substitutions}
                 octavosSubstitutions={octavosSubstitutions}
                 octavosGroupInfo={octavosGroupInfo}
@@ -128,6 +129,7 @@ export default function EditarApuestas({
                 finalGroupInfo={finalGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
+                onSetWinner={setPredictedWinner}
                 onSetPredictedWinner={setPredictedWinner}
                 hideChampionDisplay={true}
               />
@@ -165,6 +167,7 @@ export default function EditarApuestas({
                 showActual={true}
                 editable={true}
                 isConfirmed={false}
+                isAdmin={true}
                 r16Substitutions={r16Substitutions}
                 octavosSubstitutions={octavosSubstitutions}
                 octavosGroupInfo={octavosGroupInfo}
@@ -178,6 +181,7 @@ export default function EditarApuestas({
                 finalGroupInfo={finalGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
+                onSetWinner={setPredictedWinner}
                 onSetPredictedWinner={setPredictedWinner}
                 hideChampionDisplay={true}
               />
