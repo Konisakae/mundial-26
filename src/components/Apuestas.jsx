@@ -37,9 +37,44 @@ export default function Apuestas({
   selectedThirds = {},
   resultsConfirmed = {},
   r16MatchupsConfirmed = false,
+  isAdmin = false,
 }) {
   const [selectedJornada, setSelectedJornada] = useState(1)
   const currentJornada = phase === 'G' ? (getCurrentJornada ? getCurrentJornada(participant) : 1) : 1
+
+  // Helper para calcular la jornada/fase máxima accesible para participantes
+  const getMaxAccessibleJornada = (p) => {
+    if (isAdmin) return 3
+
+    for (let j = 3; j >= 1; j--) {
+      if (resultsConfirmed[j]) {
+        return Math.min(j + 1, 3)
+      }
+    }
+    return 1
+  }
+
+  const getMaxAccessiblePhase = (p) => {
+    if (isAdmin) return p
+
+    const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
+    const phaseOrderReverse = { 'G': 'R16', 'R16': 'OCT', 'OCT': 'CTO', 'CTO': 'SEMI', 'SEMI': ['3P', 'FIN'] }
+
+    // Si es fase G, usa la jornada máxima accesible
+    if (p === 'G') {
+      return getMaxAccessibleJornada(participant) <= 3
+    }
+
+    // Para fases eliminatorias, verifica si la fase anterior está confirmada
+    const prevPhase = phaseOrder[p]
+    if (!prevPhase) return false
+
+    if (p === 'R16') {
+      return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
+    }
+
+    return !!(resultsConfirmed[prevPhase])
+  }
 
   const pIdx = participant ? participants.indexOf(participant) : -1
   const pAv = pIdx >= 0 ? AVATAR_COLORS[pIdx % AVATAR_COLORS.length] : null
@@ -92,6 +127,29 @@ export default function Apuestas({
 
   // Renderizar fase eliminatoria con estados
   const renderEliminationPhase = (phaseName, phaseLabel) => {
+    // Verificar si participante tiene acceso a esta fase
+    if (!isAdmin) {
+      const phaseOrder = { 'R16': 'G', 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
+      const prevPhase = phaseOrder[phaseName]
+
+      if (phaseName === 'R16') {
+        const canAccessR16 = resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
+        if (!canAccessR16) {
+          return (
+            <div className={styles.accessDenied}>
+              <p>No puedes ver esta fase aún. Completa todas las jornadas de grupos en resultados.</p>
+            </div>
+          )
+        }
+      } else if (prevPhase && !resultsConfirmed[prevPhase]) {
+        return (
+          <div className={styles.accessDenied}>
+            <p>No puedes ver esta fase aún. Completa la fase anterior en resultados.</p>
+          </div>
+        )
+      }
+    }
+
     const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
     const allFilled = isPhasePredictionCompleted(phaseName)
     const allCompleted = isPhaseActualsCompleted(phaseName)
@@ -212,6 +270,18 @@ export default function Apuestas({
 
   // Renderizar sección de jornada
   const renderJornada = (j) => {
+    const maxAccessibleJornada = getMaxAccessibleJornada(participant)
+    const isAccessible = isAdmin || j <= maxAccessibleJornada
+
+    // Si participante intenta ver jornada no accesible, mostrar mensaje
+    if (!isAccessible) {
+      return (
+        <div className={styles.accessDenied}>
+          <p>No puedes ver esta jornada aún. Completa las jornadas anteriores en resultados.</p>
+        </div>
+      )
+    }
+
     const matches = getMatchesForJornada(MATCHES, j)
     const isConfirmed = confirmed[j]
     const prevJornada = j - 1
@@ -323,11 +393,9 @@ export default function Apuestas({
       </div>
 
       <div className={styles.controls}>
-        <CustomSelect
-          value={phase}
-          onChange={setPhase}
-          label="Ronda:"
-          options={[
+        {(() => {
+          const maxAccessibleJornada = getMaxAccessibleJornada(participant)
+          const allPhaseOptions = [
             { value: 'G', label: 'Grupos' },
             { value: 'R16', label: 'Dieciseisavos' },
             { value: 'OCT', label: 'Octavos' },
@@ -335,19 +403,47 @@ export default function Apuestas({
             { value: 'SEMI', label: 'Semifinales' },
             { value: '3P', label: '3er Puesto' },
             { value: 'FIN', label: 'Final' },
-          ]}
-        />
+          ]
+
+          // Filtrar fases accesibles para participantes
+          const accessiblePhases = isAdmin ? allPhaseOptions : allPhaseOptions.filter(opt => {
+            if (opt.value === 'G') return true
+            if (opt.value === 'R16') return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
+            const phaseOrder = { 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
+            const prevPhase = phaseOrder[opt.value]
+            return !!(resultsConfirmed[prevPhase])
+          })
+
+          return (
+            <CustomSelect
+              value={phase}
+              onChange={setPhase}
+              label="Ronda:"
+              options={accessiblePhases}
+            />
+          )
+        })()}
+
         {phase === 'G' && (
-          <CustomSelect
-            value={selectedJornada}
-            onChange={setSelectedJornada}
-            label="Jornada:"
-            options={[
+          (() => {
+            const maxAccessibleJornada = getMaxAccessibleJornada(participant)
+            const allJornadaOptions = [
               { value: 1, label: 'Jornada 1' },
               { value: 2, label: 'Jornada 2' },
               { value: 3, label: 'Jornada 3' },
-            ]}
-          />
+            ]
+
+            const accessibleJornadas = isAdmin ? allJornadaOptions : allJornadaOptions.filter(opt => opt.value <= maxAccessibleJornada)
+
+            return (
+              <CustomSelect
+                value={selectedJornada}
+                onChange={setSelectedJornada}
+                label="Jornada:"
+                options={accessibleJornadas}
+              />
+            )
+          })()
         )}
       </div>
 

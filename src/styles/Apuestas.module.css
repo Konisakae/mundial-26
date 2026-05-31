@@ -292,3 +292,12 @@
   text-align: center;
   margin: 0;
 }
+
+.accessDenied {
+  padding: 2rem;
+  text-align: center;
+  background: rgba(255, 100, 100, 0.1);
+  border: 2px solid rgba(255, 100, 100, 0.3);
+  border-radius: 0.5rem;
+  color: #ff6464;
+}

@@ -1180,6 +1180,7 @@ export default function App() {
             selectedThirds={selectedThirds}
             resultsConfirmed={resultsConfirmed}
             r16MatchupsConfirmed={r16MatchupsConfirmed}
+            isAdmin={isAdmin}
           />
         )}
         {tab === 'todas' && (
