@@ -6,6 +6,7 @@ import TablerFlag3Icon from './TablerFlag3Icon'
 import TablerLayoutGridIcon from './TablerLayoutGridIcon'
 import TablerMedalIcon from './TablerMedalIcon'
 import TablerChartBarIcon from './TablerChartBarIcon'
+import TablerTrendingUpIcon from './TablerTrendingUpIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -450,19 +451,16 @@ export default function Header({
                 <span className={styles.tabLong}>ESTADÍSTICAS</span>
                 <span className={styles.tabShort}>EST</span>
               </button>
-              {[
-                ['evolucion', '📈 EVOLUCIÓN', '📈 EVO'],
-              ].map(([id, label, short]) => (
-                <button
-                  key={id}
-                  onClick={() => setTab(id)}
-                  className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
-                  title={label}
-                >
-                  <span className={styles.tabLong}>{label}</span>
-                  <span className={styles.tabShort}>{short}</span>
-                </button>
-              ))}
+              <button
+                onClick={() => setTab('evolucion')}
+                className={`${styles.tab} ${tab === 'evolucion' ? styles.tabActive : ''}`}
+                title="EVOLUCIÓN"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              >
+                <TablerTrendingUpIcon size={18} />
+                <span className={styles.tabLong}>EVOLUCIÓN</span>
+                <span className={styles.tabShort}>EVO</span>
+              </button>
             </div>
           </div>
         </div>
