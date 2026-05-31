@@ -88,12 +88,6 @@ export default function Header({
 
           {participant && (
             <div className={styles.centerContent}>
-              <button
-                onClick={() => setTab('apuestas')}
-                className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
-              >
-                📝 TUS APUESTAS
-              </button>
               {pAv && (
                 <div className={styles.scoreBox} style={{ background: 'rgba(255,255,255,0.1)' }}>
                   <div className={styles.avatarSmall} style={{ background: pAv.b, color: pAv.t }}>
@@ -102,6 +96,12 @@ export default function Header({
                   <span className={styles.scoreText}>{totalPts} pts</span>
                 </div>
               )}
+              <button
+                onClick={() => setTab('apuestas')}
+                className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
+              >
+                📝 TUS APUESTAS
+              </button>
             </div>
           )}
 
