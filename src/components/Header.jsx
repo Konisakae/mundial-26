@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
 import { ADMIN_PIN, PARTICIPANT_CODES } from '../config'
+import TablerFlag3Icon from './TablerFlag3Icon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -404,8 +405,17 @@ export default function Header({
         <div className={styles.tabsContainer}>
           <div className={styles.tabsRow}>
             <div className={styles.tabGroup}>
+              <button
+                onClick={() => setTab('resultados')}
+                className={`${styles.tab} ${tab === 'resultados' ? styles.tabActive : ''}`}
+                title="RESULTADOS"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              >
+                <TablerFlag3Icon size={18} />
+                <span className={styles.tabLong}>RESULTADOS</span>
+                <span className={styles.tabShort}>RES</span>
+              </button>
               {[
-                ['resultados', '🚩 RESULTADOS', '🚩 RES'],
                 ['grupos', '🏆 GRUPOS', '🏆 GR'],
               ].map(([id, label, short]) => (
                 <button
