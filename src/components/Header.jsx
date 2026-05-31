@@ -56,15 +56,6 @@ export default function Header({
     setPinVal('')
   }
 
-  const handleParticipantSelect = (e) => {
-    const selected = e.target.value
-    if (selected) {
-      setSelectedParticipantTemp(selected)
-      setShowParticipantCode(true)
-      setParticipantCodeVal('')
-    }
-  }
-
   const handleParticipantCode = () => {
     if (participantCodeVal === PARTICIPANT_CODES[selectedParticipantTemp]) {
       setParticipant(selectedParticipantTemp)
@@ -79,12 +70,16 @@ export default function Header({
 
   return (
     <div className={styles.header}>
-      <img
-        src="/mundial-2026-logo.svg"
-        alt="Mundial 2026"
-        className={styles.logo}
-      />
       <div className={styles.container}>
+        {/* Logo line */}
+        <div className={styles.logoRow}>
+          <img
+            src="/mundial-2026-logo.svg"
+            alt="Mundial 2026"
+            className={styles.logo}
+          />
+        </div>
+
         {/* Top row */}
         <div className={styles.topRow}>
 
