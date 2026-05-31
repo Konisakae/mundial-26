@@ -53,6 +53,24 @@
   -webkit-text-stroke-join: round;
 }
 
+.mundialFull {
+  display: inline;
+}
+
+.mundialShort {
+  display: none;
+}
+
+@media (max-width: 550px) {
+  .mundialFull {
+    display: none;
+  }
+
+  .mundialShort {
+    display: inline;
+  }
+}
+
 .titleText {
   font-size: 1rem;
   font-weight: bold;
