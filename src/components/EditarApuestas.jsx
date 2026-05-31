@@ -52,28 +52,31 @@ export default function EditarApuestas({
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
+                    gap: '0.75rem',
                     padding: '0.5rem 1rem',
-                    background: av.b,
-                    color: av.t,
-                    border: 'none',
+                    background: 'transparent',
+                    border: '2px solid ' + av.b,
                     borderRadius: '0.375rem',
                     cursor: 'pointer',
                     fontWeight: 500,
+                    color: '#ffffff',
                   }}
                 >
                   <div style={{
-                    width: '1.5rem',
-                    height: '1.5rem',
+                    width: '2.5rem',
+                    height: '2.5rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '0.8rem',
+                    fontSize: '1.2rem',
                     fontWeight: 'bold',
+                    background: av.b,
+                    color: av.t,
+                    borderRadius: '0.25rem',
                   }}>
                     {initialsMap[p]}
                   </div>
-                  {p}
+                  <span style={{ fontSize: '1.1rem' }}>{p}</span>
                 </button>
               )
             })}
