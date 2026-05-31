@@ -82,7 +82,6 @@ export default function Header({
           {!participant && !selectedParticipantTemp && !showPin && (
             <div className={styles.mundialTitle}>
               <span className={styles.mundialFull}>MUNDIAL 2026</span>
-              <span className={styles.mundialShort}>MUNDIAL '26</span>
               <span className={styles.mundialMini}>M26</span>
             </div>
           )}

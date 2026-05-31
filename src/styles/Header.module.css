@@ -57,34 +57,16 @@
   display: inline;
 }
 
-.mundialShort {
-  display: none;
-}
-
 .mundialMini {
   display: none;
 }
 
 @media (max-width: 550px) {
   .mundialTitle {
-    font-size: 1.6rem;
-  }
-
-  .mundialFull {
-    display: none;
-  }
-
-  .mundialShort {
-    display: inline;
-  }
-}
-
-@media (max-width: 460px) {
-  .mundialTitle {
     font-size: 3rem;
   }
 
-  .mundialShort {
+  .mundialFull {
     display: none;
   }
 
