@@ -3,6 +3,7 @@ import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
 import { ADMIN_PIN, PARTICIPANT_CODES } from '../config'
 import TablerFlag3Icon from './TablerFlag3Icon'
+import TablerLayoutGridIcon from './TablerLayoutGridIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -415,19 +416,16 @@ export default function Header({
                 <span className={styles.tabLong}>RESULTADOS</span>
                 <span className={styles.tabShort}>RES</span>
               </button>
-              {[
-                ['grupos', '🏆 GRUPOS', '🏆 GR'],
-              ].map(([id, label, short]) => (
-                <button
-                  key={id}
-                  onClick={() => setTab(id)}
-                  className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
-                  title={label}
-                >
-                  <span className={styles.tabLong}>{label}</span>
-                  <span className={styles.tabShort}>{short}</span>
-                </button>
-              ))}
+              <button
+                onClick={() => setTab('grupos')}
+                className={`${styles.tab} ${tab === 'grupos' ? styles.tabActive : ''}`}
+                title="GRUPOS"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              >
+                <TablerLayoutGridIcon size={18} />
+                <span className={styles.tabLong}>GRUPOS</span>
+                <span className={styles.tabShort}>GR</span>
+              </button>
             </div>
             <div className={styles.tabGroup}>
               {[
