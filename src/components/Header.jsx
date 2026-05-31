@@ -87,7 +87,7 @@ export default function Header({
             </div>
           )}
 
-          {participant && (
+          {!isAdmin && participant && (
             <div className={styles.centerContent}>
               {pAv && (
                 <div className={styles.participantInfo}>
@@ -103,6 +103,17 @@ export default function Header({
                 className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
               >
                 📝 TUS APUESTAS
+              </button>
+            </div>
+          )}
+
+          {isAdmin && (
+            <div className={styles.centerContent}>
+              <button
+                onClick={() => setTab('editar-apuestas')}
+                className={`${styles.topTab} ${tab === 'editar-apuestas' ? styles.topTabActive : ''}`}
+              >
+                📝 EDITAR APUESTAS
               </button>
             </div>
           )}

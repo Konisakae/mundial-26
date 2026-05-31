@@ -7,6 +7,7 @@ import { getAllGroupWinners } from './utils/groupStandings'
 import Header from './components/Header'
 import Resultados from './components/Resultados'
 import Apuestas from './components/Apuestas'
+import EditarApuestas from './components/EditarApuestas'
 import Clasificacion from './components/Clasificacion'
 import Grupos from './components/Grupos'
 import Todas from './components/Todas'
@@ -22,6 +23,7 @@ export default function App() {
   const [predictions, setPredictions] = useState({})
   const [actuals, setActuals] = useState({})
   const [isAdmin, setIsAdmin] = useState(false)
+  const [selectedParticipantForEditing, setSelectedParticipantForEditing] = useState(null)
   const [loading, setLoading] = useState(true)
   const [simulatedJornadas, setSimulatedJornadas] = useState({ 1: false, 2: false, 3: false })
   const [simulatedPhases, setSimulatedPhases] = useState({ R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
@@ -104,16 +106,33 @@ export default function App() {
     }
   }, [])
 
-  const savePred = (matchId, h, a) => {
-    if (!participant) return
+  const savePred = (matchIdOrParticipant, hOrMatchId, aOrH, a) => {
+    // Soporta dos firmas: savePred(matchId, h, a) o savePred(participant, matchId, h, a)
+    let targetParticipant, matchId, h, actualA
+
+    if (typeof hOrMatchId === 'number' || typeof hOrMatchId === 'string') {
+      // Primera forma: savePred(matchId, h, a)
+      targetParticipant = participant
+      matchId = matchIdOrParticipant
+      h = hOrMatchId
+      actualA = aOrH
+    } else {
+      // Segunda forma: savePred(participant, matchId, h, a)
+      targetParticipant = matchIdOrParticipant
+      matchId = hOrMatchId
+      h = aOrH
+      actualA = a
+    }
+
+    if (!targetParticipant) return
     const next = {
       ...predictions,
-      [participant]: {
+      [targetParticipant]: {
         predictions: {
-          ...(predictions[participant]?.predictions || {}),
-          [matchId]: { h, a },
+          ...(predictions[targetParticipant]?.predictions || {}),
+          [matchId]: { h, a: actualA },
         },
-        confirmed: predictions[participant]?.confirmed || { 1: false, 2: false, 3: false },
+        confirmed: predictions[targetParticipant]?.confirmed || { 1: false, 2: false, 3: false },
       },
     }
     setPredictions(next)
@@ -1181,6 +1200,32 @@ export default function App() {
             resultsConfirmed={resultsConfirmed}
             r16MatchupsConfirmed={r16MatchupsConfirmed}
             isAdmin={isAdmin}
+          />
+        )}
+        {tab === 'editar-apuestas' && (
+          <EditarApuestas
+            participants={participants}
+            selectedParticipant={selectedParticipantForEditing}
+            setSelectedParticipant={setSelectedParticipantForEditing}
+            phase={phase}
+            setPhase={setPhase}
+            predictions={predictions}
+            savePred={savePred}
+            setPredictedWinner={setPredictedWinner}
+            actuals={actuals}
+            r16Substitutions={r16Substitutions}
+            octavosSubstitutions={octavosSubstitutions}
+            octavosGroupInfo={octavosGroupInfo}
+            cuartosSubstitutions={cuartosSubstitutions}
+            cuartosGroupInfo={cuartosGroupInfo}
+            semifinalSubstitutions={semifinalSubstitutions}
+            semifinalGroupInfo={semifinalGroupInfo}
+            tercerPuestoSubstitutions={tercerPuestoSubstitutions}
+            tercerPuestoGroupInfo={tercerPuestoGroupInfo}
+            finalSubstitutions={finalSubstitutions}
+            finalGroupInfo={finalGroupInfo}
+            availableThirds={availableThirds}
+            selectedThirds={selectedThirds}
           />
         )}
         {tab === 'todas' && (
