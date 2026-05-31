@@ -380,7 +380,7 @@ export default function Header({
                   >
                     {initialsMap[p]}
                   </div>
-                  <span>{p}</span>
+                  <span style={['Lucía', 'Lucas', 'Nic', 'Eva', 'Abuelo'].includes(p) ? { color: '#000' } : {}}>{p}</span>
                 </button>
               )
             })}
