@@ -49,7 +49,7 @@
   letter-spacing: 0.05em;
   white-space: nowrap;
   z-index: 50;
-  WebkitTextStroke: '2.5px white';
+  WebkitTextStroke: '4px white';
 }
 
 .titleText {
