@@ -226,6 +226,7 @@ export default function Header({
                   setParticipant('')
                   setShowSimulations(false)
                   setShowParticipantDropdown(false)
+                  setTab('resultados')
                 }}
                 className={styles.exitBtn}
                 title="Salir de admin"
@@ -311,6 +312,7 @@ export default function Header({
                     onClick={() => {
                       setParticipant('')
                       setShowParticipantDropdown(false)
+                      setTab('resultados')
                     }}
                     className={styles.exitBtn}
                     title="Salir del participante"
