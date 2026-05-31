@@ -40,6 +40,7 @@ export default function Header({
   const [showParticipantDropdown, setShowParticipantDropdown] = useState(false)
   const [showSimulations, setShowSimulations] = useState(false)
   const [dropdownPos, setDropdownPos] = useState({ top: 0, right: 0, width: 0 })
+  const [dropdownReady, setDropdownReady] = useState(false)
   const dropdownRef = useRef(null)
   const participantDropdownRef = useRef(null)
   const simulationDropdownRef = useRef(null)
@@ -53,6 +54,9 @@ export default function Header({
         right: window.innerWidth - rect.right,
         width: rect.width
       })
+      setDropdownReady(true)
+    } else {
+      setDropdownReady(false)
     }
   }, [showParticipantDropdown])
 
@@ -314,7 +318,9 @@ export default function Header({
                         style={{
                           top: `${dropdownPos.top}px`,
                           right: `${dropdownPos.right}px`,
-                          width: `${dropdownPos.width}px`
+                          width: `${dropdownPos.width}px`,
+                          opacity: dropdownReady ? 1 : 0,
+                          transition: 'opacity 0.15s ease'
                         }}
                       >
                         {participants.map((p, idx) => {
