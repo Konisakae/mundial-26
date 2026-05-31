@@ -79,14 +79,14 @@
 }
 
 .avatar {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 0.375rem;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .ptsValue {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #00d9ff;
   text-align: center;
@@ -179,7 +179,7 @@
 }
 
 .winner {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: #ffffff;
   text-transform: capitalize;
