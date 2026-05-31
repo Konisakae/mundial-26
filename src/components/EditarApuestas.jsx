@@ -40,9 +40,9 @@ export default function EditarApuestas({
   if (!selectedParticipant || pAv === null) {
     return (
       <div className={styles.apuestas}>
-        <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+        <div style={{ textAlign: 'center', color: '#94a3b8' }}>
           <p>Selecciona un participante para editar sus apuestas</p>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem', justifyContent: 'center' }}>
+          <div className={styles.participantSelectorContainer}>
             {participants.map((p, i) => {
               const av = AVATAR_COLORS[i % AVATAR_COLORS.length]
               return (
