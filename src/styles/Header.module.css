@@ -406,7 +406,8 @@
 .simulationsMenu {
   position: fixed;
   bottom: auto;
-  right: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   background: #2a3f57;
   border: 1px solid rgba(0, 217, 255, 0.3);
   border-radius: 6px;
