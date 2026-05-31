@@ -9,6 +9,7 @@ import TablerChartBarIcon from './TablerChartBarIcon'
 import TablerTrendingUpIcon from './TablerTrendingUpIcon'
 import TablerSettingsIcon from './TablerSettingsIcon'
 import TablerEditIcon from './TablerEditIcon'
+import TablerListDetailsIcon from './TablerListDetailsIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -108,8 +109,10 @@ export default function Header({
               <button
                 onClick={() => setTab('apuestas')}
                 className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
               >
-                📝 TUS APUESTAS
+                <TablerListDetailsIcon size={18} />
+                <span>TUS APUESTAS</span>
               </button>
             </div>
           )}
