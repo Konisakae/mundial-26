@@ -10,6 +10,7 @@ import TablerTrendingUpIcon from './TablerTrendingUpIcon'
 import TablerSettingsIcon from './TablerSettingsIcon'
 import TablerEditIcon from './TablerEditIcon'
 import TablerListDetailsIcon from './TablerListDetailsIcon'
+import TablerAdjustmentsAltIcon from './TablerAdjustmentsAltIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -139,7 +140,7 @@ export default function Header({
                   title="Menú de simulaciones"
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                 >
-                  <TablerSettingsIcon size={18} />
+                  <TablerAdjustmentsAltIcon size={18} />
                   <span>SIM</span>
                 </button>
                 {showSimulations && (
