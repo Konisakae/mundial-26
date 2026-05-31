@@ -11,8 +11,8 @@ export default function TablerFlag3Icon({ size = 24 }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M5 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1 -1v-5" />
-      <path d="M5 20h7" />
+      <path d="M5 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-5" />
+      <path d="M5 20h10" />
     </svg>
   )
 }
