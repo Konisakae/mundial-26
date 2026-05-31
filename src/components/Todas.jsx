@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { MATCHES } from '../data/matches'
 import { TEAMS } from '../data/teams'
 import { AVATAR_COLORS } from '../data/colors'
@@ -9,9 +9,32 @@ import TodasLayout3 from './TodasLayout3'
 import styles from '../styles/Todas.module.css'
 
 export default function Todas({ participants, phase, setPhase, predictions, actuals, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, tercerPuestoSubstitutions, finalSubstitutions, selectedThirds = {}, availableThirds = {} }) {
-  const [jornada, setJornada] = useState(1)
   const [layoutView, setLayoutView] = useState(3)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
+
+  // Detectar jornadas/fases con datos
+  const jornadasWithData = [1, 2, 3].filter(j => {
+    const jMatches = getMatchesForJornada(MATCHES, j)
+    return jMatches.some(m => actuals[m.id] || participants.some(p => predictions[p]?.[m.id]))
+  })
+
+  const phasesWithData = ['G', 'R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN'].filter(ph => {
+    const pMatches = ph === 'G' ? getMatchesForJornada(MATCHES, 1) : MATCHES.filter(m => m.ph === ph)
+    return pMatches.some(m => actuals[m.id] || participants.some(p => predictions[p]?.[m.id]))
+  })
+
+  // Inicializar con la última fase/jornada con datos
+  const lastPhaseWithData = phasesWithData.length > 0 ? phasesWithData[phasesWithData.length - 1] : 'G'
+  const lastJornada = phase === 'G' ? (jornadasWithData.length > 0 ? jornadasWithData[jornadasWithData.length - 1] : 1) : 1
+
+  const [jornada, setJornada] = useState(lastJornada)
+
+  // Sincronizar phase con la última fase con datos en el primer render
+  useEffect(() => {
+    if (lastPhaseWithData && phase !== lastPhaseWithData) {
+      setPhase(lastPhaseWithData)
+    }
+  }, [])
 
   let matches
   if (phase === 'G') {
