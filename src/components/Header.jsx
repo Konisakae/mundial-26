@@ -405,7 +405,7 @@ export default function Header({
           <div className={styles.tabsRow}>
             <div className={styles.tabGroup}>
               {[
-                ['resultados', '📊 RESULTADOS', '📊 RES'],
+                ['resultados', '🚩 RESULTADOS', '🚩 RES'],
                 ['grupos', '🏆 GRUPOS', '🏆 GR'],
               ].map(([id, label, short]) => (
                 <button
