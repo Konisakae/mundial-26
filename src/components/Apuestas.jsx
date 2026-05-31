@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { MATCHES } from '../data/matches'
 import { getMatchesForJornada } from '../utils/jornadas'
-import { initials } from '../utils/scoring'
+import { generateInitials } from '../utils/initials'
 import { AVATAR_COLORS } from '../data/colors'
 import MatchCard from './MatchCard'
 import CustomSelect from './CustomSelect'
@@ -43,6 +43,7 @@ export default function Apuestas({
 
   const pIdx = participant ? participants.indexOf(participant) : -1
   const pAv = pIdx >= 0 ? AVATAR_COLORS[pIdx % AVATAR_COLORS.length] : null
+  const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   if (!participant || pAv === null) {
     return <div className={styles.noParticipant}>Selecciona un participante primero</div>
@@ -316,7 +317,7 @@ export default function Apuestas({
     <div className={styles.apuestas}>
       <div className={styles.header}>
         <div className={styles.userChip} style={{ background: pAv.b, color: pAv.t }}>
-          {initials(participant)}
+          {initialsMap[participant]}
         </div>
         <span>{participant}</span>
       </div>
