@@ -7,6 +7,7 @@ import TablerLayoutGridIcon from './TablerLayoutGridIcon'
 import TablerMedalIcon from './TablerMedalIcon'
 import TablerChartBarIcon from './TablerChartBarIcon'
 import TablerTrendingUpIcon from './TablerTrendingUpIcon'
+import TablerSettingsIcon from './TablerSettingsIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -130,8 +131,10 @@ export default function Header({
                   onClick={() => setShowSimulations(!showSimulations)}
                   className={styles.simulateBtn}
                   title="Menú de simulaciones"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                 >
-                  ⚙️ SIM
+                  <TablerSettingsIcon size={18} />
+                  <span>SIM</span>
                 </button>
                 {showSimulations && (
                   <div className={styles.simulationsMenu}>
