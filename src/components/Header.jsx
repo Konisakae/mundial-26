@@ -254,6 +254,16 @@ export default function Header({
                             </button>
                           )
                         })}
+                        <button
+                          onClick={() => {
+                            setShowPin(true)
+                            setShowParticipantDropdown(false)
+                          }}
+                          className={`${styles.participantDropdownItem} ${styles.adminDropdownItem}`}
+                          style={{borderTop: '1px solid rgba(0, 217, 255, 0.2)'}}
+                        >
+                          ⚙️ Admin
+                        </button>
                       </div>
                     )}
                   </div>
@@ -277,12 +287,6 @@ export default function Header({
                     }} className={styles.participantCodeBtn} style={{background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff6464'}}>✕</button>
                   </div>
                 )}
-                <button
-                  onClick={() => isAdmin ? setIsAdmin(false) : setShowPin(true)}
-                  className={`${styles.adminBtn} ${isAdmin ? styles.adminActive : ''}`}
-                >
-                  {isAdmin ? '⚙️ Admin ON' : '⚙️'}
-                </button>
               </>
             ) : (
               <div className={styles.pinInput}>

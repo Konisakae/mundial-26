@@ -290,6 +290,12 @@
   flex-shrink: 0;
 }
 
+.adminDropdownItem {
+  justify-content: center;
+  color: #ff006e;
+  font-weight: 600;
+}
+
 .simulateBtn {
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
