@@ -342,8 +342,6 @@
 
 .participantDropdownMenu {
   position: fixed;
-  left: 0;
-  right: 0;
   background: #2a3f57;
   border: 1px solid rgba(0, 217, 255, 0.3);
   border-radius: 6px;
