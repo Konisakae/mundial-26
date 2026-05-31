@@ -290,10 +290,6 @@
   flex-shrink: 0;
 }
 
-.adminDropdownItem {
-  color: #ff006e;
-  font-weight: 600;
-}
 
 .simulateBtn {
   font-size: 0.75rem;
