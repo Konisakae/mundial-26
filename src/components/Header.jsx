@@ -298,6 +298,7 @@ export default function Header({
                         }}
                       >
                         {participants.map((p, idx) => {
+                          const av = AVATAR_COLORS[idx % AVATAR_COLORS.length]
                           return (
                             <button
                               key={p}
@@ -308,6 +309,12 @@ export default function Header({
                               }}
                               className={styles.participantDropdownItem}
                             >
+                              <div
+                                className={styles.avatarDropdownItem}
+                                style={{background: av.b, color: av.t}}
+                              >
+                                {initialsMap[p]}
+                              </div>
                               <span>{p}</span>
                             </button>
                           )
