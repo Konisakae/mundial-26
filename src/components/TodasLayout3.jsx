@@ -182,7 +182,7 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
 
               {isExpanded && (
                 <div className={styles.predictions}>
-                  {matches.filter(m => predictions[p]?.[m.id] || actuals[m.id]).map((m, mIdx) => {
+                  {matches.filter(m => actuals[m.id]).map((m, mIdx) => {
                     const h = getTeam(m.h, m.id)
                     const a = getTeam(m.a, m.id)
                     const pred = predictions[p]?.[m.id]
