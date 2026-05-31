@@ -75,7 +75,7 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
                   backgroundColor: GROUP_COLORS[groupId]?.border,
                   color: 'white',
                   borderBottom: '1px solid rgba(0, 0, 0, 0.3)',
-                  WebkitTextStroke: '1.2px rgba(0, 0, 0, 0.5)',
+                  WebkitTextStroke: '1px rgba(0, 0, 0, 0.4)',
                 }}
               >
                 GRUPO {groupId}
