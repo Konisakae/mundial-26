@@ -63,12 +63,12 @@ export default function EditarApuestas({
                   }}
                 >
                   <div style={{
-                    width: '2.5rem',
-                    height: '2.5rem',
+                    width: '2rem',
+                    height: '2rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.2rem',
+                    fontSize: '0.96rem',
                     fontWeight: 'bold',
                     background: av.b,
                     color: av.t,
@@ -76,7 +76,7 @@ export default function EditarApuestas({
                   }}>
                     {initialsMap[p]}
                   </div>
-                  <span style={{ fontSize: '1.1rem' }}>{p}</span>
+                  <span style={{ fontSize: '0.88rem' }}>{p}</span>
                 </button>
               )
             })}
