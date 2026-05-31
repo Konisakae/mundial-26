@@ -33,6 +33,10 @@ export default function EditarApuestas({
 }) {
   const [selectedJornada, setSelectedJornada] = useState(1)
 
+  const handleSetPredictedWinner = (matchId, winner) => {
+    setPredictedWinner(matchId, winner, selectedParticipant)
+  }
+
   const pIdx = selectedParticipant ? participants.indexOf(selectedParticipant) : -1
   const pAv = pIdx >= 0 ? AVATAR_COLORS[pIdx % AVATAR_COLORS.length] : null
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
@@ -129,7 +133,7 @@ export default function EditarApuestas({
                 finalGroupInfo={finalGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
-                onSetWinner={setPredictedWinner}
+                onSetWinner={handleSetPredictedWinner}
                 onSetPredictedWinner={setPredictedWinner}
                 hideChampionDisplay={true}
               />
@@ -181,7 +185,7 @@ export default function EditarApuestas({
                 finalGroupInfo={finalGroupInfo}
                 selectedThirds={selectedThirds}
                 availableThirds={availableThirds}
-                onSetWinner={setPredictedWinner}
+                onSetWinner={handleSetPredictedWinner}
                 onSetPredictedWinner={setPredictedWinner}
                 hideChampionDisplay={true}
               />

@@ -173,19 +173,20 @@ export default function App() {
     }
   }
 
-  const setPredictedWinner = (matchId, winner) => {
-    if (!participant) return
+  const setPredictedWinner = (matchId, winner, targetParticipant = null) => {
+    const targetPart = targetParticipant || participant
+    if (!targetPart) return
     const next = {
       ...predictions,
-      [participant]: {
+      [targetPart]: {
         predictions: {
-          ...(predictions[participant]?.predictions || {}),
+          ...(predictions[targetPart]?.predictions || {}),
           [matchId]: {
-            ...(predictions[participant]?.predictions[matchId] || {}),
+            ...(predictions[targetPart]?.predictions[matchId] || {}),
             winner: winner || undefined
           }
         },
-        confirmed: predictions[participant]?.confirmed || { 1: false, 2: false, 3: false },
+        confirmed: predictions[targetPart]?.confirmed || { 1: false, 2: false, 3: false },
       },
     }
     setPredictions(next)
