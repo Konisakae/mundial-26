@@ -79,7 +79,7 @@ export default function Header({
             className={styles.logo}
           />
 
-          {!participant && !selectedParticipantTemp && <div className={styles.mundialTitle}>MUNDIAL 2026</div>}
+          {!participant && !selectedParticipantTemp && !showPin && <div className={styles.mundialTitle}>MUNDIAL 2026</div>}
 
           <div className={styles.rightControls}>
             {(participant || isAdmin) && (
