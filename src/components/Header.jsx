@@ -40,6 +40,8 @@ export default function Header({
   const [showSimulations, setShowSimulations] = useState(false)
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 })
   const dropdownRef = useRef(null)
+  const participantDropdownRef = useRef(null)
+  const simulationDropdownRef = useRef(null)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   useEffect(() => {
@@ -52,6 +54,22 @@ export default function Header({
       })
     }
   }, [showParticipantDropdown])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (participantDropdownRef.current && !participantDropdownRef.current.contains(e.target)) {
+        setShowParticipantDropdown(false)
+      }
+      if (simulationDropdownRef.current && !simulationDropdownRef.current.contains(e.target)) {
+        setShowSimulations(false)
+      }
+    }
+
+    if (showParticipantDropdown || showSimulations) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showParticipantDropdown, showSimulations])
 
   const handleAdd = () => {
     const name = newName.trim()
@@ -133,7 +151,7 @@ export default function Header({
 
           <div className={styles.rightControls}>
             {isAdmin && (
-              <div style={{ position: 'relative' }}>
+              <div style={{ position: 'relative' }} ref={simulationDropdownRef}>
                 <button
                   onClick={() => setShowSimulations(!showSimulations)}
                   className={styles.simulateBtn}
@@ -264,7 +282,7 @@ export default function Header({
             {!showPin ? (
               <>
                 {!participant && !isAdmin && !showParticipantCode && (
-                  <div className={styles.participantDropdown}>
+                  <div className={styles.participantDropdown} ref={participantDropdownRef}>
                     <button
                       ref={dropdownRef}
                       onClick={() => setShowParticipantDropdown(!showParticipantDropdown)}
