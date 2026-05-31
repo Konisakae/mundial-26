@@ -318,9 +318,10 @@ export default function Header({
                             setShowParticipantDropdown(false)
                           }}
                           className={`${styles.participantDropdownItem} ${styles.adminDropdownItem}`}
-                          style={{borderTop: '1px solid rgba(0, 217, 255, 0.2)'}}
+                          style={{borderTop: '1px solid rgba(0, 217, 255, 0.2)', display: 'flex', alignItems: 'center', gap: '0.5rem'}}
                         >
-                          ⚙️ Admin
+                          <TablerSettingsIcon size={16} />
+                          <span>Admin</span>
                         </button>
                       </div>
                     )}
