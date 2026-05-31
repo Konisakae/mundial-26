@@ -49,7 +49,7 @@
   letter-spacing: 0.05em;
   white-space: nowrap;
   z-index: 50;
-  -webkit-text-stroke: 1px white;
+  -webkit-text-stroke: 1px #003bffa4;
   -webkit-text-stroke-join: round;
 }
 
