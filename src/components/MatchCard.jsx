@@ -261,7 +261,7 @@ export default function MatchCard({
         </div>
 
         <div className={styles.score}>
-            {editable && !isConfirmed ? (
+            {(editable && !isConfirmed) || isAdmin ? (
               <>
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                   <input
