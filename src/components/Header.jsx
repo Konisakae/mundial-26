@@ -8,6 +8,7 @@ import TablerMedalIcon from './TablerMedalIcon'
 import TablerChartBarIcon from './TablerChartBarIcon'
 import TablerTrendingUpIcon from './TablerTrendingUpIcon'
 import TablerSettingsIcon from './TablerSettingsIcon'
+import TablerEditIcon from './TablerEditIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -118,8 +119,10 @@ export default function Header({
               <button
                 onClick={() => setTab('editar-apuestas')}
                 className={`${styles.topTab} ${tab === 'editar-apuestas' ? styles.topTabActive : ''}`}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
               >
-                📝 EDITAR
+                <TablerEditIcon size={18} />
+                <span>EDITAR</span>
               </button>
             </div>
           )}
