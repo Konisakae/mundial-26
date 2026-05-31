@@ -39,7 +39,7 @@ export default function Header({
   const [showParticipantCode, setShowParticipantCode] = useState(false)
   const [showParticipantDropdown, setShowParticipantDropdown] = useState(false)
   const [showSimulations, setShowSimulations] = useState(false)
-  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 })
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, right: 0, width: 0 })
   const dropdownRef = useRef(null)
   const participantDropdownRef = useRef(null)
   const simulationDropdownRef = useRef(null)
