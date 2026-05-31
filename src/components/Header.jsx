@@ -108,7 +108,7 @@ export default function Header({
           )}
 
           <div className={styles.rightControls}>
-            {!participant && (participant || isAdmin) && (
+            {participant && !isAdmin && (
               <button
                 onClick={() => setTab('apuestas')}
                 className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
