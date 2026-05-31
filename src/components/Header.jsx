@@ -219,7 +219,7 @@ export default function Header({
                           <span>{participant}</span>
                         </>
                       ) : (
-                        'Participantes'
+                        'Participante'
                       )}
                       <span className={styles.chevron} style={{transform: showParticipantDropdown ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
                     </button>
