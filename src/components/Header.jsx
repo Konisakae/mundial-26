@@ -47,7 +47,7 @@ export default function Header({
       const rect = dropdownRef.current.getBoundingClientRect()
       setDropdownPos({
         top: rect.bottom + 4,
-        left: rect.left,
+        right: window.innerWidth - rect.right,
         width: rect.width
       })
     }
@@ -293,7 +293,7 @@ export default function Header({
                         className={styles.participantDropdownMenu}
                         style={{
                           top: `${dropdownPos.top}px`,
-                          left: `${dropdownPos.left}px`,
+                          right: `${dropdownPos.right}px`,
                           width: `${dropdownPos.width}px`
                         }}
                       >
