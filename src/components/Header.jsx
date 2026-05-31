@@ -384,13 +384,6 @@ export default function Header({
                 </button>
               )
             })}
-            <input
-              value={newName}
-              onChange={e => setNewName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAdd()}
-              placeholder="+ Añadir"
-              className={styles.addInput}
-            />
           </div>
         )}
 
