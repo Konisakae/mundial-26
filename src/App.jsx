@@ -110,18 +110,19 @@ export default function App() {
     // Soporta dos firmas: savePred(matchId, h, a) o savePred(participant, matchId, h, a)
     let targetParticipant, matchId, h, actualA
 
-    if (typeof hOrMatchId === 'number' || typeof hOrMatchId === 'string') {
-      // Primera forma: savePred(matchId, h, a)
-      targetParticipant = participant
-      matchId = matchIdOrParticipant
-      h = hOrMatchId
-      actualA = aOrH
-    } else {
+    // Si el primer arg es string (participante), es la segunda forma
+    if (typeof matchIdOrParticipant === 'string') {
       // Segunda forma: savePred(participant, matchId, h, a)
       targetParticipant = matchIdOrParticipant
       matchId = hOrMatchId
       h = aOrH
       actualA = a
+    } else {
+      // Primera forma: savePred(matchId, h, a)
+      targetParticipant = participant
+      matchId = matchIdOrParticipant
+      h = hOrMatchId
+      actualA = aOrH
     }
 
     if (!targetParticipant) return
