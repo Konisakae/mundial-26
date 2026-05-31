@@ -108,15 +108,6 @@ export default function Header({
           )}
 
           <div className={styles.rightControls}>
-            {participant && !isAdmin && (
-              <button
-                onClick={() => setTab('apuestas')}
-                className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
-              >
-                📝 TUS APUESTAS
-              </button>
-            )}
-
             {isAdmin && (
               <div style={{ position: 'relative' }}>
                 <button
