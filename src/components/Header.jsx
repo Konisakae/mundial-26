@@ -223,7 +223,9 @@ export default function Header({
               <button
                 onClick={() => {
                   setIsAdmin(false)
+                  setParticipant('')
                   setShowSimulations(false)
+                  setShowParticipantDropdown(false)
                 }}
                 className={styles.exitBtn}
                 title="Salir de admin"
