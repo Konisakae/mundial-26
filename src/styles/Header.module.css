@@ -618,7 +618,7 @@
   display: none;
 }
 
-@media (max-width: 645px) {
+@media (max-width: 675px) {
   .tabLong {
     display: none;
   }
