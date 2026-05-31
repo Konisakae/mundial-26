@@ -80,12 +80,14 @@ export default function Header({
           />
 
           <div className={styles.rightControls}>
-            <button
-              onClick={() => setTab('apuestas')}
-              className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
-            >
-              📝 TUS APUESTAS
-            </button>
+            {(participant || isAdmin) && (
+              <button
+                onClick={() => setTab('apuestas')}
+                className={`${styles.topTab} ${tab === 'apuestas' ? styles.topTabActive : ''}`}
+              >
+                📝 TUS APUESTAS
+              </button>
+            )}
 
             {participant && pAv && (
               <div className={styles.scoreBox} style={{ background: 'rgba(255,255,255,0.1)' }}>
