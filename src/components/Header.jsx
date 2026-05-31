@@ -112,8 +112,9 @@ export default function Header({
               <button
                 onClick={() => setTab('editar-apuestas')}
                 className={`${styles.topTab} ${tab === 'editar-apuestas' ? styles.topTabActive : ''}`}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', lineHeight: '1.1' }}
               >
-                📝 EDITAR APUESTAS
+                📝 EDITAR<br />APUESTAS
               </button>
             </div>
           )}
