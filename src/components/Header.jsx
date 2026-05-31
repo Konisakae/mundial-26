@@ -71,17 +71,13 @@ export default function Header({
   return (
     <div className={styles.header}>
       <div className={styles.container}>
-        {/* Logo line */}
-        <div className={styles.logoRow}>
+        {/* Top row with logo and controls */}
+        <div className={styles.topRow}>
           <img
             src="/mundial-2026-logo.svg"
             alt="Mundial 2026"
             className={styles.logo}
           />
-        </div>
-
-        {/* Top row */}
-        <div className={styles.topRow}>
 
           <div className={styles.rightControls}>
             <button
