@@ -93,10 +93,29 @@
   z-index: 49;
 }
 
-.centerContent .avatarSmall {
-  width: 40px;
-  height: 40px;
-  font-size: 1.2rem;
+.participantInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.avatarCenter {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.participantName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
 }
 
 .rightControls {

@@ -89,10 +89,11 @@ export default function Header({
           {participant && (
             <div className={styles.centerContent}>
               {pAv && (
-                <div className={styles.scoreBox} style={{ background: 'rgba(255,255,255,0.1)' }}>
-                  <div className={styles.avatarSmall} style={{ background: pAv.b, color: pAv.t }}>
+                <div className={styles.participantInfo}>
+                  <div className={styles.avatarCenter} style={{ background: pAv.b, color: pAv.t }}>
                     {initialsMap[participant]}
                   </div>
+                  <span className={styles.participantName}>{participant}</span>
                   <span className={styles.scoreText}>{totalPts} pts</span>
                 </div>
               )}
