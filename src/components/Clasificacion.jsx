@@ -7,7 +7,7 @@ import { generateInitials } from '../utils/initials'
 import styles from '../styles/Clasificacion.module.css'
 
 export default function Clasificacion({ participants, predictions, actuals }) {
-  const femaleNames = ['Laura', 'Lucía', 'Olivia', 'Eva', 'Elena', 'Charo', 'Nic']
+  const femaleNames = ['Lucía', 'Olivia', 'Eva', 'Elena', 'Charo', 'Nic']
 
   const isFemale = (name) => femaleNames.some(fName => name.includes(fName))
 

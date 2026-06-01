@@ -3,7 +3,6 @@ export const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || '2026'
 
 // Códigos de participantes - todos usan el mismo código por ahora
 export const PARTICIPANT_CODES = {
-  'Laura': '1234',
   'Lucía': '1234',
   'Olivia': '1234',
   'Eva': '1234',
