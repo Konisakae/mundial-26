@@ -4,6 +4,7 @@ import { MATCHES } from './data/matches'
 import { calcTotalPts } from './utils/scoring'
 import { storage } from './utils/storage'
 import { getAllGroupWinners } from './utils/groupStandings'
+import { getSession } from './utils/auth'
 import Header from './components/Header'
 import Resultados from './components/Resultados'
 import Apuestas from './components/Apuestas'
@@ -103,6 +104,13 @@ export default function App() {
         setR16Substitutions(newSubs)
         storage.set('wc26_r16Substitutions', newSubs)
       }
+    }
+
+    // Restaurar sesión si existe
+    const session = getSession()
+    if (session) {
+      if (session.type === 'admin') setIsAdmin(true)
+      if (session.type === 'participant') setParticipant(session.user)
     }
   }, [])
 
