@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MATCHES } from '../data/matches'
-import { getMatchesForJornada, JORNADAS } from '../utils/jornadas'
+import { getMatchesForJornada } from '../utils/jornadas'
 import MatchCard from './MatchCard'
 import CustomSelect from './CustomSelect'
 import styles from '../styles/Resultados.module.css'

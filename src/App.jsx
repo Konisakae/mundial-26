@@ -373,24 +373,16 @@ export default function App() {
   }
 
   // Función genérica para simular fase eliminatoria
-  const simulateElimination = (phaseName, allowDraws = false) => {
+  const simulateElimination = (phaseName) => {
     const phaseMatches = MATCHES.filter(m => m.ph === phaseName)
     if (phaseMatches.length === 0) return
 
     // Generar resultados reales
     const newActuals = { ...actuals }
     phaseMatches.forEach(m => {
-      if (allowDraws) {
-        newActuals[m.id] = {
-          h: Math.floor(Math.random() * 4),
-          a: Math.floor(Math.random() * 4)
-        }
-      } else {
-        // Permitir empates en resultados reales
-        newActuals[m.id] = {
-          h: Math.floor(Math.random() * 4),
-          a: Math.floor(Math.random() * 4)
-        }
+      newActuals[m.id] = {
+        h: Math.floor(Math.random() * 4),
+        a: Math.floor(Math.random() * 4)
       }
     })
 
@@ -553,31 +545,7 @@ export default function App() {
   }
 
   // Confirmar terceros lugares seleccionados y generar dieciseisavos
-  const confirmThirdPlaces = (selectedMap) => {
-    if (Object.keys(selectedMap).length !== 8) return
-
-    const groupWinners = getAllGroupWinners(actuals)
-
-    // Crear mapeo de substituciones incluyendo terceros
-    const subs = {}
-    Object.entries(groupWinners).forEach(([group, winners]) => {
-      if (winners.first) subs[`1.º ${group}`] = winners.first
-      if (winners.second) subs[`2.º ${group}`] = winners.second
-      if (winners.third) subs[`3.º ${group}`] = winners.third
-    })
-
-    // Reemplazar referencias de terceros con los seleccionados
-    Object.entries(selectedMap).forEach(([group, team]) => {
-      subs[`3.º ${group}`] = team
-    })
-
-    setR16Substitutions(subs)
-    setSelectedThirds({ ...selectedMap, completed: true })
-    storage.set('wc26_r16Substitutions', subs)
-    storage.set('wc26_selectedThirds', { ...selectedMap, completed: true })
-  }
-
-  // Generar automáticamente partidos de dieciseisavos cuando grupos estén listos
+// Generar automáticamente partidos de dieciseisavos cuando grupos estén listos
   const generateR16Matches = () => {
     if (Object.values(actuals).filter(a => a?.h !== undefined).length < 72) return
 
@@ -897,26 +865,7 @@ export default function App() {
     const octavosSubs = {}
     const octavosGroupInfoMap = {}
 
-    // Función para extraer info de grupo de una referencia
-    const extractGroupInfoFromRef = (ref, matchId) => {
-      // Si es una referencia con múltiples opciones (3.º A/B/C/D/F), usar el grupo seleccionado
-      if (ref.includes('3.º') && ref.includes('/')) {
-        const selectedGroup = selectedThirds[matchId]
-        if (selectedGroup) {
-          return { position: '3', group: selectedGroup }
-        }
-      }
-
-      // Formato: "1.º A", "2.º B", "3.º A", etc.
-      const match = ref.match(/^(\d+)\.º\s*([A-Z])$/i)
-      if (match) {
-        return { position: match[1], group: match[2] }
-      }
-
-      return null
-    }
-
-    // Función para obtener el ganador de un partido
+// Función para obtener el ganador de un partido
     const getWinner = (matchId) => {
       const match = MATCHES.find(m => m.id === matchId)
       const actual = actualResults[matchId]
