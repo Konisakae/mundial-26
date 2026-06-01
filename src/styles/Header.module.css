@@ -628,6 +628,12 @@
   }
 }
 
+@media (max-width: 405px) {
+  .tab {
+    font-size: 0.5rem;
+  }
+}
+
 .tabStandalone {
   margin-left: auto;
 }
