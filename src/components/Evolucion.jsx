@@ -442,7 +442,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
             disabled={showAll || windowStart === 0}
             className={styles.navBtn}
           >
-            <div>←</div>
+            <div className={styles.navArrow}>←</div>
             <div>Anterior</div>
           </button>
 
@@ -455,7 +455,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
             disabled={showAll || clampedWindowStart >= maxWindowStart}
             className={styles.navBtn}
           >
-            <div>→</div>
+            <div className={styles.navArrow}>→</div>
             <div>Siguiente</div>
           </button>
 
