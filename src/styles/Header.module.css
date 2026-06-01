@@ -600,7 +600,7 @@
   border-right: none;
 }
 
-.tab:hover {
+.tab:hover:not(.tabActive) {
   color: rgba(255, 255, 255, 0.6);
 }
 
