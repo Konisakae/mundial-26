@@ -39,6 +39,7 @@ export default function Header({
   const [showParticipantCode, setShowParticipantCode] = useState(false)
   const [showParticipantDropdown, setShowParticipantDropdown] = useState(false)
   const [showSimulations, setShowSimulations] = useState(false)
+  const [loginError, setLoginError] = useState('')
   const [dropdownPos, setDropdownPos] = useState({ top: 0, right: 0, width: 0 })
   const [dropdownReady, setDropdownReady] = useState(false)
   const dropdownRef = useRef(null)
@@ -84,17 +85,25 @@ export default function Header({
   }
 
   const handlePin = () => {
-    if (pinVal === ADMIN_PIN) setIsAdmin(true)
-    setShowPin(false)
-    setPinVal('')
+    if (pinVal === ADMIN_PIN) {
+      setIsAdmin(true)
+      setLoginError('')
+      setShowPin(false)
+      setPinVal('')
+    } else {
+      setLoginError('PIN incorrecto')
+    }
   }
 
   const handleParticipantCode = () => {
     if (participantCodeVal === PARTICIPANT_CODES[selectedParticipantTemp]) {
       setParticipant(selectedParticipantTemp)
+      setLoginError('')
       setShowParticipantCode(false)
       setSelectedParticipantTemp('')
       setParticipantCodeVal('')
+    } else {
+      setLoginError('Código incorrecto')
     }
   }
 
@@ -374,40 +383,54 @@ export default function Header({
                   </button>
                 )}
                 {!isAdmin && showParticipantCode && (
-                  <div className={styles.participantCodeInput}>
-                    <input
-                      type="password"
-                      placeholder="Código"
-                      value={participantCodeVal}
-                      onChange={e => setParticipantCodeVal(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && handleParticipantCode()}
-                      className={styles.participantCodeField}
-                      autoFocus
-                    />
-                    <button onClick={handleParticipantCode} className={styles.participantCodeBtn}>✓</button>
-                    <button onClick={() => {
-                      setShowParticipantCode(false)
-                      setSelectedParticipantTemp('')
-                      setParticipantCodeVal('')
-                    }} className={styles.participantCodeBtn} style={{background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff6464'}}>✕</button>
+                  <div>
+                    <div className={styles.participantCodeInput}>
+                      <input
+                        type="password"
+                        placeholder="Código"
+                        value={participantCodeVal}
+                        onChange={e => {
+                          setParticipantCodeVal(e.target.value)
+                          setLoginError('')
+                        }}
+                        onKeyDown={e => e.key === 'Enter' && handleParticipantCode()}
+                        className={styles.participantCodeField}
+                        autoFocus
+                      />
+                      <button onClick={handleParticipantCode} className={styles.participantCodeBtn}>✓</button>
+                      <button onClick={() => {
+                        setShowParticipantCode(false)
+                        setSelectedParticipantTemp('')
+                        setParticipantCodeVal('')
+                        setLoginError('')
+                      }} className={styles.participantCodeBtn} style={{background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff6464'}}>✕</button>
+                    </div>
+                    {loginError && <div style={{color: '#ff6464', fontSize: '0.75rem', marginTop: '0.25rem', textAlign: 'center'}}>{loginError}</div>}
                   </div>
                 )}
               </>
             ) : (
-              <div className={styles.pinInput}>
-                <input
-                  type="password"
-                  placeholder="PIN"
-                  value={pinVal}
-                  onChange={e => setPinVal(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handlePin()}
-                  className={styles.pinField}
-                />
-                <button onClick={handlePin} className={styles.pinBtn}>✓</button>
-                <button onClick={() => {
-                  setShowPin(false)
-                  setPinVal('')
-                }} className={styles.pinBtn} style={{background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff6464'}}>✕</button>
+              <div>
+                <div className={styles.pinInput}>
+                  <input
+                    type="password"
+                    placeholder="PIN"
+                    value={pinVal}
+                    onChange={e => {
+                      setPinVal(e.target.value)
+                      setLoginError('')
+                    }}
+                    onKeyDown={e => e.key === 'Enter' && handlePin()}
+                    className={styles.pinField}
+                  />
+                  <button onClick={handlePin} className={styles.pinBtn}>✓</button>
+                  <button onClick={() => {
+                    setShowPin(false)
+                    setPinVal('')
+                    setLoginError('')
+                  }} className={styles.pinBtn} style={{background: 'rgba(255, 100, 100, 0.1)', border: '1px solid rgba(255, 100, 100, 0.3)', color: '#ff6464'}}>✕</button>
+                </div>
+                {loginError && <div style={{color: '#ff6464', fontSize: '0.75rem', marginTop: '0.25rem', textAlign: 'center'}}>{loginError}</div>}
               </div>
             )}
           </div>

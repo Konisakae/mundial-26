@@ -8,7 +8,11 @@ const get = (key, fallback = null) => {
 }
 
 const set = (key, value) => {
-  try { localStorage.setItem(key, JSON.stringify(value)) } catch {}
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch (err) {
+    console.error(`[Storage] Failed to write '${key}':`, err.message)
+  }
 }
 
 // Migrar formato antiguo de predicciones al nuevo

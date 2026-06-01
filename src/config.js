@@ -6,13 +6,13 @@ export const PARTICIPANT_CODES = {
   'Lucía': '1234',
   'Olivia': '1234',
   'Eva': '1234',
-  'Pablo N.': '1234',
+  'Pablo': '1234',
   'Lucas': '1234',
   'Darío': '1234',
   'Elena': '1234',
   'Javi': '1234',
   'Nic': '1234',
-  'Jose M.': '1234',
+  'Jose': '1234',
   'Charo': '1234',
   'Abuelo': '1234'
 }
