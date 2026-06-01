@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
 import { ADMIN_PIN, PARTICIPANT_CODES } from '../config'
+import { validateParticipant, validateAdmin, setSession, clearSession } from '../utils/auth'
 import TablerFlag3Icon from './TablerFlag3Icon'
 import TablerLayoutGridIcon from './TablerLayoutGridIcon'
 import TablerMedalIcon from './TablerMedalIcon'
@@ -85,8 +86,9 @@ export default function Header({
   }
 
   const handlePin = () => {
-    if (pinVal === ADMIN_PIN) {
+    if (validateAdmin(pinVal)) {
       setIsAdmin(true)
+      setSession('admin', 'admin')
       setLoginError('')
       setShowPin(false)
       setPinVal('')
@@ -96,8 +98,9 @@ export default function Header({
   }
 
   const handleParticipantCode = () => {
-    if (participantCodeVal === PARTICIPANT_CODES[selectedParticipantTemp]) {
+    if (validateParticipant(selectedParticipantTemp, participantCodeVal)) {
       setParticipant(selectedParticipantTemp)
+      setSession('participant', selectedParticipantTemp)
       setLoginError('')
       setShowParticipantCode(false)
       setSelectedParticipantTemp('')
@@ -286,6 +289,7 @@ export default function Header({
                   setShowSimulations(false)
                   setShowParticipantDropdown(false)
                   setTab('resultados')
+                  clearSession()
                 }}
                 className={styles.exitBtn}
                 title="Salir de admin"
@@ -375,6 +379,7 @@ export default function Header({
                       setParticipant('')
                       setShowParticipantDropdown(false)
                       setTab('resultados')
+                      clearSession()
                     }}
                     className={styles.exitBtn}
                     title="Salir del participante"
