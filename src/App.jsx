@@ -147,6 +147,11 @@ export default function App() {
     }
     setPredictions(next)
     storage.set('wc26_predictions', next)
+
+    // Write to Supabase in background (non-blocking)
+    savePredictionToSupabase(null, matchId, h, actualA).catch(err =>
+      console.error(`[Supabase] Failed to save prediction for match ${matchId}:`, err.message)
+    )
   }
 
   const saveActual = (matchId, h, a) => {
@@ -158,6 +163,13 @@ export default function App() {
     }
     setActuals(next)
     storage.set('wc26_actuals', next)
+
+    // Write to Supabase in background (non-blocking)
+    if (h !== undefined && a !== undefined) {
+      saveActualToSupabase(matchId, h, a).catch(err =>
+        console.error(`[Supabase] Failed to save actual for match ${matchId}:`, err.message)
+      )
+    }
 
     // Generar R16 automáticamente si hay 72 resultados (sin importar si fueron simulados o manuales)
     const resultCount = Object.values(next).filter(a => a?.h !== undefined).length
@@ -273,12 +285,22 @@ export default function App() {
     const next = { ...resultsConfirmed, [jornadaOrPhase]: true }
     setResultsConfirmed(next)
     storage.set('wc26_resultsConfirmed', next)
+
+    // Write to Supabase in background
+    saveConfirmation(String(jornadaOrPhase)).catch(err =>
+      console.error(`[Supabase] Failed to save confirmation for ${jornadaOrPhase}:`, err.message)
+    )
   }
 
   // Confirmar enfrentamientos de R16
   const confirmR16Matchups = () => {
     setR16MatchupsConfirmed(true)
     storage.set('wc26_r16MatchupsConfirmed', true)
+
+    // Write to Supabase in background
+    saveConfirmation('r16_matchups').catch(err =>
+      console.error('[Supabase] Failed to save R16 matchups confirmation:', err.message)
+    )
   }
 
   // Simular datos de una jornada específica
