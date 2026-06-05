@@ -97,8 +97,9 @@ export default function Header({
     }
   }
 
-  const handleParticipantCode = () => {
-    if (validateParticipant(selectedParticipantTemp, participantCodeVal)) {
+  const handleParticipantCode = async () => {
+    const isValid = await validateParticipant(selectedParticipantTemp, participantCodeVal)
+    if (isValid) {
       setParticipant(selectedParticipantTemp)
       setSession('participant', selectedParticipantTemp)
       setLoginError('')

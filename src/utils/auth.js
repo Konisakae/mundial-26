@@ -1,6 +1,29 @@
 import { PARTICIPANTS_DB, ADMIN_PIN } from '../config/participants'
+import { getParticipantByName } from './supabase'
+import bcrypt from 'bcryptjs'
 
-export const validateParticipant = (name, password) => {
+// Validate participant - uses Supabase if available, falls back to local
+export const validateParticipant = async (name, password) => {
+  const hasSupabase = !!import.meta.env.VITE_SUPABASE_URL
+
+  if (hasSupabase) {
+    // Try Supabase first
+    const { data, error } = await getParticipantByName(name)
+    if (error || !data) {
+      console.warn(`[Auth] Participant "${name}" not found in Supabase, trying local`)
+    } else {
+      // Compare password with hash
+      try {
+        const match = await bcrypt.compare(password, data.password_hash)
+        return match
+      } catch (err) {
+        console.error('[Auth] Password comparison failed:', err.message)
+        return false
+      }
+    }
+  }
+
+  // Fallback to local PARTICIPANTS_DB
   return PARTICIPANTS_DB[name]?.password === password
 }
 
@@ -41,4 +64,10 @@ export const clearSession = () => {
 export const isSessionValid = () => {
   const session = getSession()
   return session && session.user
+}
+
+// Hash password for storing in database
+export const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10)
+  return await bcrypt.hash(password, salt)
 }
