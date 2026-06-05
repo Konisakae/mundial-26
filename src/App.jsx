@@ -117,91 +117,95 @@ export default function App() {
 
   // Real-time subscriptions: listen for changes in Supabase
   useEffect(() => {
-    const subscriptions = []
+    const channels = []
 
     // Subscribe to actuals (match results)
-    const actualsSubscription = supabase
-      .from('actuals')
-      .on('*', payload => {
-        setActuals(prev => ({
-          ...prev,
-          [payload.new.match_id]: {
-            h: payload.new.home_score,
-            a: payload.new.away_score,
-            winner: payload.new.winner
+    const actualsChannel = supabase
+      .channel('realtime:actuals')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'actuals' },
+        payload => {
+          if (payload.new) {
+            setActuals(prev => ({
+              ...prev,
+              [payload.new.match_id]: {
+                h: payload.new.home_score,
+                a: payload.new.away_score,
+                winner: payload.new.winner
+              }
+            }))
+            console.log('[Realtime] Actuals updated:', payload.new.match_id)
           }
-        }))
-        console.log('[Realtime] Actuals updated:', payload.new.match_id)
-      })
+        }
+      )
       .subscribe()
-    subscriptions.push(actualsSubscription)
-
-    // Subscribe to predictions (participant predictions)
-    const predictionsSubscription = supabase
-      .from('predictions')
-      .on('*', payload => {
-        const { participant_id, match_id, home_score, away_score, predicted_winner } = payload.new
-        // Find participant name by ID and update predictions
-        // This is a simplified version - in production you might want to track participant_id separately
-        setPredictions(prev => ({
-          ...prev,
-          // Note: We'd need participant name from ID - for now, log it
-        }))
-        console.log('[Realtime] Prediction updated:', { participant_id, match_id })
-      })
-      .subscribe()
-    subscriptions.push(predictionsSubscription)
+    channels.push(actualsChannel)
 
     // Subscribe to confirmations (phase/jornada confirmations)
-    const confirmationsSubscription = supabase
-      .from('confirmations')
-      .on('*', payload => {
-        const { phase_or_jornada } = payload.new
-        setResultsConfirmed(prev => ({
-          ...prev,
-          [phase_or_jornada]: true
-        }))
-        console.log('[Realtime] Confirmation updated:', phase_or_jornada)
-      })
+    const confirmationsChannel = supabase
+      .channel('realtime:confirmations')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'confirmations' },
+        payload => {
+          if (payload.new) {
+            const { phase_or_jornada } = payload.new
+            setResultsConfirmed(prev => ({
+              ...prev,
+              [phase_or_jornada]: true
+            }))
+            console.log('[Realtime] Confirmation updated:', phase_or_jornada)
+          }
+        }
+      )
       .subscribe()
-    subscriptions.push(confirmationsSubscription)
+    channels.push(confirmationsChannel)
 
     // Subscribe to r16_substitutions
-    const r16SubsSubscription = supabase
-      .from('r16_substitutions')
-      .on('*', payload => {
-        const { slot_identifier, team_code } = payload.new
-        setR16Substitutions(prev => ({
-          ...prev,
-          [slot_identifier]: team_code
-        }))
-        console.log('[Realtime] R16 substitution updated:', { slot_identifier, team_code })
-      })
+    const r16SubsChannel = supabase
+      .channel('realtime:r16_substitutions')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'r16_substitutions' },
+        payload => {
+          if (payload.new) {
+            const { slot_identifier, team_code } = payload.new
+            setR16Substitutions(prev => ({
+              ...prev,
+              [slot_identifier]: team_code
+            }))
+            console.log('[Realtime] R16 substitution updated:', { slot_identifier, team_code })
+          }
+        }
+      )
       .subscribe()
-    subscriptions.push(r16SubsSubscription)
+    channels.push(r16SubsChannel)
 
     // Subscribe to simulations
-    const simulationsSubscription = supabase
-      .from('simulations')
-      .on('*', payload => {
-        const { jornada_1, jornada_2, jornada_3, phase_r16, phase_oct, phase_cto, phase_semi, phase_tercerp, phase_fin } = payload.new
-        setSimulatedJornadas({ 1: jornada_1, 2: jornada_2, 3: jornada_3 })
-        setSimulatedPhases({
-          R16: phase_r16,
-          OCT: phase_oct,
-          CTO: phase_cto,
-          SEMI: phase_semi,
-          '3P': phase_tercerp,
-          FIN: phase_fin
-        })
-        console.log('[Realtime] Simulations updated')
-      })
+    const simulationsChannel = supabase
+      .channel('realtime:simulations')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'simulations' },
+        payload => {
+          if (payload.new) {
+            const { jornada_1, jornada_2, jornada_3, phase_r16, phase_oct, phase_cto, phase_semi, phase_tercerp, phase_fin } = payload.new
+            setSimulatedJornadas({ 1: jornada_1, 2: jornada_2, 3: jornada_3 })
+            setSimulatedPhases({
+              R16: phase_r16,
+              OCT: phase_oct,
+              CTO: phase_cto,
+              SEMI: phase_semi,
+              '3P': phase_tercerp,
+              FIN: phase_fin
+            })
+            console.log('[Realtime] Simulations updated')
+          }
+        }
+      )
       .subscribe()
-    subscriptions.push(simulationsSubscription)
+    channels.push(simulationsChannel)
 
     // Cleanup: unsubscribe from all channels when component unmounts
     return () => {
-      subscriptions.forEach(sub => sub.unsubscribe())
+      channels.forEach(channel => channel.unsubscribe())
     }
   }, [])
 
