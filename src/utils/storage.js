@@ -16,30 +16,36 @@ const set = (key, value) => {
   }
 }
 
-// Async versions using Firestore
+// Async versions using Firestore with localStorage priority
 export const getAsync = async (key, fallback = null) => {
+  // Priority 1: localStorage (instant)
+  const localData = get(key, null)
+  if (localData !== null) {
+    return localData
+  }
+
+  // Priority 2: Firestore (in background, don't wait)
   try {
     const data = await loadFromFirestore('app_data', key)
     if (data && data.value) {
+      set(key, data.value) // Update localStorage
       return data.value
     }
-    return fallback
   } catch (err) {
     console.error(`[Storage] Failed to read from Firestore '${key}':`, err.message)
-    // Fallback to localStorage
-    return get(key, fallback)
   }
+
+  return fallback
 }
 
 export const setAsync = async (key, value) => {
-  // Save to Firestore
-  try {
-    await saveToFirestore('app_data', key, { value })
-  } catch (err) {
-    console.error(`[Storage] Failed to write to Firestore '${key}':`, err.message)
-  }
-  // Always also save to localStorage for offline support
+  // Always save to localStorage first (instant)
   set(key, value)
+
+  // Then try Firestore in background (don't wait)
+  saveToFirestore('app_data', key, { value }).catch(err => {
+    console.error(`[Storage] Failed to write to Firestore '${key}':`, err.message)
+  })
 }
 
 // Migrar formato antiguo de predicciones al nuevo
