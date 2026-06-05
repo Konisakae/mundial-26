@@ -1,6 +1,6 @@
-// Hybrid storage: localStorage + Supabase
-// Falls back to localStorage for development/offline support
+import { loadFromFirestore, saveToFirestore } from './firebase'
 
+// Synchronous localStorage for backward compatibility
 const get = (key, fallback = null) => {
   try {
     const val = localStorage.getItem(key)
@@ -16,12 +16,29 @@ const set = (key, value) => {
   }
 }
 
-// Async versions for Supabase (not implemented yet, using localStorage only for now)
+// Async versions using Firestore
 export const getAsync = async (key, fallback = null) => {
-  return get(key, fallback)
+  try {
+    const data = await loadFromFirestore('app_data', key)
+    if (data && data.value) {
+      return data.value
+    }
+    return fallback
+  } catch (err) {
+    console.error(`[Storage] Failed to read from Firestore '${key}':`, err.message)
+    // Fallback to localStorage
+    return get(key, fallback)
+  }
 }
 
 export const setAsync = async (key, value) => {
+  // Save to Firestore
+  try {
+    await saveToFirestore('app_data', key, { value })
+  } catch (err) {
+    console.error(`[Storage] Failed to write to Firestore '${key}':`, err.message)
+  }
+  // Always also save to localStorage for offline support
   set(key, value)
 }
 

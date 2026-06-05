@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react'
 import { DEFAULT_PARTICIPANTS } from './data/teams'
 import { MATCHES } from './data/matches'
 import { calcTotalPts } from './utils/scoring'
-import { storage } from './utils/storage'
+import { storage, getAsync, setAsync } from './utils/storage'
 import { getAllGroupWinners } from './utils/groupStandings'
 import { getSession } from './utils/auth'
-// Supabase temporarily disabled - using localStorage only
-// Will re-integrate Supabase correctly in next phase
 import Header from './components/Header'
 import Resultados from './components/Resultados'
 import Apuestas from './components/Apuestas'
@@ -47,73 +45,76 @@ export default function App() {
   const [r16MatchupsConfirmed, setR16MatchupsConfirmed] = useState(false)
 
   useEffect(() => {
-    const parts = DEFAULT_PARTICIPANTS
-    setParticipants(parts)
-    storage.set('wc26_participants', parts)
+    const loadData = async () => {
+      const parts = DEFAULT_PARTICIPANTS
+      setParticipants(parts)
+      await setAsync('wc26_participants', parts)
 
-    let preds = storage.get('wc26_predictions', {})
-    // Migrar a formato nuevo si es necesario
-    preds = storage.ensureNewFormat(preds)
-    const acts = storage.get('wc26_actuals', {})
-    const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
-    const simPhases = storage.get('wc26_simulatedPhases', { R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
-    const subs = storage.get('wc26_r16Substitutions', {})
-    const octSubs = storage.get('wc26_octavosSubstitutions', {})
-    const octGroupInfo = storage.get('wc26_octavosGroupInfo', {})
-    const ctoSubs = storage.get('wc26_cuartosSubstitutions', {})
-    const ctoGroupInfo = storage.get('wc26_cuartosGroupInfo', {})
-    const semiSubs = storage.get('wc26_semifinalSubstitutions', {})
-    const semiGroupInfo = storage.get('wc26_semifinalGroupInfo', {})
-    const tercerSubs = storage.get('wc26_tercerPuestoSubstitutions', {})
-    const tercerGroupInfo = storage.get('wc26_tercerPuestoGroupInfo', {})
-    const finalSubs = storage.get('wc26_finalSubstitutions', {})
-    const finalGroupInfo = storage.get('wc26_finalGroupInfo', {})
-    const r16Conf = storage.get('wc26_r16Confirmed', false)
-    const selThirds = storage.get('wc26_selectedThirds', {})
-    const resConfirmed = storage.get('wc26_resultsConfirmed', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
-    const r16MatchConf = storage.get('wc26_r16MatchupsConfirmed', false)
+      let preds = await getAsync('wc26_predictions', {})
+      preds = storage.ensureNewFormat(preds)
+      const acts = await getAsync('wc26_actuals', {})
+      const simJornadas = await getAsync('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
+      const simPhases = await getAsync('wc26_simulatedPhases', { R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
+      const subs = await getAsync('wc26_r16Substitutions', {})
+      const octSubs = await getAsync('wc26_octavosSubstitutions', {})
+      const octGroupInfo = await getAsync('wc26_octavosGroupInfo', {})
+      const ctoSubs = await getAsync('wc26_cuartosSubstitutions', {})
+      const ctoGroupInfo = await getAsync('wc26_cuartosGroupInfo', {})
+      const semiSubs = await getAsync('wc26_semifinalSubstitutions', {})
+      const semiGroupInfo = await getAsync('wc26_semifinalGroupInfo', {})
+      const tercerSubs = await getAsync('wc26_tercerPuestoSubstitutions', {})
+      const tercerGroupInfo = await getAsync('wc26_tercerPuestoGroupInfo', {})
+      const finalSubs = await getAsync('wc26_finalSubstitutions', {})
+      const finalGroupInfo = await getAsync('wc26_finalGroupInfo', {})
+      const r16Conf = await getAsync('wc26_r16Confirmed', false)
+      const selThirds = await getAsync('wc26_selectedThirds', {})
+      const resConfirmed = await getAsync('wc26_resultsConfirmed', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
+      const r16MatchConf = await getAsync('wc26_r16MatchupsConfirmed', false)
 
-    setPredictions(preds)
-    setActuals(acts)
-    setSimulatedJornadas(simJornadas)
-    setSimulatedPhases(simPhases)
-    setR16Substitutions(subs)
-    setOctavosSubstitutions(octSubs)
-    setOctavosGroupInfo(octGroupInfo)
-    setCuartosSubstitutions(ctoSubs)
-    setCuartosGroupInfo(ctoGroupInfo)
-    setSemifinalSubstitutions(semiSubs)
-    setSemifinalGroupInfo(semiGroupInfo)
-    setTercerPuestoSubstitutions(tercerSubs)
-    setTercerPuestoGroupInfo(tercerGroupInfo)
-    setFinalSubstitutions(finalSubs)
-    setFinalGroupInfo(finalGroupInfo)
-    setR16Confirmed(r16Conf)
-    setSelectedThirds(selThirds)
-    setResultsConfirmed(resConfirmed)
-    setR16MatchupsConfirmed(r16MatchConf)
-    setLoading(false)
+      setPredictions(preds)
+      setActuals(acts)
+      setSimulatedJornadas(simJornadas)
+      setSimulatedPhases(simPhases)
+      setR16Substitutions(subs)
+      setOctavosSubstitutions(octSubs)
+      setOctavosGroupInfo(octGroupInfo)
+      setCuartosSubstitutions(ctoSubs)
+      setCuartosGroupInfo(ctoGroupInfo)
+      setSemifinalSubstitutions(semiSubs)
+      setSemifinalGroupInfo(semiGroupInfo)
+      setTercerPuestoSubstitutions(tercerSubs)
+      setTercerPuestoGroupInfo(tercerGroupInfo)
+      setFinalSubstitutions(finalSubs)
+      setFinalGroupInfo(finalGroupInfo)
+      setR16Confirmed(r16Conf)
+      setSelectedThirds(selThirds)
+      setResultsConfirmed(resConfirmed)
+      setR16MatchupsConfirmed(r16MatchConf)
+      setLoading(false)
 
-    // Si todas las jornadas están simuladas, generar R16 substituciones
-    if (simJornadas[1] && simJornadas[2] && simJornadas[3] && Object.keys(subs).length === 0) {
-      const groupWinners = getAllGroupWinners(acts)
-      const newSubs = {}
-      Object.entries(groupWinners).forEach(([group, winners]) => {
-        if (winners.first) newSubs[`1.º ${group}`] = winners.first
-        if (winners.second) newSubs[`2.º ${group}`] = winners.second
-      })
-      if (Object.keys(newSubs).length > 0) {
-        setR16Substitutions(newSubs)
-        storage.set('wc26_r16Substitutions', newSubs)
+      // Si todas las jornadas están simuladas, generar R16 substituciones
+      if (simJornadas[1] && simJornadas[2] && simJornadas[3] && Object.keys(subs).length === 0) {
+        const groupWinners = getAllGroupWinners(acts)
+        const newSubs = {}
+        Object.entries(groupWinners).forEach(([group, winners]) => {
+          if (winners.first) newSubs[`1.º ${group}`] = winners.first
+          if (winners.second) newSubs[`2.º ${group}`] = winners.second
+        })
+        if (Object.keys(newSubs).length > 0) {
+          setR16Substitutions(newSubs)
+          await setAsync('wc26_r16Substitutions', newSubs)
+        }
+      }
+
+      // Restaurar sesión si existe
+      const session = getSession()
+      if (session) {
+        if (session.type === 'admin') setIsAdmin(true)
+        if (session.type === 'participant') setParticipant(session.user)
       }
     }
 
-    // Restaurar sesión si existe
-    const session = getSession()
-    if (session) {
-      if (session.type === 'admin') setIsAdmin(true)
-      if (session.type === 'participant') setParticipant(session.user)
-    }
+    loadData()
   }, [])
 
   // Data sync strategy:
@@ -154,7 +155,7 @@ export default function App() {
       },
     }
     setPredictions(next)
-    storage.set('wc26_predictions', next)
+    setAsync('wc26_predictions', next)
   }
 
   const saveActual = (matchId, h, a) => {
@@ -165,7 +166,7 @@ export default function App() {
       next[matchId] = { ...next[matchId], h, a }
     }
     setActuals(next)
-    storage.set('wc26_actuals', next)
+    setAsync('wc26_actuals', next)
 
     // Generar R16 automáticamente si hay 72 resultados (sin importar si fueron simulados o manuales)
     const resultCount = Object.values(next).filter(a => a?.h !== undefined).length
@@ -177,7 +178,7 @@ export default function App() {
         if (winners.second) newSubs[`2.º ${group}`] = winners.second
       })
       setR16Substitutions(newSubs)
-      storage.set('wc26_r16Substitutions', newSubs)
+      setAsync('wc26_r16Substitutions', newSubs)
     }
   }
 
@@ -186,7 +187,7 @@ export default function App() {
     if (next[matchId]) {
       next[matchId] = { ...next[matchId], winner: winner || undefined }
       setActuals(next)
-      storage.set('wc26_actuals', next)
+      setAsync('wc26_actuals', next)
     }
   }
 
@@ -207,7 +208,7 @@ export default function App() {
       },
     }
     setPredictions(next)
-    storage.set('wc26_predictions', next)
+    setAsync('wc26_predictions', next)
   }
 
   const addParticipant = (name) => {
@@ -215,7 +216,7 @@ export default function App() {
     const next = [...participants, name]
     setParticipants(next)
     setParticipant(name)
-    storage.set('wc26_participants', next)
+    setAsync('wc26_participants', next)
   }
 
   // Obtener jornada actual (primera no confirmada)
@@ -241,7 +242,7 @@ export default function App() {
       },
     }
     setPredictions(next)
-    storage.set('wc26_predictions', next)
+    setAsync('wc26_predictions', next)
   }
 
   const confirmR16Prediction = (part) => {
@@ -257,7 +258,7 @@ export default function App() {
       },
     }
     setPredictions(next)
-    storage.set('wc26_predictions', next)
+    setAsync('wc26_predictions', next)
   }
 
   const confirmEliminationPhase = (part, phase) => {
@@ -273,20 +274,20 @@ export default function App() {
       },
     }
     setPredictions(next)
-    storage.set('wc26_predictions', next)
+    setAsync('wc26_predictions', next)
   }
 
   // Confirmar resultados de una jornada o fase
   const confirmResults = (jornadaOrPhase) => {
     const next = { ...resultsConfirmed, [jornadaOrPhase]: true }
     setResultsConfirmed(next)
-    storage.set('wc26_resultsConfirmed', next)
+    setAsync('wc26_resultsConfirmed', next)
   }
 
   // Confirmar enfrentamientos de R16
   const confirmR16Matchups = () => {
     setR16MatchupsConfirmed(true)
-    storage.set('wc26_r16MatchupsConfirmed', true)
+    setAsync('wc26_r16MatchupsConfirmed', true)
   }
 
   // Simular datos de una jornada específica
@@ -332,9 +333,9 @@ export default function App() {
     setPredictions(newPreds)
     setSimulatedJornadas(newSimJornadas)
 
-    storage.set('wc26_actuals', newActuals)
-    storage.set('wc26_predictions', newPreds)
-    storage.set('wc26_simulatedJornadas', newSimJornadas)
+    setAsync('wc26_actuals', newActuals)
+    setAsync('wc26_predictions', newPreds)
+    setAsync('wc26_simulatedJornadas', newSimJornadas)
   }
 
   // Simular dieciseisavos cuando todos los terceros estén seleccionados
@@ -374,9 +375,9 @@ export default function App() {
     const newPhases = { ...simulatedPhases, R16: true }
     setSimulatedPhases(newPhases)
 
-    storage.set('wc26_actuals', newActuals)
-    storage.set('wc26_predictions', newPreds)
-    storage.set('wc26_simulatedPhases', newPhases)
+    setAsync('wc26_actuals', newActuals)
+    setAsync('wc26_predictions', newPreds)
+    setAsync('wc26_simulatedPhases', newPhases)
   }
 
   // Función helper para generar score sin empate
@@ -421,8 +422,8 @@ export default function App() {
     setActuals(newActuals)
     setPredictions(newPreds)
 
-    storage.set('wc26_actuals', newActuals)
-    storage.set('wc26_predictions', newPreds)
+    setAsync('wc26_actuals', newActuals)
+    setAsync('wc26_predictions', newPreds)
   }
 
   const simulateOctavos = () => {
@@ -430,7 +431,7 @@ export default function App() {
     simulateElimination('OCT')
     const newPhases = { ...simulatedPhases, OCT: true }
     setSimulatedPhases(newPhases)
-    storage.set('wc26_simulatedPhases', newPhases)
+    setAsync('wc26_simulatedPhases', newPhases)
   }
 
   const simulateCuartos = () => {
@@ -438,7 +439,7 @@ export default function App() {
     simulateElimination('CTO')
     const newPhases = { ...simulatedPhases, CTO: true }
     setSimulatedPhases(newPhases)
-    storage.set('wc26_simulatedPhases', newPhases)
+    setAsync('wc26_simulatedPhases', newPhases)
   }
 
   const simulateSemis = () => {
@@ -446,7 +447,7 @@ export default function App() {
     simulateElimination('SEMI')
     const newPhases = { ...simulatedPhases, SEMI: true }
     setSimulatedPhases(newPhases)
-    storage.set('wc26_simulatedPhases', newPhases)
+    setAsync('wc26_simulatedPhases', newPhases)
   }
 
   const simulateThirdPlace = () => {
@@ -454,7 +455,7 @@ export default function App() {
     simulateElimination('3P')
     const newPhases = { ...simulatedPhases, '3P': true }
     setSimulatedPhases(newPhases)
-    storage.set('wc26_simulatedPhases', newPhases)
+    setAsync('wc26_simulatedPhases', newPhases)
   }
 
   const simulateFinal = () => {
@@ -462,7 +463,7 @@ export default function App() {
     simulateElimination('FIN')
     const newPhases = { ...simulatedPhases, FIN: true }
     setSimulatedPhases(newPhases)
-    storage.set('wc26_simulatedPhases', newPhases)
+    setAsync('wc26_simulatedPhases', newPhases)
   }
 
   // Validar automáticamente ganadores cuando todas las jornadas estén simuladas
@@ -520,7 +521,7 @@ export default function App() {
           if (winners.second) newSubs[`2.º ${group}`] = winners.second
         })
         setR16Substitutions(newSubs)
-        storage.set('wc26_r16Substitutions', newSubs)
+        setAsync('wc26_r16Substitutions', newSubs)
       }
     }
   }, [actuals, simulatedJornadas, phase, r16Substitutions, octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo])
@@ -545,21 +546,21 @@ export default function App() {
     setFinalGroupInfo({})
     setSelectedThirds({})
 
-    storage.set('wc26_actuals', {})
-    storage.set('wc26_predictions', {})
-    storage.set('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
-    storage.set('wc26_r16Substitutions', {})
-    storage.set('wc26_octavosSubstitutions', {})
-    storage.set('wc26_octavosGroupInfo', {})
-    storage.set('wc26_cuartosSubstitutions', {})
-    storage.set('wc26_cuartosGroupInfo', {})
-    storage.set('wc26_semifinalSubstitutions', {})
-    storage.set('wc26_semifinalGroupInfo', {})
-    storage.set('wc26_tercerPuestoSubstitutions', {})
-    storage.set('wc26_tercerPuestoGroupInfo', {})
-    storage.set('wc26_finalSubstitutions', {})
-    storage.set('wc26_finalGroupInfo', {})
-    storage.set('wc26_selectedThirds', {})
+    setAsync('wc26_actuals', {})
+    setAsync('wc26_predictions', {})
+    setAsync('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
+    setAsync('wc26_r16Substitutions', {})
+    setAsync('wc26_octavosSubstitutions', {})
+    setAsync('wc26_octavosGroupInfo', {})
+    setAsync('wc26_cuartosSubstitutions', {})
+    setAsync('wc26_cuartosGroupInfo', {})
+    setAsync('wc26_semifinalSubstitutions', {})
+    setAsync('wc26_semifinalGroupInfo', {})
+    setAsync('wc26_tercerPuestoSubstitutions', {})
+    setAsync('wc26_tercerPuestoGroupInfo', {})
+    setAsync('wc26_finalSubstitutions', {})
+    setAsync('wc26_finalGroupInfo', {})
+    setAsync('wc26_selectedThirds', {})
   }
 
   // Confirmar terceros lugares seleccionados y generar dieciseisavos
@@ -577,13 +578,13 @@ export default function App() {
     })
 
     setR16Substitutions(subs)
-    storage.set('wc26_r16Substitutions', subs)
+    setAsync('wc26_r16Substitutions', subs)
   }
 
   const confirmR16 = () => {
     generateOctavosMatches(r16Substitutions, selectedThirds, availableThirds, actuals)
     setR16Confirmed(true)
-    storage.set('wc26_r16Confirmed', true)
+    setAsync('wc26_r16Confirmed', true)
   }
 
   // Función auxiliar para extraer info de grupo de una referencia
@@ -677,8 +678,8 @@ export default function App() {
 
     setCuartosSubstitutions(subs)
     setCuartosGroupInfo(groupInfo)
-    storage.set('wc26_cuartosSubstitutions', subs)
-    storage.set('wc26_cuartosGroupInfo', groupInfo)
+    setAsync('wc26_cuartosSubstitutions', subs)
+    setAsync('wc26_cuartosGroupInfo', groupInfo)
   }
 
   // Generar semifinales desde cuartos
@@ -754,8 +755,8 @@ export default function App() {
 
     setSemifinalSubstitutions(subs)
     setSemifinalGroupInfo(groupInfo)
-    storage.set('wc26_semifinalSubstitutions', subs)
-    storage.set('wc26_semifinalGroupInfo', groupInfo)
+    setAsync('wc26_semifinalSubstitutions', subs)
+    setAsync('wc26_semifinalGroupInfo', groupInfo)
   }
 
   // Generar tercer puesto y final desde semifinales
@@ -845,10 +846,10 @@ export default function App() {
     setTercerPuestoGroupInfo(tercerGroupInfo)
     setFinalSubstitutions(finalSubs)
     setFinalGroupInfo(finalGroupInfo)
-    storage.set('wc26_tercerPuestoSubstitutions', tercerSubs)
-    storage.set('wc26_tercerPuestoGroupInfo', tercerGroupInfo)
-    storage.set('wc26_finalSubstitutions', finalSubs)
-    storage.set('wc26_finalGroupInfo', finalGroupInfo)
+    setAsync('wc26_tercerPuestoSubstitutions', tercerSubs)
+    setAsync('wc26_tercerPuestoGroupInfo', tercerGroupInfo)
+    setAsync('wc26_finalSubstitutions', finalSubs)
+    setAsync('wc26_finalGroupInfo', finalGroupInfo)
   }
 
   const generateOctavosMatches = (r16Subs, selectedThirds, availThirds, actualResults) => {
@@ -1003,8 +1004,8 @@ export default function App() {
 
     setOctavosSubstitutions(octavosSubs)
     setOctavosGroupInfo(octavosGroupInfoMap)
-    storage.set('wc26_octavosSubstitutions', octavosSubs)
-    storage.set('wc26_octavosGroupInfo', octavosGroupInfoMap)
+    setAsync('wc26_octavosSubstitutions', octavosSubs)
+    setAsync('wc26_octavosGroupInfo', octavosGroupInfoMap)
   }
 
   // Obtener predicciones en formato compatible con calcTotalPts (estructura antigua)
@@ -1119,14 +1120,14 @@ export default function App() {
             onSelectThird={(matchId, group) => {
               const newSelected = { ...selectedThirds, [matchId]: group }
               setSelectedThirds(newSelected)
-              storage.set('wc26_selectedThirds', newSelected)
+              setAsync('wc26_selectedThirds', newSelected)
 
               // Actualizar r16Substitutions cuando se selecciona un tercero
               const teamCode = availableThirds[group]
               if (teamCode) {
                 const newSubs = { ...r16Substitutions, [`3.º ${group}`]: teamCode }
                 setR16Substitutions(newSubs)
-                storage.set('wc26_r16Substitutions', newSubs)
+                setAsync('wc26_r16Substitutions', newSubs)
               }
             }}
             simulatedJornadas={simulatedJornadas}
