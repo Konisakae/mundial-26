@@ -115,15 +115,16 @@ export default function App() {
     }
   }, [])
 
-  // Polling for data updates from Supabase (fallback for real-time)
+  // Load data from Supabase on tab change (refresh when switching sections)
   useEffect(() => {
-    const pollInterval = setInterval(async () => {
+    const loadSupabaseData = async () => {
       try {
-        const { data: actualsData, error: actualsError } = await supabase
+        // Load actuals from Supabase
+        const { data: actualsData } = await supabase
           .from('actuals')
           .select('*')
 
-        if (!actualsError && actualsData) {
+        if (actualsData) {
           const newActuals = {}
           actualsData.forEach(row => {
             newActuals[row.match_id] = {
@@ -132,94 +133,67 @@ export default function App() {
               winner: row.winner
             }
           })
-          setActuals(prev => {
-            // Only update if something changed
-            if (JSON.stringify(prev) !== JSON.stringify(newActuals)) {
-              console.log('[Polling] Actuals updated')
-              return newActuals
-            }
-            return prev
-          })
+          setActuals(newActuals)
+          storage.set('wc26_actuals', newActuals)
+          console.log('[Supabase] Actuals loaded')
         }
 
-        // Don't poll predictions - they're stored in localStorage + saved to Supabase in background
-        // Polling was causing predictions to disappear because Supabase save is async
-
-        const { data: confirmationsData, error: confirmationsError } = await supabase
+        // Load confirmations from Supabase
+        const { data: confirmationsData } = await supabase
           .from('confirmations')
           .select('*')
 
-        if (!confirmationsError && confirmationsData) {
+        if (confirmationsData) {
           const newConfirmations = {}
           confirmationsData.forEach(row => {
             newConfirmations[row.phase_or_jornada] = true
           })
-          setResultsConfirmed(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(newConfirmations)) {
-              console.log('[Polling] Confirmations updated')
-              return { ...prev, ...newConfirmations }
-            }
-            return prev
-          })
+          setResultsConfirmed(prev => ({ ...prev, ...newConfirmations }))
+          console.log('[Supabase] Confirmations loaded')
         }
 
-        const { data: r16SubsData, error: r16SubsError } = await supabase
+        // Load r16_substitutions
+        const { data: r16SubsData } = await supabase
           .from('r16_substitutions')
           .select('*')
 
-        if (!r16SubsError && r16SubsData) {
+        if (r16SubsData) {
           const newR16Subs = {}
           r16SubsData.forEach(row => {
             newR16Subs[row.slot_identifier] = row.team_code
           })
-          setR16Substitutions(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(newR16Subs)) {
-              console.log('[Polling] R16 substitutions updated')
-              return newR16Subs
-            }
-            return prev
-          })
+          setR16Substitutions(newR16Subs)
+          console.log('[Supabase] R16 substitutions loaded')
         }
 
-        const { data: simulationsData, error: simulationsError } = await supabase
+        // Load simulations
+        const { data: simulationsData } = await supabase
           .from('simulations')
           .select('*')
           .order('updated_at', { ascending: false })
           .limit(1)
 
-        if (!simulationsError && simulationsData && simulationsData[0]) {
+        if (simulationsData && simulationsData[0]) {
           const sim = simulationsData[0]
-          const newJornadas = { 1: sim.jornada_1, 2: sim.jornada_2, 3: sim.jornada_3 }
-          const newPhases = {
+          setSimulatedJornadas({ 1: sim.jornada_1, 2: sim.jornada_2, 3: sim.jornada_3 })
+          setSimulatedPhases({
             R16: sim.phase_r16,
             OCT: sim.phase_oct,
             CTO: sim.phase_cto,
             SEMI: sim.phase_semi,
             '3P': sim.phase_tercerp,
             FIN: sim.phase_fin
-          }
-          setSimulatedJornadas(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(newJornadas)) {
-              console.log('[Polling] Simulated jornadas updated')
-              return newJornadas
-            }
-            return prev
           })
-          setSimulatedPhases(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(newPhases)) {
-              console.log('[Polling] Simulated phases updated')
-              return newPhases
-            }
-            return prev
-          })
+          console.log('[Supabase] Simulations loaded')
         }
       } catch (err) {
-        console.error('[Polling] Error:', err.message)
+        console.error('[Supabase] Load error:', err.message)
       }
-    }, 5000) // Poll every 5 seconds
+    }
 
-    return () => clearInterval(pollInterval)
-  }, [])
+    // Load from Supabase when tab changes
+    loadSupabaseData()
+  }, [tab])
 
   const savePred = (matchIdOrParticipant, hOrMatchId, aOrH, a) => {
     // Soporta dos firmas: savePred(matchId, h, a) o savePred(participant, matchId, h, a)
