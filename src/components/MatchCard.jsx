@@ -271,7 +271,8 @@ export default function MatchCard({
                     maxLength="2"
                     value={value?.h === '' || value?.h === undefined ? '' : value?.h}
                     onChange={e => {
-                      const val = e.target.value.replace(/[^0-9]/g, '')
+                      let val = e.target.value.replace(/[^0-9]/g, '')
+                      if (val && parseInt(val) > 20) val = '20'
                       onChange('h', val)
                     }}
                     style={{
@@ -290,7 +291,8 @@ export default function MatchCard({
                     maxLength="2"
                     value={value?.a === '' || value?.a === undefined ? '' : value?.a}
                     onChange={e => {
-                      const val = e.target.value.replace(/[^0-9]/g, '')
+                      let val = e.target.value.replace(/[^0-9]/g, '')
+                      if (val && parseInt(val) > 20) val = '20'
                       onChange('a', val)
                     }}
                     style={{
