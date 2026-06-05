@@ -463,57 +463,58 @@ export default function App() {
     }
   }, [simulatedJornadas])
 
-  // Generar octavos automáticamente cuando todos los R16 estén completos
+  // Consolidated useEffect: Generate elimination matches in sequence when actuals change
+  // This prevents race conditions from multiple parallel writes
   useEffect(() => {
-    const r16Matches = MATCHES.filter(m => m.ph === 'R16')
-    const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
+    // Generate R16 if all groups completed
+    if (simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3]) {
+      const r16Matches = MATCHES.filter(m => m.ph === 'R16')
+      const r16Completed = r16Matches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
 
-    if (r16Completed && Object.keys(r16Substitutions).length > 0) {
-      generateOctavosMatches(r16Substitutions, selectedThirds, availableThirds, actuals)
-    }
-  }, [actuals])
+      if (r16Completed && Object.keys(r16Substitutions).length > 0) {
+        generateOctavosMatches(r16Substitutions, selectedThirds, availableThirds, actuals)
+      }
 
-  // Generar cuartos cuando octavos estén completos
-  useEffect(() => {
-    if (Object.keys(octavosSubstitutions).length > 0) {
-      generateCuartosMatches(octavosSubstitutions, actuals, octavosGroupInfo)
-    }
-  }, [actuals, octavosSubstitutions, octavosGroupInfo])
+      // Generate Octavos if R16 completed
+      const octavosMatches = MATCHES.filter(m => m.ph === 'OCT')
+      const octavosCompleted = octavosMatches.length > 0 && octavosMatches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
 
-  // Generar semifinales cuando cuartos estén completos
-  useEffect(() => {
-    if (Object.keys(cuartosSubstitutions).length > 0) {
-      generateSemifinalMatches(cuartosSubstitutions, actuals, cuartosGroupInfo)
-    }
-  }, [actuals, cuartosSubstitutions, cuartosGroupInfo])
+      if (octavosCompleted && Object.keys(octavosSubstitutions).length > 0) {
+        generateCuartosMatches(octavosSubstitutions, actuals, octavosGroupInfo)
+      }
 
-  // Generar tercer puesto y final cuando semifinales estén completos
-  useEffect(() => {
-    if (Object.keys(semifinalSubstitutions).length > 0) {
-      generateFinalMatches(semifinalSubstitutions, actuals, semifinalGroupInfo)
-    }
-  }, [actuals, semifinalSubstitutions, semifinalGroupInfo])
+      // Generate Cuartos if Octavos completed
+      const cuartosMatches = MATCHES.filter(m => m.ph === 'CTO')
+      const cuartosCompleted = cuartosMatches.length > 0 && cuartosMatches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
 
+      if (cuartosCompleted && Object.keys(cuartosSubstitutions).length > 0) {
+        generateSemifinalMatches(cuartosSubstitutions, actuals, cuartosGroupInfo)
+      }
 
-  // Regenerar R16 cuando se cambia a la fase R16 en Apuestas
-  useEffect(() => {
-    if (phase === 'R16') {
-      const resultCount = Object.values(actuals).filter(a => a?.h !== undefined).length
-      if (resultCount >= 72) {
-        // Verificar si r16Substitutions tiene los primeros (debería tener al menos 12 entradas)
-        if (Object.keys(r16Substitutions).length < 12) {
-          const groupWinners = getAllGroupWinners(actuals)
-          const newSubs = { ...r16Substitutions }
-          Object.entries(groupWinners).forEach(([group, winners]) => {
-            if (winners.first) newSubs[`1.º ${group}`] = winners.first
-            if (winners.second) newSubs[`2.º ${group}`] = winners.second
-          })
-          setR16Substitutions(newSubs)
-          storage.set('wc26_r16Substitutions', newSubs)
-        }
+      // Generate Semis and Final if Cuartos completed
+      const semiMatches = MATCHES.filter(m => m.ph === 'SEMI')
+      const semiCompleted = semiMatches.length > 0 && semiMatches.every(m => actuals[m.id]?.h !== undefined && actuals[m.id]?.a !== undefined && actuals[m.id]?.h !== '' && actuals[m.id]?.a !== '')
+
+      if (semiCompleted && Object.keys(semifinalSubstitutions).length > 0) {
+        generateFinalMatches(semifinalSubstitutions, actuals, semifinalGroupInfo)
       }
     }
-  }, [phase, actuals])
+
+    // Regenerar R16 cuando se accede a la fase R16 por primera vez
+    if (phase === 'R16') {
+      const resultCount = Object.values(actuals).filter(a => a?.h !== undefined).length
+      if (resultCount >= 72 && Object.keys(r16Substitutions).length < 12) {
+        const groupWinners = getAllGroupWinners(actuals)
+        const newSubs = { ...r16Substitutions }
+        Object.entries(groupWinners).forEach(([group, winners]) => {
+          if (winners.first) newSubs[`1.º ${group}`] = winners.first
+          if (winners.second) newSubs[`2.º ${group}`] = winners.second
+        })
+        setR16Substitutions(newSubs)
+        storage.set('wc26_r16Substitutions', newSubs)
+      }
+    }
+  }, [actuals, simulatedJornadas, phase, r16Substitutions, octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo])
 
   // Borrar todos los datos simulados
   const clearAllData = () => {
