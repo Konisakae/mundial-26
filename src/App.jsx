@@ -115,15 +115,108 @@ export default function App() {
     }
   }, [])
 
-  // Real-time subscriptions: disabled temporarily
-  // TODO: Fix Supabase Realtime API compatibility issue
-  // useEffect(() => {
-  //   const channels = []
-  //   // Realtime subscriptions would go here
-  //   return () => {
-  //     channels.forEach(channel => channel.unsubscribe())
-  //   }
-  // }, [])
+  // Polling for data updates from Supabase (fallback for real-time)
+  useEffect(() => {
+    const pollInterval = setInterval(async () => {
+      try {
+        const { data: actualsData, error: actualsError } = await supabase
+          .from('actuals')
+          .select('*')
+
+        if (!actualsError && actualsData) {
+          const newActuals = {}
+          actualsData.forEach(row => {
+            newActuals[row.match_id] = {
+              h: row.home_score,
+              a: row.away_score,
+              winner: row.winner
+            }
+          })
+          setActuals(prev => {
+            // Only update if something changed
+            if (JSON.stringify(prev) !== JSON.stringify(newActuals)) {
+              console.log('[Polling] Actuals updated')
+              return newActuals
+            }
+            return prev
+          })
+        }
+
+        const { data: confirmationsData, error: confirmationsError } = await supabase
+          .from('confirmations')
+          .select('*')
+
+        if (!confirmationsError && confirmationsData) {
+          const newConfirmations = {}
+          confirmationsData.forEach(row => {
+            newConfirmations[row.phase_or_jornada] = true
+          })
+          setResultsConfirmed(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(newConfirmations)) {
+              console.log('[Polling] Confirmations updated')
+              return { ...prev, ...newConfirmations }
+            }
+            return prev
+          })
+        }
+
+        const { data: r16SubsData, error: r16SubsError } = await supabase
+          .from('r16_substitutions')
+          .select('*')
+
+        if (!r16SubsError && r16SubsData) {
+          const newR16Subs = {}
+          r16SubsData.forEach(row => {
+            newR16Subs[row.slot_identifier] = row.team_code
+          })
+          setR16Substitutions(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(newR16Subs)) {
+              console.log('[Polling] R16 substitutions updated')
+              return newR16Subs
+            }
+            return prev
+          })
+        }
+
+        const { data: simulationsData, error: simulationsError } = await supabase
+          .from('simulations')
+          .select('*')
+          .order('updated_at', { ascending: false })
+          .limit(1)
+
+        if (!simulationsError && simulationsData && simulationsData[0]) {
+          const sim = simulationsData[0]
+          const newJornadas = { 1: sim.jornada_1, 2: sim.jornada_2, 3: sim.jornada_3 }
+          const newPhases = {
+            R16: sim.phase_r16,
+            OCT: sim.phase_oct,
+            CTO: sim.phase_cto,
+            SEMI: sim.phase_semi,
+            '3P': sim.phase_tercerp,
+            FIN: sim.phase_fin
+          }
+          setSimulatedJornadas(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(newJornadas)) {
+              console.log('[Polling] Simulated jornadas updated')
+              return newJornadas
+            }
+            return prev
+          })
+          setSimulatedPhases(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(newPhases)) {
+              console.log('[Polling] Simulated phases updated')
+              return newPhases
+            }
+            return prev
+          })
+        }
+      } catch (err) {
+        console.error('[Polling] Error:', err.message)
+      }
+    }, 5000) // Poll every 5 seconds
+
+    return () => clearInterval(pollInterval)
+  }, [])
 
   const savePred = (matchIdOrParticipant, hOrMatchId, aOrH, a) => {
     // Soporta dos firmas: savePred(matchId, h, a) o savePred(participant, matchId, h, a)
