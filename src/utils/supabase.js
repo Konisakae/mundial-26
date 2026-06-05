@@ -3,6 +3,17 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(
+    '❌ Supabase environment variables not configured!\n' +
+    'Please add to Vercel:\n' +
+    '  VITE_SUPABASE_URL\n' +
+    '  VITE_SUPABASE_ANON_KEY\n' +
+    'Or create .env.local for local development'
+  )
+  throw new Error('Supabase configuration missing')
+}
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Get participant by name
