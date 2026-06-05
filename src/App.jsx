@@ -46,76 +46,74 @@ export default function App() {
   const [r16MatchupsConfirmed, setR16MatchupsConfirmed] = useState(false)
 
   useEffect(() => {
-    const loadData = async () => {
-      const parts = DEFAULT_PARTICIPANTS
-      setParticipants(parts)
-      await setAsync('wc26_participants', parts)
+    const parts = DEFAULT_PARTICIPANTS
+    setParticipants(parts)
+    // Sync to Firestore in background (non-blocking)
+    setAsync('wc26_participants', parts)
 
-      let preds = await getAsync('wc26_predictions', {})
-      preds = storage.ensureNewFormat(preds)
-      const acts = await getAsync('wc26_actuals', {})
-      const simJornadas = await getAsync('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
-      const simPhases = await getAsync('wc26_simulatedPhases', { R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
-      const subs = await getAsync('wc26_r16Substitutions', {})
-      const octSubs = await getAsync('wc26_octavosSubstitutions', {})
-      const octGroupInfo = await getAsync('wc26_octavosGroupInfo', {})
-      const ctoSubs = await getAsync('wc26_cuartosSubstitutions', {})
-      const ctoGroupInfo = await getAsync('wc26_cuartosGroupInfo', {})
-      const semiSubs = await getAsync('wc26_semifinalSubstitutions', {})
-      const semiGroupInfo = await getAsync('wc26_semifinalGroupInfo', {})
-      const tercerSubs = await getAsync('wc26_tercerPuestoSubstitutions', {})
-      const tercerGroupInfo = await getAsync('wc26_tercerPuestoGroupInfo', {})
-      const finalSubs = await getAsync('wc26_finalSubstitutions', {})
-      const finalGroupInfo = await getAsync('wc26_finalGroupInfo', {})
-      const r16Conf = await getAsync('wc26_r16Confirmed', false)
-      const selThirds = await getAsync('wc26_selectedThirds', {})
-      const resConfirmed = await getAsync('wc26_resultsConfirmed', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
-      const r16MatchConf = await getAsync('wc26_r16MatchupsConfirmed', false)
+    // Load from localStorage only (instant, don't wait for Firestore)
+    let preds = storage.get('wc26_predictions', {})
+    preds = storage.ensureNewFormat(preds)
+    const acts = storage.get('wc26_actuals', {})
+    const simJornadas = storage.get('wc26_simulatedJornadas', { 1: false, 2: false, 3: false })
+    const simPhases = storage.get('wc26_simulatedPhases', { R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
+    const subs = storage.get('wc26_r16Substitutions', {})
+    const octSubs = storage.get('wc26_octavosSubstitutions', {})
+    const octGroupInfo = storage.get('wc26_octavosGroupInfo', {})
+    const ctoSubs = storage.get('wc26_cuartosSubstitutions', {})
+    const ctoGroupInfo = storage.get('wc26_cuartosGroupInfo', {})
+    const semiSubs = storage.get('wc26_semifinalSubstitutions', {})
+    const semiGroupInfo = storage.get('wc26_semifinalGroupInfo', {})
+    const tercerSubs = storage.get('wc26_tercerPuestoSubstitutions', {})
+    const tercerGroupInfo = storage.get('wc26_tercerPuestoGroupInfo', {})
+    const finalSubs = storage.get('wc26_finalSubstitutions', {})
+    const finalGroupInfo = storage.get('wc26_finalGroupInfo', {})
+    const r16Conf = storage.get('wc26_r16Confirmed', false)
+    const selThirds = storage.get('wc26_selectedThirds', {})
+    const resConfirmed = storage.get('wc26_resultsConfirmed', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
+    const r16MatchConf = storage.get('wc26_r16MatchupsConfirmed', false)
 
-      setPredictions(preds)
-      setActuals(acts)
-      setSimulatedJornadas(simJornadas)
-      setSimulatedPhases(simPhases)
-      setR16Substitutions(subs)
-      setOctavosSubstitutions(octSubs)
-      setOctavosGroupInfo(octGroupInfo)
-      setCuartosSubstitutions(ctoSubs)
-      setCuartosGroupInfo(ctoGroupInfo)
-      setSemifinalSubstitutions(semiSubs)
-      setSemifinalGroupInfo(semiGroupInfo)
-      setTercerPuestoSubstitutions(tercerSubs)
-      setTercerPuestoGroupInfo(tercerGroupInfo)
-      setFinalSubstitutions(finalSubs)
-      setFinalGroupInfo(finalGroupInfo)
-      setR16Confirmed(r16Conf)
-      setSelectedThirds(selThirds)
-      setResultsConfirmed(resConfirmed)
-      setR16MatchupsConfirmed(r16MatchConf)
-      setLoading(false)
+    setPredictions(preds)
+    setActuals(acts)
+    setSimulatedJornadas(simJornadas)
+    setSimulatedPhases(simPhases)
+    setR16Substitutions(subs)
+    setOctavosSubstitutions(octSubs)
+    setOctavosGroupInfo(octGroupInfo)
+    setCuartosSubstitutions(ctoSubs)
+    setCuartosGroupInfo(ctoGroupInfo)
+    setSemifinalSubstitutions(semiSubs)
+    setSemifinalGroupInfo(semiGroupInfo)
+    setTercerPuestoSubstitutions(tercerSubs)
+    setTercerPuestoGroupInfo(tercerGroupInfo)
+    setFinalSubstitutions(finalSubs)
+    setFinalGroupInfo(finalGroupInfo)
+    setR16Confirmed(r16Conf)
+    setSelectedThirds(selThirds)
+    setResultsConfirmed(resConfirmed)
+    setR16MatchupsConfirmed(r16MatchConf)
+    setLoading(false)
 
-      // Si todas las jornadas están simuladas, generar R16 substituciones
-      if (simJornadas[1] && simJornadas[2] && simJornadas[3] && Object.keys(subs).length === 0) {
-        const groupWinners = getAllGroupWinners(acts)
-        const newSubs = {}
-        Object.entries(groupWinners).forEach(([group, winners]) => {
-          if (winners.first) newSubs[`1.º ${group}`] = winners.first
-          if (winners.second) newSubs[`2.º ${group}`] = winners.second
-        })
-        if (Object.keys(newSubs).length > 0) {
-          setR16Substitutions(newSubs)
-          await setAsync('wc26_r16Substitutions', newSubs)
-        }
-      }
-
-      // Restaurar sesión si existe
-      const session = getSession()
-      if (session) {
-        if (session.type === 'admin') setIsAdmin(true)
-        if (session.type === 'participant') setParticipant(session.user)
+    // Si todas las jornadas están simuladas, generar R16 substituciones
+    if (simJornadas[1] && simJornadas[2] && simJornadas[3] && Object.keys(subs).length === 0) {
+      const groupWinners = getAllGroupWinners(acts)
+      const newSubs = {}
+      Object.entries(groupWinners).forEach(([group, winners]) => {
+        if (winners.first) newSubs[`1.º ${group}`] = winners.first
+        if (winners.second) newSubs[`2.º ${group}`] = winners.second
+      })
+      if (Object.keys(newSubs).length > 0) {
+        setR16Substitutions(newSubs)
+        setAsync('wc26_r16Substitutions', newSubs)
       }
     }
 
-    loadData()
+    // Restaurar sesión si existe
+    const session = getSession()
+    if (session) {
+      if (session.type === 'admin') setIsAdmin(true)
+      if (session.type === 'participant') setParticipant(session.user)
+    }
   }, [])
 
   // Initialize participants in Firestore (only once)
