@@ -1,4 +1,5 @@
-// Wrappers sobre localStorage con manejo de errores
+// Hybrid storage: localStorage + Supabase
+// Falls back to localStorage for development/offline support
 
 const get = (key, fallback = null) => {
   try {
@@ -13,6 +14,15 @@ const set = (key, value) => {
   } catch (err) {
     console.error(`[Storage] Failed to write '${key}':`, err.message)
   }
+}
+
+// Async versions for Supabase (not implemented yet, using localStorage only for now)
+export const getAsync = async (key, fallback = null) => {
+  return get(key, fallback)
+}
+
+export const setAsync = async (key, value) => {
+  set(key, value)
 }
 
 // Migrar formato antiguo de predicciones al nuevo
