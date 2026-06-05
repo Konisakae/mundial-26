@@ -138,3 +138,47 @@ export async function saveSimulations(state) {
     })
   return { data, error }
 }
+
+// ============ BULK LOAD/SAVE FUNCTIONS ============
+
+// Load all app data from Supabase
+export async function loadAllDataFromSupabase() {
+  try {
+    const [
+      { data: allPredictions, error: predError },
+      { data: allActuals, error: actualError },
+      { data: confirmations, error: confError },
+      { data: simulations, error: simError }
+    ] = await Promise.all([
+      supabase.from('predictions').select('*'),
+      supabase.from('actuals').select('*'),
+      supabase.from('confirmations').select('*'),
+      supabase.from('simulations').select('*').order('updated_at', { ascending: false }).limit(1)
+    ])
+
+    if (predError || actualError || confError || simError) {
+      console.error('[Supabase] Load error:', { predError, actualError, confError, simError })
+      return null
+    }
+
+    return {
+      predictions: allPredictions,
+      actuals: allActuals,
+      confirmations: confirmations,
+      simulations: simulations?.[0]
+    }
+  } catch (err) {
+    console.error('[Supabase] Failed to load data:', err.message)
+    return null
+  }
+}
+
+// Save actual result to Supabase
+export async function saveActualToSupabase(matchId, homeScore, awayScore, winner = null) {
+  return await saveActual(matchId, homeScore, awayScore, winner)
+}
+
+// Save prediction to Supabase
+export async function savePredictionToSupabase(participantId, matchId, homeScore, awayScore, predictedWinner = null) {
+  return await savePrediction(participantId, matchId, homeScore, awayScore, predictedWinner)
+}
