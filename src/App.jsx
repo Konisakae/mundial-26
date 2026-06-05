@@ -5,6 +5,7 @@ import { calcTotalPts } from './utils/scoring'
 import { storage, getAsync, setAsync } from './utils/storage'
 import { getAllGroupWinners } from './utils/groupStandings'
 import { getSession } from './utils/auth'
+import { initializeParticipant, subscribeToActuals } from './utils/firebase'
 import Header from './components/Header'
 import Resultados from './components/Resultados'
 import Apuestas from './components/Apuestas'
@@ -115,6 +116,29 @@ export default function App() {
     }
 
     loadData()
+  }, [])
+
+  // Initialize participants in Firestore and subscribe to real-time actuals
+  useEffect(() => {
+    // Initialize all participants (only if they don't exist yet)
+    const initializeParticipants = async () => {
+      const parts = DEFAULT_PARTICIPANTS
+      for (const part of parts) {
+        const defaultPassword = '1234' // Default password for all
+        await initializeParticipant(part, defaultPassword)
+      }
+      console.log('[App] Participants initialized in Firestore')
+    }
+
+    initializeParticipants()
+
+    // Subscribe to real-time updates for actuals
+    const unsubscribe = subscribeToActuals((newActuals) => {
+      console.log('[App] Actuals updated in real-time:', newActuals)
+      setActuals(newActuals)
+    })
+
+    return () => unsubscribe()
   }, [])
 
   // Data sync strategy:

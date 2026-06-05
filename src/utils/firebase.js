@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
+import bcrypt from 'bcryptjs'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDQlrP7fX6staH67NOiql32-BJdQADkiCE",
@@ -37,5 +38,53 @@ export const loadFromFirestore = async (collection, docId) => {
   } catch (err) {
     console.error(`[Firebase] Failed to load from ${collection}/${docId}:`, err.message)
     return null
+  }
+}
+
+// Hash password
+export const hashPassword = async (password) => {
+  return await bcrypt.hash(password, 10)
+}
+
+// Compare password with hash
+export const comparePassword = async (password, hash) => {
+  return await bcrypt.compare(password, hash)
+}
+
+// Initialize participant in Firestore (only if doesn't exist)
+export const initializeParticipant = async (name, password) => {
+  try {
+    const existing = await getDoc(doc(db, 'participants', name))
+    if (existing.exists()) {
+      console.log(`[Firebase] Participant ${name} already exists`)
+      return
+    }
+
+    const hashedPassword = await hashPassword(password)
+    await setDoc(doc(db, 'participants', name), {
+      name,
+      passwordHash: hashedPassword,
+      createdAt: new Date()
+    })
+    console.log(`[Firebase] Initialized participant ${name}`)
+  } catch (err) {
+    console.error(`[Firebase] Failed to initialize ${name}:`, err.message)
+  }
+}
+
+// Subscribe to real-time updates for actuals
+export const subscribeToActuals = (callback) => {
+  try {
+    const unsubscribe = onSnapshot(doc(db, 'app_data', 'wc26_actuals'), (docSnap) => {
+      if (docSnap.exists()) {
+        callback(docSnap.data().value || {})
+      }
+    }, (err) => {
+      console.error(`[Firebase] Error subscribing to actuals:`, err.message)
+    })
+    return unsubscribe
+  } catch (err) {
+    console.error(`[Firebase] Failed to subscribe to actuals:`, err.message)
+    return () => {}
   }
 }

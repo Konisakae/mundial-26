@@ -1,8 +1,24 @@
-import { PARTICIPANTS_DB, ADMIN_PIN } from '../config/participants'
+import { getDoc, doc } from 'firebase/firestore'
+import { comparePassword, db } from './firebase'
+import { ADMIN_PIN } from '../config/participants'
 
-// Validate participant - uses local PARTICIPANTS_DB
+// Validate participant - checks against Firestore
 export const validateParticipant = async (name, password) => {
-  return PARTICIPANTS_DB[name]?.password === password
+  try {
+    const participantDoc = await getDoc(doc(db, 'participants', name))
+    if (!participantDoc.exists()) {
+      console.log(`[Auth] Participant ${name} not found`)
+      return false
+    }
+
+    const { passwordHash } = participantDoc.data()
+    const isValid = await comparePassword(password, passwordHash)
+    console.log(`[Auth] Validation for ${name}: ${isValid ? 'success' : 'failed'}`)
+    return isValid
+  } catch (err) {
+    console.error(`[Auth] Failed to validate participant:`, err.message)
+    return false
+  }
 }
 
 export const validateAdmin = (pin) => {
