@@ -5,7 +5,7 @@ import { calcTotalPts } from './utils/scoring'
 import { storage } from './utils/storage'
 import { getAllGroupWinners } from './utils/groupStandings'
 import { getSession } from './utils/auth'
-import { supabase, loadAllDataFromSupabase, saveActualToSupabase, savePredictionToSupabase, saveConfirmation, saveR16Substitutions, saveSimulations } from './utils/supabase'
+import { supabase, loadAllDataFromSupabase, saveActualToSupabase, savePredictionToSupabase, savePredictionByName, saveConfirmation, saveR16Substitutions, saveSimulations } from './utils/supabase'
 import Header from './components/Header'
 import Resultados from './components/Resultados'
 import Apuestas from './components/Apuestas'
@@ -142,6 +142,35 @@ export default function App() {
           })
         }
 
+        // Fetch predictions by participant name
+        const { data: predictionsData, error: predictionsError } = await supabase
+          .from('predictions')
+          .select('*')
+
+        if (!predictionsError && predictionsData) {
+          const newPredictions = {}
+          predictionsData.forEach(row => {
+            const name = row.participant_name
+            if (!newPredictions[name]) {
+              newPredictions[name] = {
+                predictions: {},
+                confirmed: predictions[name]?.confirmed || { 1: false, 2: false, 3: false }
+              }
+            }
+            newPredictions[name].predictions[row.match_id] = {
+              h: row.home_score,
+              a: row.away_score
+            }
+          })
+          setPredictions(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(newPredictions)) {
+              console.log('[Polling] Predictions updated')
+              return newPredictions
+            }
+            return prev
+          })
+        }
+
         const { data: confirmationsData, error: confirmationsError } = await supabase
           .from('confirmations')
           .select('*')
@@ -252,7 +281,7 @@ export default function App() {
     storage.set('wc26_predictions', next)
 
     // Write to Supabase in background (non-blocking)
-    savePredictionToSupabase(null, matchId, h, actualA).catch(err =>
+    savePredictionByName(targetParticipant, matchId, h, actualA).catch(err =>
       console.error(`[Supabase] Failed to save prediction for match ${matchId}:`, err.message)
     )
   }

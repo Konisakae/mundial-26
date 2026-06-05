@@ -193,3 +193,18 @@ export async function saveActualToSupabase(matchId, homeScore, awayScore, winner
 export async function savePredictionToSupabase(participantId, matchId, homeScore, awayScore, predictedWinner = null) {
   return await savePrediction(participantId, matchId, homeScore, awayScore, predictedWinner)
 }
+
+// Save prediction by participant name (simplified version that stores name instead of UUID)
+export async function savePredictionByName(participantName, matchId, homeScore, awayScore, predictedWinner = null) {
+  const { data, error } = await supabase
+    .from('predictions')
+    .upsert({
+      participant_name: participantName,
+      match_id: matchId,
+      home_score: homeScore,
+      away_score: awayScore,
+      predicted_winner: predictedWinner,
+      updated_at: new Date()
+    })
+  return { data, error }
+}
