@@ -142,34 +142,8 @@ export default function App() {
           })
         }
 
-        // Fetch predictions by participant name
-        const { data: predictionsData, error: predictionsError } = await supabase
-          .from('predictions')
-          .select('*')
-
-        if (!predictionsError && predictionsData) {
-          const newPredictions = {}
-          predictionsData.forEach(row => {
-            const name = row.participant_name
-            if (!newPredictions[name]) {
-              newPredictions[name] = {
-                predictions: {},
-                confirmed: predictions[name]?.confirmed || { 1: false, 2: false, 3: false }
-              }
-            }
-            newPredictions[name].predictions[row.match_id] = {
-              h: row.home_score,
-              a: row.away_score
-            }
-          })
-          setPredictions(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(newPredictions)) {
-              console.log('[Polling] Predictions updated')
-              return newPredictions
-            }
-            return prev
-          })
-        }
+        // Don't poll predictions - they're stored in localStorage + saved to Supabase in background
+        // Polling was causing predictions to disappear because Supabase save is async
 
         const { data: confirmationsData, error: confirmationsError } = await supabase
           .from('confirmations')
