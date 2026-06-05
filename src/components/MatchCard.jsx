@@ -392,9 +392,7 @@ export default function MatchCard({
           <div className={styles.actualCenter}>
             Resultado: <span className={styles.actualValue}>{actual.h}-{actual.a}</span>
             {(() => {
-              const hScore = Number(actual.h)
-              const aScore = Number(actual.a)
-              const winner = actual.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
+              const winner = actual.winner
               return winner && isElimination && (
                 <>
                   {' - Ganador: '}<span className={styles.actualValue}>{winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : getTeamDisplay(match.a, a, isMobile)}</span>
@@ -410,9 +408,7 @@ export default function MatchCard({
           <span className={styles.championLabel}>Campeón:</span>
           <span className={styles.championValue}>
             {(() => {
-              const hScore = Number(actual.h)
-              const aScore = Number(actual.a)
-              const winner = actual.winner || (hScore > aScore ? 'h' : aScore > hScore ? 'a' : null)
+              const winner = actual.winner
               return winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : winner === 'a' ? getTeamDisplay(match.a, a, isMobile) : '—'
             })()}
           </span>
