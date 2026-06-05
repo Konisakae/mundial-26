@@ -541,7 +541,7 @@ export default function App() {
         setAsync('wc26_r16Substitutions', newSubs)
       }
     }
-  }, [actuals, simulatedJornadas, phase, r16Substitutions, octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo])
+  }, [actuals, simulatedJornadas, phase])
 
   // Borrar todos los datos simulados
   const clearAllData = () => {
