@@ -30,7 +30,7 @@ export default function TodasLayout2({ participants, phase, jornada, predictions
   // Calcular rankings por jornada y fase
   const rankingsByJornadaPhase = useMemo(() => {
     const rankings = {}
-    const tiebreakOrder = ['Lucía', 'Olivia', 'Eva', 'Pablo', 'Lucas', 'Darío', 'Elena', 'Javi', 'Nic', 'Jose M.', 'Charo', 'Abuelo']
+    const tiebreakOrder = ['Lucía', 'Olivia', 'Eva', 'Pablo', 'Lucas', 'Darío', 'Elena', 'Javi', 'Nic', 'Jose', 'Charo', 'Abuelo']
 
     const sortByPointsThenTiebreak = (entries) => {
       return entries.sort((a, b) => {
