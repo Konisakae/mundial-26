@@ -67,18 +67,34 @@ export async function savePrediction(participantId, matchId, homeScore, awayScor
   return { data, error }
 }
 
-// Save actual result
+// Save actual result (update if exists, insert if not)
 export async function saveActual(matchId, homeScore, awayScore, winner = null) {
-  const { data, error } = await supabase
+  // First try to update
+  const { data: updateData, error: updateError } = await supabase
     .from('actuals')
-    .upsert({
-      match_id: matchId,
+    .update({
       home_score: homeScore,
       away_score: awayScore,
       winner: winner,
       updated_at: new Date()
     })
-  return { data, error }
+    .eq('match_id', matchId)
+
+  // If update failed or no rows affected, insert instead
+  if (updateError || !updateData || updateData.length === 0) {
+    const { data: insertData, error: insertError } = await supabase
+      .from('actuals')
+      .insert({
+        match_id: matchId,
+        home_score: homeScore,
+        away_score: awayScore,
+        winner: winner,
+        updated_at: new Date()
+      })
+    return { data: insertData, error: insertError }
+  }
+
+  return { data: updateData, error: updateError }
 }
 
 // Get confirmations
@@ -194,17 +210,34 @@ export async function savePredictionToSupabase(participantId, matchId, homeScore
   return await savePrediction(participantId, matchId, homeScore, awayScore, predictedWinner)
 }
 
-// Save prediction by participant name (simplified version that stores name instead of UUID)
+// Save prediction by participant name (update if exists, insert if not)
 export async function savePredictionByName(participantName, matchId, homeScore, awayScore, predictedWinner = null) {
-  const { data, error } = await supabase
+  // First try to update
+  const { data: updateData, error: updateError } = await supabase
     .from('predictions')
-    .upsert({
-      participant_name: participantName,
-      match_id: matchId,
+    .update({
       home_score: homeScore,
       away_score: awayScore,
       predicted_winner: predictedWinner,
       updated_at: new Date()
     })
-  return { data, error }
+    .eq('participant_name', participantName)
+    .eq('match_id', matchId)
+
+  // If update failed or no rows affected, insert instead
+  if (updateError || !updateData || updateData.length === 0) {
+    const { data: insertData, error: insertError } = await supabase
+      .from('predictions')
+      .insert({
+        participant_name: participantName,
+        match_id: matchId,
+        home_score: homeScore,
+        away_score: awayScore,
+        predicted_winner: predictedWinner,
+        updated_at: new Date()
+      })
+    return { data: insertData, error: insertError }
+  }
+
+  return { data: updateData, error: updateError }
 }
