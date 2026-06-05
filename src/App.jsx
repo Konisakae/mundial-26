@@ -5,7 +5,7 @@ import { calcTotalPts } from './utils/scoring'
 import { storage } from './utils/storage'
 import { getAllGroupWinners } from './utils/groupStandings'
 import { getSession } from './utils/auth'
-import { loadAllDataFromSupabase, saveActualToSupabase, savePredictionToSupabase, saveConfirmation, saveR16Substitutions, saveSimulations } from './utils/supabase'
+import { supabase, loadAllDataFromSupabase, saveActualToSupabase, savePredictionToSupabase, saveConfirmation, saveR16Substitutions, saveSimulations } from './utils/supabase'
 import Header from './components/Header'
 import Resultados from './components/Resultados'
 import Apuestas from './components/Apuestas'
@@ -112,6 +112,96 @@ export default function App() {
     if (session) {
       if (session.type === 'admin') setIsAdmin(true)
       if (session.type === 'participant') setParticipant(session.user)
+    }
+  }, [])
+
+  // Real-time subscriptions: listen for changes in Supabase
+  useEffect(() => {
+    const subscriptions = []
+
+    // Subscribe to actuals (match results)
+    const actualsSubscription = supabase
+      .from('actuals')
+      .on('*', payload => {
+        setActuals(prev => ({
+          ...prev,
+          [payload.new.match_id]: {
+            h: payload.new.home_score,
+            a: payload.new.away_score,
+            winner: payload.new.winner
+          }
+        }))
+        console.log('[Realtime] Actuals updated:', payload.new.match_id)
+      })
+      .subscribe()
+    subscriptions.push(actualsSubscription)
+
+    // Subscribe to predictions (participant predictions)
+    const predictionsSubscription = supabase
+      .from('predictions')
+      .on('*', payload => {
+        const { participant_id, match_id, home_score, away_score, predicted_winner } = payload.new
+        // Find participant name by ID and update predictions
+        // This is a simplified version - in production you might want to track participant_id separately
+        setPredictions(prev => ({
+          ...prev,
+          // Note: We'd need participant name from ID - for now, log it
+        }))
+        console.log('[Realtime] Prediction updated:', { participant_id, match_id })
+      })
+      .subscribe()
+    subscriptions.push(predictionsSubscription)
+
+    // Subscribe to confirmations (phase/jornada confirmations)
+    const confirmationsSubscription = supabase
+      .from('confirmations')
+      .on('*', payload => {
+        const { phase_or_jornada } = payload.new
+        setResultsConfirmed(prev => ({
+          ...prev,
+          [phase_or_jornada]: true
+        }))
+        console.log('[Realtime] Confirmation updated:', phase_or_jornada)
+      })
+      .subscribe()
+    subscriptions.push(confirmationsSubscription)
+
+    // Subscribe to r16_substitutions
+    const r16SubsSubscription = supabase
+      .from('r16_substitutions')
+      .on('*', payload => {
+        const { slot_identifier, team_code } = payload.new
+        setR16Substitutions(prev => ({
+          ...prev,
+          [slot_identifier]: team_code
+        }))
+        console.log('[Realtime] R16 substitution updated:', { slot_identifier, team_code })
+      })
+      .subscribe()
+    subscriptions.push(r16SubsSubscription)
+
+    // Subscribe to simulations
+    const simulationsSubscription = supabase
+      .from('simulations')
+      .on('*', payload => {
+        const { jornada_1, jornada_2, jornada_3, phase_r16, phase_oct, phase_cto, phase_semi, phase_tercerp, phase_fin } = payload.new
+        setSimulatedJornadas({ 1: jornada_1, 2: jornada_2, 3: jornada_3 })
+        setSimulatedPhases({
+          R16: phase_r16,
+          OCT: phase_oct,
+          CTO: phase_cto,
+          SEMI: phase_semi,
+          '3P': phase_tercerp,
+          FIN: phase_fin
+        })
+        console.log('[Realtime] Simulations updated')
+      })
+      .subscribe()
+    subscriptions.push(simulationsSubscription)
+
+    // Cleanup: unsubscribe from all channels when component unmounts
+    return () => {
+      subscriptions.forEach(sub => sub.unsubscribe())
     }
   }, [])
 
