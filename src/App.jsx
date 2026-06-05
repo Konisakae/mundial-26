@@ -115,85 +115,12 @@ export default function App() {
     }
   }, [])
 
-  // Load data from Supabase on tab change (refresh when switching sections)
-  useEffect(() => {
-    const loadSupabaseData = async () => {
-      try {
-        // Load actuals from Supabase
-        const { data: actualsData } = await supabase
-          .from('actuals')
-          .select('*')
-
-        if (actualsData) {
-          const newActuals = {}
-          actualsData.forEach(row => {
-            newActuals[row.match_id] = {
-              h: row.home_score,
-              a: row.away_score,
-              winner: row.winner
-            }
-          })
-          setActuals(newActuals)
-          storage.set('wc26_actuals', newActuals)
-          console.log('[Supabase] Actuals loaded')
-        }
-
-        // Load confirmations from Supabase
-        const { data: confirmationsData } = await supabase
-          .from('confirmations')
-          .select('*')
-
-        if (confirmationsData) {
-          const newConfirmations = {}
-          confirmationsData.forEach(row => {
-            newConfirmations[row.phase_or_jornada] = true
-          })
-          setResultsConfirmed(prev => ({ ...prev, ...newConfirmations }))
-          console.log('[Supabase] Confirmations loaded')
-        }
-
-        // Load r16_substitutions
-        const { data: r16SubsData } = await supabase
-          .from('r16_substitutions')
-          .select('*')
-
-        if (r16SubsData) {
-          const newR16Subs = {}
-          r16SubsData.forEach(row => {
-            newR16Subs[row.slot_identifier] = row.team_code
-          })
-          setR16Substitutions(newR16Subs)
-          console.log('[Supabase] R16 substitutions loaded')
-        }
-
-        // Load simulations
-        const { data: simulationsData } = await supabase
-          .from('simulations')
-          .select('*')
-          .order('updated_at', { ascending: false })
-          .limit(1)
-
-        if (simulationsData && simulationsData[0]) {
-          const sim = simulationsData[0]
-          setSimulatedJornadas({ 1: sim.jornada_1, 2: sim.jornada_2, 3: sim.jornada_3 })
-          setSimulatedPhases({
-            R16: sim.phase_r16,
-            OCT: sim.phase_oct,
-            CTO: sim.phase_cto,
-            SEMI: sim.phase_semi,
-            '3P': sim.phase_tercerp,
-            FIN: sim.phase_fin
-          })
-          console.log('[Supabase] Simulations loaded')
-        }
-      } catch (err) {
-        console.error('[Supabase] Load error:', err.message)
-      }
-    }
-
-    // Load from Supabase when tab changes
-    loadSupabaseData()
-  }, [tab])
+  // Data sync strategy:
+  // - All changes save to localStorage immediately (responsive)
+  // - All changes save to Supabase in background (async, non-blocking)
+  // - We read from localStorage for display (always up-to-date locally)
+  // - Supabase is backup/sync for other browsers (refresh page to sync)
+  // No auto-polling or auto-load to avoid overwriting local edits
 
   const savePred = (matchIdOrParticipant, hOrMatchId, aOrH, a) => {
     // Soporta dos firmas: savePred(matchId, h, a) o savePred(participant, matchId, h, a)
