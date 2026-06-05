@@ -118,27 +118,22 @@ export default function App() {
     loadData()
   }, [])
 
-  // Initialize participants in Firestore and subscribe to real-time actuals
+  // Initialize participants in Firestore (only once)
   useEffect(() => {
-    // Initialize all participants (only if they don't exist yet)
+    const hasInitialized = localStorage.getItem('wc26_participants_initialized')
+    if (hasInitialized) return
+
     const initializeParticipants = async () => {
       const parts = DEFAULT_PARTICIPANTS
       for (const part of parts) {
-        const defaultPassword = '1234' // Default password for all
+        const defaultPassword = '1234'
         await initializeParticipant(part, defaultPassword)
       }
       console.log('[App] Participants initialized in Firestore')
+      localStorage.setItem('wc26_participants_initialized', 'true')
     }
 
     initializeParticipants()
-
-    // Subscribe to real-time updates for actuals
-    const unsubscribe = subscribeToActuals((newActuals) => {
-      console.log('[App] Actuals updated in real-time:', newActuals)
-      setActuals(newActuals)
-    })
-
-    return () => unsubscribe()
   }, [])
 
   // Data sync strategy:
