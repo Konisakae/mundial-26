@@ -16,26 +16,21 @@ const set = (key, value) => {
   }
 }
 
-// Async versions using Firestore with localStorage priority
+// Async versions using Firestore - always read from Firestore, fall back to localStorage
 export const getAsync = async (key, fallback = null) => {
-  // Priority 1: localStorage (instant)
-  const localData = get(key, null)
-  if (localData !== null) {
-    return localData
-  }
-
-  // Priority 2: Firestore (in background, don't wait)
   try {
     const data = await loadFromFirestore('app_data', key)
     if (data && data.value) {
-      set(key, data.value) // Update localStorage
+      set(key, data.value) // Update localStorage with Firestore data
       return data.value
     }
   } catch (err) {
     console.error(`[Storage] Failed to read from Firestore '${key}':`, err.message)
   }
 
-  return fallback
+  // Fallback to localStorage if Firestore fails or returns null
+  const localData = get(key, null)
+  return localData !== null ? localData : fallback
 }
 
 export const setAsync = async (key, value) => {
