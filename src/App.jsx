@@ -115,22 +115,18 @@ export default function App() {
       if (session.type === 'participant') setParticipant(session.user)
     }
 
-    // Sync from Firestore in background if localStorage is empty
-    if (Object.keys(acts).length === 0) {
-      getAsync('wc26_actuals', {}).then(fbActuals => {
-        if (fbActuals && Object.keys(fbActuals).length > 0) {
-          setActuals(fbActuals)
-        }
-      })
-    }
+    // Sync from Firestore in background (only once on mount, no loops)
+    getAsync('wc26_actuals', {}).then(fbActuals => {
+      if (JSON.stringify(fbActuals) !== JSON.stringify(acts)) {
+        setActuals(fbActuals)
+      }
+    })
 
-    if (Object.keys(preds).length === 0) {
-      getAsync('wc26_predictions', {}).then(fbPreds => {
-        if (fbPreds && Object.keys(fbPreds).length > 0) {
-          setPredictions(storage.ensureNewFormat(fbPreds))
-        }
-      })
-    }
+    getAsync('wc26_predictions', {}).then(fbPreds => {
+      if (JSON.stringify(fbPreds) !== JSON.stringify(preds)) {
+        setPredictions(storage.ensureNewFormat(fbPreds))
+      }
+    })
   }, [])
 
   // Initialize participants in Firestore (only once)
