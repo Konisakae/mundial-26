@@ -37,9 +37,10 @@ export const setAsync = async (key, value) => {
   // Always save to localStorage first (instant)
   set(key, value)
 
-  // Then try Firestore in background (don't wait)
-  saveToFirestore('app_data', key, { value }).catch(err => {
+  // Then try Firestore in background (don't wait, but return promise for error handling)
+  return saveToFirestore('app_data', key, { value }).catch(err => {
     console.error(`[Storage] Failed to write to Firestore '${key}':`, err.message)
+    throw err // Re-throw so caller can handle
   })
 }
 

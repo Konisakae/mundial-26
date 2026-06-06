@@ -214,11 +214,16 @@ export default function App() {
 
   const setWinner = (matchId, winner) => {
     const next = { ...actuals }
-    if (next[matchId]) {
-      next[matchId] = { ...next[matchId], winner: winner || undefined }
-      setActuals(next)
-      setAsync('wc26_actuals', next)
+    if (!next[matchId]) {
+      console.warn(`[setWinner] Match ${matchId} has no result yet, cannot set winner`)
+      return
     }
+    next[matchId] = { ...next[matchId], winner: winner || undefined }
+    console.log(`[setWinner] Match ${matchId}: saving winner=${winner}`, next[matchId])
+    setActuals(next)
+    setAsync('wc26_actuals', next).catch(err => {
+      console.error(`[setWinner] Failed to save winner for match ${matchId}:`, err)
+    })
   }
 
   const setPredictedWinner = (matchId, winner, targetParticipant = null) => {
