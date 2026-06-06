@@ -178,6 +178,14 @@ export default function App() {
     initializeParticipants()
   }, [])
 
+  // Generate elimination matches when R16 subs are loaded from Firestore
+  useEffect(() => {
+    if (r16Substitutions && Object.keys(r16Substitutions).length > 0 && (!octavosSubstitutions || Object.keys(octavosSubstitutions).length === 0)) {
+      const avail = getAvailableThirds()
+      generateOctavosMatches(r16Substitutions, selectedThirds, avail, actuals)
+    }
+  }, [r16Substitutions, actuals])
+
   // Data sync strategy:
   // - All changes save to localStorage immediately (responsive)
   // - All changes save to Supabase in background (async, non-blocking)
@@ -590,7 +598,7 @@ export default function App() {
         setAsync('wc26_r16Substitutions', newSubs)
       }
     }
-  }, [actuals, simulatedJornadas, phase, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, selectedThirds])
+  }, [actuals, simulatedJornadas, phase])
 
   // Borrar todos los datos simulados
   const clearAllData = () => {
