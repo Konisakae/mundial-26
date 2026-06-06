@@ -590,7 +590,7 @@ export default function App() {
         setAsync('wc26_r16Substitutions', newSubs)
       }
     }
-  }, [actuals, simulatedJornadas, phase])
+  }, [actuals, simulatedJornadas, phase, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, selectedThirds, availableThirds])
 
   // Borrar todos los datos simulados
   const clearAllData = () => {
