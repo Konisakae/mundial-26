@@ -245,7 +245,7 @@ export default function App() {
       },
     }
     setPredictions(next)
-    setAsync('wc26_predictions', next)
+    // Only save to localStorage, not Firebase (Firebase saves when confirming jornada)
   }
 
   const saveActual = (matchId, h, a) => {
@@ -373,10 +373,24 @@ export default function App() {
   }
 
   // Confirmar resultados de una jornada o fase
+  // Guardar todas las predicciones de una jornada a Firebase
+  const savePredictionsToFirebase = (jornada) => {
+    if (predictions && Object.keys(predictions).length > 0) {
+      setAsync('wc26_predictions', predictions).catch(err => {
+        console.error(`[savePredictionsToFirebase] Failed to save predictions for jornada ${jornada}:`, err)
+      })
+    }
+  }
+
   const confirmResults = (jornadaOrPhase) => {
     const next = { ...resultsConfirmed, [jornadaOrPhase]: true }
     setResultsConfirmed(next)
     setAsync('wc26_resultsConfirmed', next)
+
+    // Save predictions to Firebase when confirming (only for jornadas 1-3, not elimination phases)
+    if (typeof jornadaOrPhase === 'number') {
+      savePredictionsToFirebase(jornadaOrPhase)
+    }
   }
 
   // Confirmar enfrentamientos de R16
