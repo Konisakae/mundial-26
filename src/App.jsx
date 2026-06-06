@@ -117,14 +117,45 @@ export default function App() {
 
     // Sync from Firestore in background (only once on mount, no loops)
     getAsync('wc26_actuals', {}).then(fbActuals => {
-      if (JSON.stringify(fbActuals) !== JSON.stringify(acts)) {
+      if (fbActuals && Object.keys(fbActuals).length > 0) {
         setActuals(fbActuals)
       }
     })
 
     getAsync('wc26_predictions', {}).then(fbPreds => {
-      if (JSON.stringify(fbPreds) !== JSON.stringify(preds)) {
+      if (fbPreds && Object.keys(fbPreds).length > 0) {
         setPredictions(storage.ensureNewFormat(fbPreds))
+      }
+    })
+
+    // Sync confirmations from Firestore
+    getAsync('wc26_resultsConfirmed', resConfirmed).then(fbConfirmed => {
+      if (fbConfirmed && Object.keys(fbConfirmed).length > 0) {
+        setResultsConfirmed(fbConfirmed)
+      }
+    })
+
+    getAsync('wc26_selectedThirds', selThirds).then(fbThirds => {
+      if (fbThirds && Object.keys(fbThirds).length > 0) {
+        setSelectedThirds(fbThirds)
+      }
+    })
+
+    getAsync('wc26_r16Substitutions', subs).then(fbSubs => {
+      if (fbSubs && Object.keys(fbSubs).length > 0) {
+        setR16Substitutions(fbSubs)
+      }
+    })
+
+    getAsync('wc26_r16MatchupsConfirmed', r16MatchConf).then(fbR16Match => {
+      if (fbR16Match) {
+        setR16MatchupsConfirmed(fbR16Match)
+      }
+    })
+
+    getAsync('wc26_r16Confirmed', r16Conf).then(fbR16Conf => {
+      if (fbR16Conf) {
+        setR16Confirmed(fbR16Conf)
       }
     })
   }, [])
