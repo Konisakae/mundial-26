@@ -1155,14 +1155,19 @@ export default function App() {
             onSelectThird={(matchId, group) => {
               const newSelected = { ...selectedThirds, [matchId]: group }
               setSelectedThirds(newSelected)
-              setAsync('wc26_selectedThirds', newSelected)
+              console.log(`[onSelectThird] Match ${matchId}: saving third=${group}`)
+              setAsync('wc26_selectedThirds', newSelected).catch(err => {
+                console.error(`[onSelectThird] Failed to save thirds:`, err)
+              })
 
               // Actualizar r16Substitutions cuando se selecciona un tercero
               const teamCode = availableThirds[group]
               if (teamCode) {
                 const newSubs = { ...r16Substitutions, [`3.º ${group}`]: teamCode }
                 setR16Substitutions(newSubs)
-                setAsync('wc26_r16Substitutions', newSubs)
+                setAsync('wc26_r16Substitutions', newSubs).catch(err => {
+                  console.error(`[onSelectThird] Failed to save r16Substitutions:`, err)
+                })
               }
             }}
             simulatedJornadas={simulatedJornadas}
