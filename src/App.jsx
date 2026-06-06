@@ -186,6 +186,27 @@ export default function App() {
     }
   }, [r16Substitutions, actuals])
 
+  // Generate cuartos when octavos are loaded from Firestore
+  useEffect(() => {
+    if (octavosSubstitutions && Object.keys(octavosSubstitutions).length > 0 && (!cuartosSubstitutions || Object.keys(cuartosSubstitutions).length === 0)) {
+      generateCuartosMatches(octavosSubstitutions, actuals, octavosGroupInfo)
+    }
+  }, [octavosSubstitutions, actuals])
+
+  // Generate semis when cuartos are loaded from Firestore
+  useEffect(() => {
+    if (cuartosSubstitutions && Object.keys(cuartosSubstitutions).length > 0 && (!semifinalSubstitutions || Object.keys(semifinalSubstitutions).length === 0)) {
+      generateSemifinalMatches(cuartosSubstitutions, actuals, cuartosGroupInfo)
+    }
+  }, [cuartosSubstitutions, actuals])
+
+  // Generate final when semis are loaded from Firestore
+  useEffect(() => {
+    if (semifinalSubstitutions && Object.keys(semifinalSubstitutions).length > 0 && (!finalSubstitutions || Object.keys(finalSubstitutions).length === 0)) {
+      generateFinalMatches(semifinalSubstitutions, actuals, semifinalGroupInfo)
+    }
+  }, [semifinalSubstitutions, actuals])
+
   // Data sync strategy:
   // - All changes save to localStorage immediately (responsive)
   // - All changes save to Supabase in background (async, non-blocking)
