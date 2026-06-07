@@ -6,6 +6,21 @@ import { storage, getAsync, setAsync } from './utils/storage'
 import { getAllGroupWinners } from './utils/groupStandings'
 import { getSession } from './utils/auth'
 import { initializeParticipant } from './utils/firebase'
+
+const FIXED_PASSWORDS = {
+  'Lucía': 'luc026',
+  'Olivia': 'oli541',
+  'Eva': 'eva831',
+  'Pablo': 'pab801',
+  'Lucas': 'luc778',
+  'Darío': 'dar018',
+  'Elena': 'ele777',
+  'Javi': 'jav361',
+  'Nic': 'nic573',
+  'Jose': 'jos886',
+  'Charo': 'cha494',
+  'Abuelo': 'abu116'
+}
 import Header from './components/Header'
 import Resultados from './components/Resultados'
 import Apuestas from './components/Apuestas'
@@ -168,8 +183,8 @@ export default function App() {
     const initializeParticipants = async () => {
       const parts = DEFAULT_PARTICIPANTS
       for (const part of parts) {
-        const defaultPassword = '1234'
-        await initializeParticipant(part, defaultPassword)
+        const password = FIXED_PASSWORDS[part] || 'default'
+        await initializeParticipant(part, password)
       }
       console.log('[App] Participants initialized in Firestore')
       localStorage.setItem('wc26_participants_initialized', 'true')
