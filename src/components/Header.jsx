@@ -141,23 +141,6 @@ export default function Header({
                   </div>
                   <span className={styles.participantName}>{participant}</span>
                   <span className={styles.scoreText}>{totalPts} pts</span>
-                  <button
-                    onClick={() => window.location.reload()}
-                    title="Recargar página para sincronizar datos"
-                    style={{
-                      marginLeft: '1rem',
-                      fontSize: '1.2rem',
-                      padding: '0.5rem 0.75rem',
-                      background: 'rgba(0, 217, 255, 0.2)',
-                      border: '1px solid #00d9ff',
-                      borderRadius: '0.375rem',
-                      color: '#00d9ff',
-                      cursor: 'pointer',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    ↻
-                  </button>
                 </div>
               )}
               <button
@@ -343,6 +326,24 @@ export default function Header({
                       )}
                       <span className={styles.chevron} style={{transform: showParticipantDropdown ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
                     </button>
+
+                    <button
+                      onClick={() => window.location.reload()}
+                      title="Recargar datos"
+                      style={{
+                        marginLeft: '0.5rem',
+                        fontSize: '0.9rem',
+                        padding: '0.35rem 0.5rem',
+                        background: 'rgba(0, 217, 255, 0.15)',
+                        border: '1px solid #00d9ff',
+                        borderRadius: '0.25rem',
+                        color: '#00d9ff',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ↻
+                    </button>
+
                     {showParticipantDropdown && (
                       <div
                         className={styles.participantDropdownMenu}
