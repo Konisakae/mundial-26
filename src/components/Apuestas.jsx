@@ -285,7 +285,8 @@ export default function Apuestas({
     const matches = getMatchesForJornada(MATCHES, j)
     const isConfirmed = confirmed[j]
     const prevJornada = j - 1
-    const isPrevResultsConfirmed = prevJornada < 1 || resultsConfirmed[prevJornada]
+    // Para jornadas 1-3: participantes pueden rellenar siguiente jornada si confirmaron la anterior
+    const isPrevResultsConfirmed = prevJornada < 1 || (j <= 3 ? confirmed[prevJornada] : resultsConfirmed[prevJornada])
     const isCurrent = j === currentJornada && isPrevResultsConfirmed
     const isBlocked = !isConfirmed && !isCurrent
 
