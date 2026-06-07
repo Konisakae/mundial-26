@@ -14,34 +14,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const PARTICIPANTS = [
-  'Lucía', 'Olivia', 'Eva', 'Pablo', 'Lucas', 'Darío',
-  'Elena', 'Javi', 'Nic', 'Jose', 'Charo', 'Abuelo'
-];
+const FIXED_PASSWORDS = {
+  'Lucía': 'luc026',
+  'Olivia': 'oli541',
+  'Eva': 'eva831',
+  'Pablo': 'pab801',
+  'Lucas': 'luc778',
+  'Darío': 'dar018',
+  'Elena': 'ele777',
+  'Javi': 'jav361',
+  'Nic': 'nic573',
+  'Jose': 'jos886',
+  'Charo': 'cha494',
+  'Abuelo': 'abu116'
+};
 
-// Función para generar 3 números aleatorios
-function generateRandomNumbers() {
-  return Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-}
-
-// Función para quitar acentos
-function removeAccents(str) {
-  return str
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '');
-}
+const PARTICIPANTS = Object.keys(FIXED_PASSWORDS);
 
 async function generatePasswords() {
-  console.log('Generando nuevas contraseñas...\n');
+  console.log('Configurando contraseñas fijas...\n');
 
   const passwords = [];
 
   for (const name of PARTICIPANTS) {
-    // 3 primeras letras sin acentos
-    const prefix = removeAccents(name).toLowerCase().substring(0, 3);
-    // 3 números aleatorios
-    const suffix = generateRandomNumbers();
-    const newPassword = `${prefix}${suffix}`;
+    const newPassword = FIXED_PASSWORDS[name];
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
