@@ -10,26 +10,23 @@
 
 ### Firestore Security Rules
 
-**Configurar en Firebase Console → Firestore → Rules:**
+**NOTA:** Las rules por dominio (`request.headers['origin']`) no funcionan en Firestore.
+Solución: Usar test mode (acceso público) o migrar a Firebase Auth nativa.
+
+**Actualmente en TEST MODE (público):**
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      allow read, write: if 
-        // Permitir desde Vercel (producción)
-        (request.headers['origin'] == 'https://mundial-26-los-ropers.vercel.app' ||
-         request.headers['referer'].startsWith('https://mundial-26-los-ropers.vercel.app')) ||
-        // Permitir desde localhost (desarrollo local)
-        (request.headers['origin'] == 'http://localhost:5173' ||
-         request.headers['referer'].startsWith('http://localhost:5173')) ||
-        // Permitir usuarios autenticados
-        request.auth != null;
+      allow read, write: if true;
     }
   }
 }
 ```
+
+Esta es la única configuración que funciona sin Firebase Auth.
 
 ### Autenticación Actual
 
