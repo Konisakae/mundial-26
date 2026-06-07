@@ -61,7 +61,6 @@ export default function App() {
   const [r16MatchupsConfirmed, setR16MatchupsConfirmed] = useState(false)
 
   useEffect(() => {
-    console.log('[App] useEffect inicial ejecutándose')
     const parts = DEFAULT_PARTICIPANTS
     setParticipants(parts)
     // Sync to Firestore in background (non-blocking)
@@ -182,37 +181,15 @@ export default function App() {
     if (hasInitialized) return
 
     const initializeParticipants = async () => {
-      try {
-        const parts = DEFAULT_PARTICIPANTS
-        for (const part of parts) {
-          const password = FIXED_PASSWORDS[part] || 'default'
-          await initializeParticipant(part, password)
-        }
-        console.log('[App] Participants initialized in Firestore')
-        localStorage.setItem('wc26_participants_initialized', 'true')
-      } catch (err) {
-        console.error('[App] Error initializing participants:', err)
+      const parts = DEFAULT_PARTICIPANTS
+      for (const part of parts) {
+        const password = FIXED_PASSWORDS[part] || 'default'
+        await initializeParticipant(part, password)
       }
+      localStorage.setItem('wc26_participants_initialized', 'true')
     }
 
-    console.log('[App] Before initializeParticipants')
-    initializeParticipants().then(() => {
-      console.log('[App] After initializeParticipants (async done)')
-
-      // Auto-reload page on first load to ensure fresh data from Firestore
-      const hasReloaded = sessionStorage.getItem('wc26_reloaded')
-      console.log('[App] hasReloaded:', hasReloaded)
-      if (!hasReloaded) {
-        console.log('[App] Setting reload flag and reloading in 2 seconds')
-        sessionStorage.setItem('wc26_reloaded', 'true')
-        setTimeout(() => {
-          console.log('[App] Reloading page')
-          window.location.reload()
-        }, 2000)
-      }
-    }).catch(err => {
-      console.error('[App] Error in initializeParticipants chain:', err)
-    })
+    initializeParticipants()
   }, [])
 
   // Generate elimination matches when R16 subs are loaded from Firestore
