@@ -10,7 +10,6 @@ export default function Resultados({
   octavosSubstitutions, octavosGroupInfo, cuartosSubstitutions, cuartosGroupInfo, semifinalSubstitutions, semifinalGroupInfo,
   tercerPuestoSubstitutions, tercerPuestoGroupInfo, finalSubstitutions, finalGroupInfo, r16Confirmed, confirmR16, selectedThirds, availableThirds, onSelectThird, simulatedJornadas,
   resultsConfirmed = {}, confirmResults = null, r16MatchupsConfirmed = false, confirmR16Matchups = null,
-  closedPhases = {}, toggleClosePhase = null,
 }) {
   const [editing, setEditing] = useState({})
   const [jornada, setJornada] = useState(1)
@@ -156,13 +155,15 @@ export default function Resultados({
                 {resultsConfirmed[getCurrentPhaseId()] ? '✓ Confirmado' : 'Confirmar resultados'}
               </button>
 
-              <button
-                onClick={() => toggleClosePhase && toggleClosePhase(getCurrentPhaseId())}
-                className={styles.confirmBtn}
-                style={{ background: closedPhases[getCurrentPhaseId()] ? '#ff6464' : '#00d9ff' }}
-              >
-                {closedPhases[getCurrentPhaseId()] ? '🔒 Abierto' : '🔓 Cerrado'}
-              </button>
+              {!resultsConfirmed[getCurrentPhaseId()] && (
+                <button
+                  onClick={() => confirmResults && confirmResults(getCurrentPhaseId())}
+                  className={styles.confirmBtn}
+                  style={{ background: '#ff9500' }}
+                >
+                  🔒 Cerrar jornada (sin validaciones)
+                </button>
+              )}
             </>
           )}
 

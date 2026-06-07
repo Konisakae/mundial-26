@@ -44,7 +44,6 @@ export default function App() {
   const [selectedThirds, setSelectedThirds] = useState({})
   const [resultsConfirmed, setResultsConfirmed] = useState({ 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
   const [r16MatchupsConfirmed, setR16MatchupsConfirmed] = useState(false)
-  const [closedPhases, setClosedPhases] = useState({ 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
 
   useEffect(() => {
     const parts = DEFAULT_PARTICIPANTS
@@ -73,7 +72,6 @@ export default function App() {
     const selThirds = storage.get('wc26_selectedThirds', {})
     const resConfirmed = storage.get('wc26_resultsConfirmed', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
     const r16MatchConf = storage.get('wc26_r16MatchupsConfirmed', false)
-    const closed = storage.get('wc26_closedPhases', { 1: false, 2: false, 3: false, R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
 
     setPredictions(preds)
     setActuals(acts)
@@ -94,7 +92,6 @@ export default function App() {
     setSelectedThirds(selThirds)
     setResultsConfirmed(resConfirmed)
     setR16MatchupsConfirmed(r16MatchConf)
-    setClosedPhases(closed)
     setLoading(false)
 
     // Si todas las jornadas están simuladas, generar R16 substituciones
@@ -400,15 +397,6 @@ export default function App() {
   const confirmR16Matchups = () => {
     setR16MatchupsConfirmed(true)
     setAsync('wc26_r16MatchupsConfirmed', true)
-  }
-
-  // Cerrar/abrir jornada o fase (impedir predicciones)
-  const toggleClosePhase = (jornadaOrPhase) => {
-    const next = { ...closedPhases, [jornadaOrPhase]: !closedPhases[jornadaOrPhase] }
-    setClosedPhases(next)
-    setAsync('wc26_closedPhases', next).catch(err => {
-      console.error(`[toggleClosePhase] Failed to save:`, err)
-    })
   }
 
   // Simular datos de una jornada específica
@@ -1269,8 +1257,6 @@ export default function App() {
             confirmResults={confirmResults}
             r16MatchupsConfirmed={r16MatchupsConfirmed}
             confirmR16Matchups={confirmR16Matchups}
-            closedPhases={closedPhases}
-            toggleClosePhase={toggleClosePhase}
           />
         )}
         {tab === 'grupos' && <Grupos actuals={actuals} selectedThirds={selectedThirds} />}
