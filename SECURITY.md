@@ -1,6 +1,12 @@
 # Seguridad - Mundial 2026
 
-## Estado Actual: v0.76
+## Estado Actual: v0.80
+
+⚠️ **MODO TEST ACTIVADO (TEMPORAL)**
+- Base de datos accesible públicamente
+- Solución temporal hasta migrar a Firebase Auth
+- NO usar para datos sensibles
+- Cambiar a Auth nativa cuando sea necesario
 
 ### Firestore Security Rules
 
