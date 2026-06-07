@@ -5,6 +5,7 @@ import { getMatchesForJornada } from '../utils/jornadas'
 import { calcPts } from '../utils/scoring'
 import { AVATAR_COLORS } from '../data/colors'
 import { generateInitials } from '../utils/initials'
+import Flag from './Flag'
 import CustomSelect from './CustomSelect'
 import styles from '../styles/TodasLayout3.module.css'
 
@@ -202,9 +203,9 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                     return (
                       <div key={m.id} className={`${styles.matchRow} ${isCorrect ? styles.correct : actual && matchPoints === 0 ? styles.incorrect : matchPoints > 0 ? styles.partial : ''}`}>
                         <div className={styles.matchInfo}>
-                          <span className={styles.flag}>{h?.f}</span>
+                          <span className={styles.flag}>{h && <Flag teamCode={h.c} size="1.5rem" />}</span>
                           <span className={styles.vs}>vs</span>
-                          <span className={styles.flag}>{a?.f}</span>
+                          <span className={styles.flag}>{a && <Flag teamCode={a.c} size="1.5rem" />}</span>
                           <div className={styles.actual}>
                             {actual ? (
                               <>

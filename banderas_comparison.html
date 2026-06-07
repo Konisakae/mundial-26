@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparativa de Banderas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons/css/flag-icons.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            gap: 60px;
+            max-width: 900px;
+        }
+        .option {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 18px;
+        }
+        .flags {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .flag-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .flag {
+            font-size: 64px;
+            line-height: 1;
+        }
+        .flag-svg {
+            width: 64px;
+            height: 64px;
+        }
+        .label {
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Comparativa: Emojis vs SVG (flag-icons)</h1>
+
+    <div class="container">
+        <!-- OPCIÓN 1: EMOJIS (ACTUAL) -->
+        <div class="option">
+            <h2>Opción Actual (Emojis Unicode)</h2>
+            <p style="color: #999; font-size: 12px;">En Windows se ven como códigos: MX, FR</p>
+            <div class="flags">
+                <div class="flag-item">
+                    <div class="flag">🇲🇽</div>
+                    <div class="label">México</div>
+                </div>
+                <div class="flag-item">
+                    <div class="flag">🇫🇷</div>
+                    <div class="label">Francia</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPCIÓN 2: SVG FLAG-ICONS -->
+        <div class="option">
+            <h2>Opción SVG (flag-icons)</h2>
+            <p style="color: #999; font-size: 12px;">Funciona perfectamente en Windows</p>
+            <div class="flags">
+                <div class="flag-item">
+                    <span class="flag-icons flag-icons-4x3 fi fi-mx"></span>
+                    <div class="label">México</div>
+                </div>
+                <div class="flag-item">
+                    <span class="flag-icons flag-icons-4x3 fi fi-fr"></span>
+                    <div class="label">Francia</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

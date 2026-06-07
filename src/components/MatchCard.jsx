@@ -2,6 +2,7 @@ import { TEAMS } from '../data/teams'
 import { GROUP_COLORS } from '../data/groupColors'
 import { useIsMobile } from '../hooks/useIsMobile'
 import { calcPts } from '../utils/scoring'
+import Flag from './Flag'
 import styles from '../styles/MatchCard.module.css'
 
 export default function MatchCard({
@@ -214,7 +215,7 @@ export default function MatchCard({
 
       <div className={styles.matchBody}>
         <div className={styles.team}>
-          <span className={styles.flag}>{h?.f}</span>
+          <span className={styles.flag}>{h && <Flag teamCode={h.c} size="2.5rem" />}</span>
           {homeOptions.length > 0 && isAdmin && !h ? (
             <select
               className={styles.thirdSelector}
@@ -376,7 +377,7 @@ export default function MatchCard({
                 />
               )}
               <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
-              <span className={styles.flag}>{a?.f}</span>
+              <span className={styles.flag}>{a && <Flag teamCode={a.c} size="2.5rem" />}</span>
             </>
           )}
         </div>
