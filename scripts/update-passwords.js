@@ -15,8 +15,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const PARTICIPANTS = [
-  'Laura', 'Lucía', 'Olivia', 'Eva', 'Pablo', 'Lucas', 'Darío',
-  'Elena', 'Javi', 'Nic', 'Jose M.', 'Charo', 'Abuelo'
+  'Lucía', 'Olivia', 'Eva', 'Pablo', 'Lucas', 'Darío',
+  'Elena', 'Javi', 'Nic', 'Jose', 'Charo', 'Abuelo'
 ];
 
 async function updatePasswords() {
