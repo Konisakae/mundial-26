@@ -326,6 +326,16 @@ export default function Header({
                       )}
                       <span className={styles.chevron} style={{transform: showParticipantDropdown ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
                     </button>
+
+                    <button
+                      onClick={() => window.location.reload()}
+                      className={styles.participantDropdownBtn}
+                      title="Recargar página para sincronizar datos desde Firestore"
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      ↻ Recargar
+                    </button>
+
                     {showParticipantDropdown && (
                       <div
                         className={styles.participantDropdownMenu}
