@@ -57,10 +57,10 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
     matches = MATCHES.filter(m => m.ph === phase)
   }
 
-  // Detectar jornadas/fases con datos
+  // Detectar jornadas/fases con datos reales
   const jornadasWithData = [1, 2, 3].filter(j => {
     const jMatches = getMatchesForJornada(MATCHES, j)
-    return jMatches.some(m => actuals[m.id] || participants.some(p => predictions[p]?.[m.id]))
+    return jMatches.some(m => actuals[m.id])
   })
 
   const phasesWithData = ['G', 'R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN'].filter(ph => {
