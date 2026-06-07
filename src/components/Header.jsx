@@ -326,24 +326,6 @@ export default function Header({
                       )}
                       <span className={styles.chevron} style={{transform: showParticipantDropdown ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
                     </button>
-
-                    <button
-                      onClick={() => window.location.reload()}
-                      title="Recargar datos"
-                      style={{
-                        marginLeft: '0.5rem',
-                        fontSize: '0.9rem',
-                        padding: '0.35rem 0.5rem',
-                        background: 'rgba(0, 217, 255, 0.15)',
-                        border: '1px solid #00d9ff',
-                        borderRadius: '0.25rem',
-                        color: '#00d9ff',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      ↻
-                    </button>
-
                     {showParticipantDropdown && (
                       <div
                         className={styles.participantDropdownMenu}
@@ -457,6 +439,23 @@ export default function Header({
                 {loginError && <div style={{color: '#ff6464', fontSize: '0.75rem', marginTop: '0.25rem', textAlign: 'center'}}>{loginError}</div>}
               </div>
             )}
+
+            <button
+              onClick={() => window.location.reload()}
+              title="Recargar datos desde Firestore"
+              style={{
+                fontSize: '1rem',
+                padding: '0.4rem 0.6rem',
+                background: 'rgba(0, 217, 255, 0.15)',
+                border: '1px solid #00d9ff',
+                borderRadius: '0.25rem',
+                color: '#00d9ff',
+                cursor: 'pointer',
+                marginLeft: 'auto'
+              }}
+            >
+              ↻
+            </button>
           </div>
         </div>
 
