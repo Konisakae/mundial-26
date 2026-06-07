@@ -8,14 +8,14 @@ import TodasLayout2 from './TodasLayout2'
 import TodasLayout3 from './TodasLayout3'
 import styles from '../styles/Todas.module.css'
 
-export default function Todas({ participants, phase, setPhase, predictions, actuals, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, tercerPuestoSubstitutions, finalSubstitutions, selectedThirds = {}, availableThirds = {} }) {
+export default function Todas({ participants, phase, setPhase, predictions, actuals, resultsConfirmed = {}, r16Substitutions, octavosSubstitutions, cuartosSubstitutions, semifinalSubstitutions, tercerPuestoSubstitutions, finalSubstitutions, selectedThirds = {}, availableThirds = {} }) {
   const [layoutView, setLayoutView] = useState(3)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   // Detectar jornadas/fases con datos
+  // Para jornadas 1-3 en Estadísticas: mostrar jornadas con resultados confirmados + la siguiente
   const jornadasWithData = [1, 2, 3].filter(j => {
-    const jMatches = getMatchesForJornada(MATCHES, j)
-    return jMatches.some(m => actuals[m.id] || participants.some(p => predictions[p]?.[m.id]))
+    return resultsConfirmed[j] || j <= (Object.keys(resultsConfirmed).filter(k => resultsConfirmed[k]).length + 1)
   })
 
   const phasesWithData = ['G', 'R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN'].filter(ph => {

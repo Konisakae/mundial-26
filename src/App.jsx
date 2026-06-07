@@ -1343,6 +1343,7 @@ export default function App() {
             setGroup={setGroup}
             predictions={getPredictionsForScoring()}
             actuals={actuals}
+            resultsConfirmed={resultsConfirmed}
             r16Substitutions={r16Substitutions}
             octavosSubstitutions={octavosSubstitutions}
             cuartosSubstitutions={cuartosSubstitutions}
