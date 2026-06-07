@@ -143,9 +143,18 @@ export default function Header({
                   <span className={styles.scoreText}>{totalPts} pts</span>
                   <button
                     onClick={() => window.location.reload()}
-                    className={styles.reloadBtn}
                     title="Recargar página para sincronizar datos"
-                    style={{ marginLeft: '1rem', fontSize: '1rem', padding: '0.25rem 0.5rem' }}
+                    style={{
+                      marginLeft: '1rem',
+                      fontSize: '1.2rem',
+                      padding: '0.5rem 0.75rem',
+                      background: 'rgba(0, 217, 255, 0.2)',
+                      border: '1px solid #00d9ff',
+                      borderRadius: '0.375rem',
+                      color: '#00d9ff',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}
                   >
                     ↻
                   </button>
