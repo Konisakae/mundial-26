@@ -191,6 +191,15 @@ export default function App() {
     }
 
     initializeParticipants()
+
+    // Auto-reload page on first load to ensure fresh data from Firestore
+    const hasReloaded = sessionStorage.getItem('wc26_reloaded')
+    if (!hasReloaded) {
+      sessionStorage.setItem('wc26_reloaded', 'true')
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    }
   }, [])
 
   // Generate elimination matches when R16 subs are loaded from Firestore
