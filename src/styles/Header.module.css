@@ -643,7 +643,7 @@
   align-items: center;
   justify-content: center;
   margin-left: auto;
-  padding: 0.4rem 0.75rem;
+  padding: .4rem .6rem;
   border-radius: 6px;
   border: 1px solid rgba(0, 217, 255, 0.25);
   background: rgba(0, 217, 255, 0.08);
@@ -652,8 +652,7 @@
   transition: all 0.3s;
   outline: none;
   font-weight: 500;
-  font-size: 0.9rem;
-  height: auto;
+  font-size: .75rem;
 }
 
 .reloadBtn:hover {
