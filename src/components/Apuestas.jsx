@@ -46,8 +46,10 @@ export default function Apuestas({
   const getMaxAccessibleJornada = (p) => {
     if (isAdmin) return 3
 
+    // Para jornadas 1-3: mostrar todas las jornadas (no dependen de resultados confirmados)
+    // Cada jornada solo requiere que la anterior esté confirmada por el participante
     for (let j = 3; j >= 1; j--) {
-      if (resultsConfirmed[j]) {
+      if (confirmed[j]) {
         return Math.min(j + 1, 3)
       }
     }
