@@ -182,13 +182,17 @@ export default function App() {
     if (hasInitialized) return
 
     const initializeParticipants = async () => {
-      const parts = DEFAULT_PARTICIPANTS
-      for (const part of parts) {
-        const password = FIXED_PASSWORDS[part] || 'default'
-        await initializeParticipant(part, password)
+      try {
+        const parts = DEFAULT_PARTICIPANTS
+        for (const part of parts) {
+          const password = FIXED_PASSWORDS[part] || 'default'
+          await initializeParticipant(part, password)
+        }
+        console.log('[App] Participants initialized in Firestore')
+        localStorage.setItem('wc26_participants_initialized', 'true')
+      } catch (err) {
+        console.error('[App] Error initializing participants:', err)
       }
-      console.log('[App] Participants initialized in Firestore')
-      localStorage.setItem('wc26_participants_initialized', 'true')
     }
 
     initializeParticipants()
