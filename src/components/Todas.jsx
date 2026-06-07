@@ -12,10 +12,10 @@ export default function Todas({ participants, phase, setPhase, predictions, actu
   const [layoutView, setLayoutView] = useState(3)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
-  // Detectar jornadas/fases con datos
+  // Detectar jornadas/fases con datos reales
   const jornadasWithData = [1, 2, 3].filter(j => {
     const jMatches = getMatchesForJornada(MATCHES, j)
-    return jMatches.some(m => actuals[m.id] || participants.some(p => predictions[p]?.[m.id]))
+    return jMatches.some(m => actuals[m.id])
   })
 
   const phasesWithData = ['G', 'R16', 'OCT', 'CTO', 'SEMI', '3P', 'FIN'].filter(ph => {
