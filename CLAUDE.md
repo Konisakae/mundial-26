@@ -13,10 +13,10 @@ Este es un nuevo proyecto hecho correctamente desde cero:
 
 - Frontend: React + Vite
 - Estilos: CSS Modules (NO inline styles)
-- Almacenamiento local: localStorage (temporal)
-- Base de datos: Supabase (después)
-- Autenticación: Supabase Auth (después)
-- Deploy: Vercel (al final)
+- Almacenamiento local: localStorage (instantáneo)
+- Base de datos: Firebase Firestore (cloud)
+- Autenticación: Nombre + contraseña (validada en Firestore)
+- Deploy: Vercel (production)
 
 ## Estructura
 
@@ -41,11 +41,12 @@ src/
 
 ## Fases del proyecto
 
-1. **Fase 1 - Diseño**: Crear interfaz visual que coincida con antes.png
-2. **Fase 2 - Funcionamiento**: Lógica, cálculos, interactividad (aquí refinamos reglas si es necesario)
-3. **Fase 3 - Autenticación local**: Múltiples usuarios, contraseñas
-4. **Fase 4 - Supabase**: Migrar a base de datos en la nube
-5. **Fase 5 - Vercel**: Desplegar al mundo
+1. ✅ **Fase 1 - Diseño**: Interfaz visual completa
+2. ✅ **Fase 2 - Funcionamiento**: Lógica, cálculos, interactividad
+3. ✅ **Fase 3 - Autenticación local**: 13 usuarios con contraseñas
+4. ✅ **Fase 4 - Firebase**: Base de datos en la nube
+5. ✅ **Fase 5 - Vercel**: En producción (mundial-26-one.vercel.app)
+6. ⏳ **Fase 6 - Seguridad**: Firestore Rules por dominio (ver SECURITY.md)
 
 ## Datos del proyecto
 
