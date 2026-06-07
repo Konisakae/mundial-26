@@ -192,6 +192,7 @@ export default function App() {
     }
 
     initializeParticipants()
+    console.log('[App] After initializeParticipants')
 
     // Auto-reload page on first load to ensure fresh data from Firestore
     const hasReloaded = sessionStorage.getItem('wc26_reloaded')
