@@ -215,7 +215,7 @@ export default function MatchCard({
 
       <div className={styles.matchBody}>
         <div className={styles.team}>
-          <span className={styles.flag}>{h && <Flag teamCode={h.c} size="2.5rem" />}</span>
+          <span className={styles.flag}>{h && <Flag teamCode={h.c} size="1.75rem" />}</span>
           {homeOptions.length > 0 && isAdmin && !h ? (
             <select
               className={styles.thirdSelector}
@@ -377,7 +377,7 @@ export default function MatchCard({
                 />
               )}
               <span className={styles.name}>{getTeamDisplay(match.a, a, isMobile)}</span>
-              <span className={styles.flag}>{a && <Flag teamCode={a.c} size="2.5rem" />}</span>
+              <span className={styles.flag}>{a && <Flag teamCode={a.c} size="1.75rem" />}</span>
             </>
           )}
         </div>
