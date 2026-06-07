@@ -13,8 +13,8 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if 
         // Permitir desde Vercel (producción)
-        (request.headers['origin'] == 'https://mundial-26-one.vercel.app' ||
-         request.headers['referer'].startsWith('https://mundial-26-one.vercel.app')) ||
+        (request.headers['origin'] == 'https://mundial-26-los-ropers.vercel.app' ||
+         request.headers['referer'].startsWith('https://mundial-26-los-ropers.vercel.app')) ||
         // Permitir desde localhost (desarrollo local)
         (request.headers['origin'] == 'http://localhost:5173' ||
          request.headers['referer'].startsWith('http://localhost:5173')) ||
