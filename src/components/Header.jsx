@@ -141,6 +141,14 @@ export default function Header({
                   </div>
                   <span className={styles.participantName}>{participant}</span>
                   <span className={styles.scoreText}>{totalPts} pts</span>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className={styles.reloadBtn}
+                    title="Recargar página para sincronizar datos"
+                    style={{ marginLeft: '1rem', fontSize: '1rem', padding: '0.25rem 0.5rem' }}
+                  >
+                    ↻
+                  </button>
                 </div>
               )}
               <button
@@ -326,16 +334,6 @@ export default function Header({
                       )}
                       <span className={styles.chevron} style={{transform: showParticipantDropdown ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
                     </button>
-
-                    <button
-                      onClick={() => window.location.reload()}
-                      className={styles.participantDropdownBtn}
-                      title="Recargar página para sincronizar datos desde Firestore"
-                      style={{ marginLeft: '0.5rem' }}
-                    >
-                      ↻ Recargar
-                    </button>
-
                     {showParticipantDropdown && (
                       <div
                         className={styles.participantDropdownMenu}
