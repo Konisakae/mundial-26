@@ -61,6 +61,7 @@ export default function App() {
   const [r16MatchupsConfirmed, setR16MatchupsConfirmed] = useState(false)
 
   useEffect(() => {
+    console.log('[App] useEffect inicial ejecutándose')
     const parts = DEFAULT_PARTICIPANTS
     setParticipants(parts)
     // Sync to Firestore in background (non-blocking)
