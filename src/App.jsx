@@ -195,20 +195,24 @@ export default function App() {
       }
     }
 
-    initializeParticipants()
-    console.log('[App] After initializeParticipants')
+    console.log('[App] Before initializeParticipants')
+    initializeParticipants().then(() => {
+      console.log('[App] After initializeParticipants (async done)')
 
-    // Auto-reload page on first load to ensure fresh data from Firestore
-    const hasReloaded = sessionStorage.getItem('wc26_reloaded')
-    console.log('[App] hasReloaded:', hasReloaded)
-    if (!hasReloaded) {
-      console.log('[App] Setting reload flag and reloading in 2 seconds')
-      sessionStorage.setItem('wc26_reloaded', 'true')
-      setTimeout(() => {
-        console.log('[App] Reloading page')
-        window.location.reload()
-      }, 2000)
-    }
+      // Auto-reload page on first load to ensure fresh data from Firestore
+      const hasReloaded = sessionStorage.getItem('wc26_reloaded')
+      console.log('[App] hasReloaded:', hasReloaded)
+      if (!hasReloaded) {
+        console.log('[App] Setting reload flag and reloading in 2 seconds')
+        sessionStorage.setItem('wc26_reloaded', 'true')
+        setTimeout(() => {
+          console.log('[App] Reloading page')
+          window.location.reload()
+        }, 2000)
+      }
+    }).catch(err => {
+      console.error('[App] Error in initializeParticipants chain:', err)
+    })
   }, [])
 
   // Generate elimination matches when R16 subs are loaded from Firestore
