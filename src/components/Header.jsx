@@ -443,16 +443,7 @@ export default function Header({
             <button
               onClick={() => window.location.reload()}
               title="Recargar datos"
-              style={{
-                marginLeft: 'auto',
-                fontSize: '0.9rem',
-                padding: '0.35rem 0.5rem',
-                background: 'rgba(0, 217, 255, 0.15)',
-                border: '1px solid #00d9ff',
-                borderRadius: '0.25rem',
-                color: '#00d9ff',
-                cursor: 'pointer'
-              }}
+              className={styles.reloadBtn}
             >
               ↻
             </button>

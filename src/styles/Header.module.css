@@ -637,3 +637,33 @@
 .tabStandalone {
   margin-left: auto;
 }
+
+.reloadBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 217, 255, 0.25);
+  background: rgba(0, 217, 255, 0.08);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.3s;
+  outline: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  height: 2.5rem;
+}
+
+.reloadBtn:hover {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: rgba(0, 217, 255, 0.5);
+  color: #e2e8f0;
+}
+
+.reloadBtn:focus {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: #00d9ff;
+  color: #00d9ff;
+}
