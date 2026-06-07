@@ -194,9 +194,12 @@ export default function App() {
 
     // Auto-reload page on first load to ensure fresh data from Firestore
     const hasReloaded = sessionStorage.getItem('wc26_reloaded')
+    console.log('[App] hasReloaded:', hasReloaded)
     if (!hasReloaded) {
+      console.log('[App] Setting reload flag and reloading in 2 seconds')
       sessionStorage.setItem('wc26_reloaded', 'true')
       setTimeout(() => {
+        console.log('[App] Reloading page')
         window.location.reload()
       }, 2000)
     }
