@@ -442,16 +442,16 @@ export default function Header({
 
             <button
               onClick={() => window.location.reload()}
-              title="Recargar datos desde Firestore"
+              title="Recargar datos"
               style={{
-                fontSize: '1rem',
-                padding: '0.4rem 0.6rem',
+                marginLeft: 'auto',
+                fontSize: '0.9rem',
+                padding: '0.35rem 0.5rem',
                 background: 'rgba(0, 217, 255, 0.15)',
                 border: '1px solid #00d9ff',
                 borderRadius: '0.25rem',
                 color: '#00d9ff',
-                cursor: 'pointer',
-                marginLeft: 'auto'
+                cursor: 'pointer'
               }}
             >
               ↻
