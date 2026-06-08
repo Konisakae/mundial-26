@@ -13,7 +13,7 @@ export const TEAMS = {
   SUE:{n:'Suecia',c:'SUE',f:'🇸🇪'},        TUN:{n:'Túnez',c:'TUN',f:'🇹🇳'},
   ESP:{n:'España',c:'ESP',f:'🇪🇸'},        CVE:{n:'Cabo Verde',c:'CVE',f:'🇨🇻'},
   BEL:{n:'Bélgica',c:'BEL',f:'🇧🇪'},      EGI:{n:'Egipto',c:'EGI',f:'🇪🇬'},
-  KSA:{n:'Arabia Saudita',c:'KSA',f:'🇸🇦'},    URU:{n:'Uruguay',c:'URU',f:'🇺🇾'},
+  KSA:{n:'Arabia Saudí',c:'KSA',f:'🇸🇦'},    URU:{n:'Uruguay',c:'URU',f:'🇺🇾'},
   IRN:{n:'Irán',c:'IRN',f:'🇮🇷'},         NZE:{n:'Nueva Zelanda',c:'NZE',f:'🇳🇿'},
   FRA:{n:'Francia',c:'FRA',f:'🇫🇷'},       SEN:{n:'Senegal',c:'SEN',f:'🇸🇳'},
   IRK:{n:'Irak',c:'IRK',f:'🇮🇶'},         NOR:{n:'Noruega',c:'NOR',f:'🇳🇴'},
