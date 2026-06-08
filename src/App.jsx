@@ -132,6 +132,9 @@ export default function App() {
 
     // Sync from Firestore in background
     const syncFromFirebase = () => {
+      const now = new Date().toLocaleTimeString('es-ES')
+      console.log(`[${now}] 🔄 Sincronizando datos desde Firebase...`)
+
       getAsync('wc26_actuals', {}).then(fbActuals => {
         if (fbActuals && Object.keys(fbActuals).length > 0) {
           setActuals(fbActuals)
@@ -176,6 +179,7 @@ export default function App() {
     }
 
     // Sync immediately on mount
+    console.log('📱 Aplicación iniciada - cargando datos iniciales...')
     syncFromFirebase()
 
     // Sync every 10 minutes
