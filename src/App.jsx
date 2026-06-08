@@ -136,46 +136,53 @@ export default function App() {
       console.log(`[${now}] 🔄 Sincronizando datos desde Firebase...`)
 
       getAsync('wc26_actuals', {}).then(fbActuals => {
+        console.log('✅ Actuals cargados:', Object.keys(fbActuals || {}).length, 'partidos')
         if (fbActuals && Object.keys(fbActuals).length > 0) {
           setActuals(fbActuals)
         }
-      })
+      }).catch(err => console.error('❌ Error cargando actuals:', err))
 
       getAsync('wc26_predictions', {}).then(fbPreds => {
+        console.log('✅ Predictions cargadas:', Object.keys(fbPreds || {}).length, 'participantes')
         if (fbPreds && Object.keys(fbPreds).length > 0) {
           setPredictions(storage.ensureNewFormat(fbPreds))
         }
-      })
+      }).catch(err => console.error('❌ Error cargando predictions:', err))
 
       getAsync('wc26_resultsConfirmed', resConfirmed).then(fbConfirmed => {
+        console.log('✅ ResultsConfirmed cargadas:', fbConfirmed)
         if (fbConfirmed && Object.keys(fbConfirmed).length > 0) {
           setResultsConfirmed(fbConfirmed)
         }
-      })
+      }).catch(err => console.error('❌ Error cargando resultsConfirmed:', err))
 
       getAsync('wc26_selectedThirds', selThirds).then(fbThirds => {
+        console.log('✅ SelectedThirds cargadas:', Object.keys(fbThirds || {}).length)
         if (fbThirds && Object.keys(fbThirds).length > 0) {
           setSelectedThirds(fbThirds)
         }
-      })
+      }).catch(err => console.error('❌ Error cargando selectedThirds:', err))
 
       getAsync('wc26_r16Substitutions', subs).then(fbSubs => {
+        console.log('✅ R16Subs cargadas:', Object.keys(fbSubs || {}).length)
         if (fbSubs && Object.keys(fbSubs).length > 0) {
           setR16Substitutions(fbSubs)
         }
-      })
+      }).catch(err => console.error('❌ Error cargando r16Subs:', err))
 
       getAsync('wc26_r16MatchupsConfirmed', r16MatchConf).then(fbR16Match => {
+        console.log('✅ R16MatchupsConfirmed cargada:', fbR16Match)
         if (fbR16Match) {
           setR16MatchupsConfirmed(fbR16Match)
         }
-      })
+      }).catch(err => console.error('❌ Error cargando r16MatchupsConfirmed:', err))
 
       getAsync('wc26_r16Confirmed', r16Conf).then(fbR16Conf => {
+        console.log('✅ R16Confirmed cargada:', fbR16Conf)
         if (fbR16Conf) {
           setR16Confirmed(fbR16Conf)
         }
-      })
+      }).catch(err => console.error('❌ Error cargando r16Confirmed:', err))
     }
 
     // Sync immediately on mount
@@ -183,9 +190,15 @@ export default function App() {
     syncFromFirebase()
 
     // Sync every 10 minutes
-    const interval = setInterval(syncFromFirebase, 10 * 60 * 1000)
+    console.log('⏰ Intervalo de sincronización configurado (cada 10 minutos)')
+    const interval = setInterval(() => {
+      syncFromFirebase()
+    }, 10 * 60 * 1000)
 
-    return () => clearInterval(interval)
+    return () => {
+      console.log('🛑 Limpiando intervalo de sincronización')
+      clearInterval(interval)
+    }
   }, [])
 
   // Initialize participants in Firestore (only once)
