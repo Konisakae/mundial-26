@@ -144,31 +144,31 @@ export default function App() {
     })
 
     // Sync confirmations from Firestore
-    getAsync('wc26_resultsConfirmed', resConfirmed).then(fbConfirmed => {
+    getAsync('wc26_resultsConfirmed', {}).then(fbConfirmed => {
       if (fbConfirmed && Object.keys(fbConfirmed).length > 0) {
         setResultsConfirmed(fbConfirmed)
       }
     })
 
-    getAsync('wc26_selectedThirds', selThirds).then(fbThirds => {
+    getAsync('wc26_selectedThirds', {}).then(fbThirds => {
       if (fbThirds && Object.keys(fbThirds).length > 0) {
         setSelectedThirds(fbThirds)
       }
     })
 
-    getAsync('wc26_r16Substitutions', subs).then(fbSubs => {
+    getAsync('wc26_r16Substitutions', {}).then(fbSubs => {
       if (fbSubs && Object.keys(fbSubs).length > 0) {
         setR16Substitutions(fbSubs)
       }
     })
 
-    getAsync('wc26_r16MatchupsConfirmed', r16MatchConf).then(fbR16Match => {
+    getAsync('wc26_r16MatchupsConfirmed', false).then(fbR16Match => {
       if (fbR16Match) {
         setR16MatchupsConfirmed(fbR16Match)
       }
     })
 
-    getAsync('wc26_r16Confirmed', r16Conf).then(fbR16Conf => {
+    getAsync('wc26_r16Confirmed', false).then(fbR16Conf => {
       if (fbR16Conf) {
         setR16Confirmed(fbR16Conf)
       }
