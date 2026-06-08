@@ -11,8 +11,6 @@ import TablerTrendingUpIcon from './TablerTrendingUpIcon'
 import TablerSettingsIcon from './TablerSettingsIcon'
 import TablerEditIcon from './TablerEditIcon'
 import TablerListDetailsIcon from './TablerListDetailsIcon'
-import TablerAdjustmentsAltIcon from './TablerAdjustmentsAltIcon'
-import TablerTrashIcon from './TablerTrashIcon'
 import styles from '../styles/Header.module.css'
 
 export default function Header({
@@ -39,13 +37,11 @@ export default function Header({
   const [participantCodeVal, setParticipantCodeVal] = useState('')
   const [showParticipantCode, setShowParticipantCode] = useState(false)
   const [showParticipantDropdown, setShowParticipantDropdown] = useState(false)
-  const [showSimulations, setShowSimulations] = useState(false)
   const [loginError, setLoginError] = useState('')
   const [dropdownPos, setDropdownPos] = useState({ top: 0, right: 0, width: 0 })
   const [dropdownReady, setDropdownReady] = useState(false)
   const dropdownRef = useRef(null)
   const participantDropdownRef = useRef(null)
-  const simulationDropdownRef = useRef(null)
   const initialsMap = useMemo(() => generateInitials(participants), [participants])
 
   useEffect(() => {
@@ -67,16 +63,13 @@ export default function Header({
       if (participantDropdownRef.current && !participantDropdownRef.current.contains(e.target)) {
         setShowParticipantDropdown(false)
       }
-      if (simulationDropdownRef.current && !simulationDropdownRef.current.contains(e.target)) {
-        setShowSimulations(false)
-      }
     }
 
-    if (showParticipantDropdown || showSimulations) {
+    if (showParticipantDropdown) {
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [showParticipantDropdown, showSimulations])
+  }, [showParticipantDropdown])
 
   const handleAdd = () => {
     const name = newName.trim()
@@ -168,126 +161,12 @@ export default function Header({
           )}
 
           <div className={styles.rightControls}>
-            {isAdmin && (
-              <div style={{ position: 'relative' }} ref={simulationDropdownRef}>
-                <button
-                  onClick={() => setShowSimulations(!showSimulations)}
-                  className={styles.simulateBtn}
-                  title="Menú de simulaciones"
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                >
-                  <TablerAdjustmentsAltIcon size={18} />
-                  <span>SIM</span>
-                </button>
-                {showSimulations && (
-                  <div className={styles.simulationsMenu}>
-                    <button
-                      onClick={() => simulate(1)}
-                      className={styles.simulateBtn}
-                      title="Simular jornada 1: 24 partidos (1-24)"
-                    >
-                      SJ1 {simulatedJornadas[1] ? '✓' : ''}
-                    </button>
-
-                    <button
-                      onClick={() => simulate(2)}
-                      disabled={!simulatedJornadas[1]}
-                      className={styles.simulateBtn}
-                      title="Simular jornada 2: 24 partidos (25-48)"
-                      style={{ opacity: simulatedJornadas[1] ? 1 : 0.5 }}
-                    >
-                      SJ2 {simulatedJornadas[2] ? '✓' : simulatedJornadas[1] ? '' : '🔒'}
-                    </button>
-
-                    <button
-                      onClick={() => simulate(3)}
-                      disabled={!simulatedJornadas[1] || !simulatedJornadas[2]}
-                      className={styles.simulateBtn}
-                      title="Simular jornada 3: 24 partidos (49-72)"
-                      style={{ opacity: simulatedJornadas[1] && simulatedJornadas[2] ? 1 : 0.5 }}
-                    >
-                      SJ3 {simulatedJornadas[3] ? '✓' : simulatedJornadas[1] && simulatedJornadas[2] ? '' : '🔒'}
-                    </button>
-
-                    <button
-                      onClick={simulate16}
-                      disabled={!simulatedJornadas[1] || !simulatedJornadas[2] || !simulatedJornadas[3] || Object.keys(selectedThirds).length < 8}
-                      className={styles.simulateBtn}
-                      title="Simular dieciseisavos: 16 partidos (73-88)"
-                      style={{ opacity: (simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3] && Object.keys(selectedThirds).length >= 8) ? 1 : 0.5 }}
-                    >
-                      S16 {Object.keys(selectedThirds).length >= 8 ? '✓' : ''}
-                    </button>
-
-                    <button
-                      onClick={simulateOctavos}
-                      disabled={Object.keys(selectedThirds).length < 8}
-                      className={styles.simulateBtn}
-                      title="Simular octavos: 8 partidos (89-96)"
-                      style={{ opacity: (Object.keys(selectedThirds).length >= 8) ? 1 : 0.5 }}
-                    >
-                      S8 {simulatedPhases?.OCT ? '✓' : Object.keys(selectedThirds).length >= 8 ? '' : '🔒'}
-                    </button>
-
-                    <button
-                      onClick={simulateCuartos}
-                      disabled={!simulatedPhases?.OCT}
-                      className={styles.simulateBtn}
-                      title="Simular cuartos: 4 partidos (97-100)"
-                      style={{ opacity: simulatedPhases?.OCT ? 1 : 0.5 }}
-                    >
-                      S4 {simulatedPhases?.CTO ? '✓' : simulatedPhases?.OCT ? '' : '🔒'}
-                    </button>
-
-                    <button
-                      onClick={simulateSemis}
-                      disabled={!simulatedPhases?.CTO}
-                      className={styles.simulateBtn}
-                      title="Simular semifinales: 2 partidos (101-102)"
-                      style={{ opacity: simulatedPhases?.CTO ? 1 : 0.5 }}
-                    >
-                      S2 {simulatedPhases?.SEMI ? '✓' : simulatedPhases?.CTO ? '' : '🔒'}
-                    </button>
-
-                    <button
-                      onClick={simulateThirdPlace}
-                      disabled={!simulatedPhases?.SEMI}
-                      className={styles.simulateBtn}
-                      title="Simular tercer puesto: 1 partido (103)"
-                      style={{ opacity: simulatedPhases?.SEMI ? 1 : 0.5 }}
-                    >
-                      S3P {simulatedPhases?.['3P'] ? '✓' : simulatedPhases?.SEMI ? '' : '🔒'}
-                    </button>
-
-                    <button
-                      onClick={simulateFinal}
-                      disabled={!simulatedPhases?.SEMI}
-                      className={styles.simulateBtn}
-                      title="Simular final: 1 partido (104)"
-                      style={{ opacity: simulatedPhases?.SEMI ? 1 : 0.5 }}
-                    >
-                      SF {simulatedPhases?.FIN ? '✓' : simulatedPhases?.SEMI ? '' : '🔒'}
-                    </button>
-
-                    <button
-                      onClick={clearAllData}
-                      className={styles.clearBtn}
-                      title="Borrar toda la simulación"
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                      <TablerTrashIcon size={18} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
 
             {isAdmin && (
               <button
                 onClick={() => {
                   setIsAdmin(false)
                   setParticipant('')
-                  setShowSimulations(false)
                   setShowParticipantDropdown(false)
                   setTab('resultados')
                   clearSession()
