@@ -136,52 +136,50 @@ export default function App() {
       console.log(`[${now}] 🔄 Sincronizando datos desde Firebase...`)
 
       getAsync('wc26_actuals', {}).then(fbActuals => {
-        console.log('✅ Actuals cargados:', Object.keys(fbActuals || {}).length, 'partidos')
-        if (fbActuals && Object.keys(fbActuals).length > 0) {
-          setActuals(fbActuals)
-        }
+        const count = Object.keys(fbActuals || {}).length
+        console.log('✅ Actuals cargados:', count, 'partidos → actualizando estado...')
+        setActuals(fbActuals || {})
+        console.log('✅ STATE ACTUALIZADO: actuals')
       }).catch(err => console.error('❌ Error cargando actuals:', err))
 
       getAsync('wc26_predictions', {}).then(fbPreds => {
-        console.log('✅ Predictions cargadas:', Object.keys(fbPreds || {}).length, 'participantes')
-        if (fbPreds && Object.keys(fbPreds).length > 0) {
-          setPredictions(storage.ensureNewFormat(fbPreds))
-        }
+        const count = Object.keys(fbPreds || {}).length
+        console.log('✅ Predictions cargadas:', count, 'participantes → actualizando estado...')
+        const formatted = storage.ensureNewFormat(fbPreds || {})
+        setPredictions(formatted)
+        console.log('✅ STATE ACTUALIZADO: predictions')
       }).catch(err => console.error('❌ Error cargando predictions:', err))
 
       getAsync('wc26_resultsConfirmed', resConfirmed).then(fbConfirmed => {
-        console.log('✅ ResultsConfirmed cargadas:', fbConfirmed)
-        if (fbConfirmed && Object.keys(fbConfirmed).length > 0) {
-          setResultsConfirmed(fbConfirmed)
-        }
+        console.log('✅ ResultsConfirmed cargadas:', fbConfirmed, '→ actualizando estado...')
+        setResultsConfirmed(fbConfirmed || {})
+        console.log('✅ STATE ACTUALIZADO: resultsConfirmed')
       }).catch(err => console.error('❌ Error cargando resultsConfirmed:', err))
 
       getAsync('wc26_selectedThirds', selThirds).then(fbThirds => {
-        console.log('✅ SelectedThirds cargadas:', Object.keys(fbThirds || {}).length)
-        if (fbThirds && Object.keys(fbThirds).length > 0) {
-          setSelectedThirds(fbThirds)
-        }
+        const count = Object.keys(fbThirds || {}).length
+        console.log('✅ SelectedThirds cargadas:', count, '→ actualizando estado...')
+        setSelectedThirds(fbThirds || {})
+        console.log('✅ STATE ACTUALIZADO: selectedThirds')
       }).catch(err => console.error('❌ Error cargando selectedThirds:', err))
 
       getAsync('wc26_r16Substitutions', subs).then(fbSubs => {
-        console.log('✅ R16Subs cargadas:', Object.keys(fbSubs || {}).length)
-        if (fbSubs && Object.keys(fbSubs).length > 0) {
-          setR16Substitutions(fbSubs)
-        }
+        const count = Object.keys(fbSubs || {}).length
+        console.log('✅ R16Subs cargadas:', count, '→ actualizando estado...')
+        setR16Substitutions(fbSubs || {})
+        console.log('✅ STATE ACTUALIZADO: r16Substitutions')
       }).catch(err => console.error('❌ Error cargando r16Subs:', err))
 
       getAsync('wc26_r16MatchupsConfirmed', r16MatchConf).then(fbR16Match => {
-        console.log('✅ R16MatchupsConfirmed cargada:', fbR16Match)
-        if (fbR16Match) {
-          setR16MatchupsConfirmed(fbR16Match)
-        }
+        console.log('✅ R16MatchupsConfirmed cargada:', fbR16Match, '→ actualizando estado...')
+        setR16MatchupsConfirmed(fbR16Match || false)
+        console.log('✅ STATE ACTUALIZADO: r16MatchupsConfirmed')
       }).catch(err => console.error('❌ Error cargando r16MatchupsConfirmed:', err))
 
       getAsync('wc26_r16Confirmed', r16Conf).then(fbR16Conf => {
-        console.log('✅ R16Confirmed cargada:', fbR16Conf)
-        if (fbR16Conf) {
-          setR16Confirmed(fbR16Conf)
-        }
+        console.log('✅ R16Confirmed cargada:', fbR16Conf, '→ actualizando estado...')
+        setR16Confirmed(fbR16Conf || false)
+        console.log('✅ STATE ACTUALIZADO: r16Confirmed')
       }).catch(err => console.error('❌ Error cargando r16Confirmed:', err))
     }
 
