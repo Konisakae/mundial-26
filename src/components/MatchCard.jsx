@@ -406,10 +406,15 @@ export default function MatchCard({
 
       {!hideChampionDisplay && match.id === 104 && actual && (actual.h !== undefined || actual.a !== undefined) && (
         <div className={styles.champion}>
-          <span className={styles.championLabel}>Campeón:</span>
+          <span className={styles.championLabel}>⭐ Campeón:</span>
           <span className={styles.championValue}>
             {(() => {
-              const winner = actual.winner
+              let winner = actual.winner
+              // Si no hay winner explícito, calcular basado en goles
+              if (!winner && actual.h !== undefined && actual.a !== undefined) {
+                if (actual.h > actual.a) winner = 'h'
+                else if (actual.a > actual.h) winner = 'a'
+              }
               return winner === 'h' ? getTeamDisplay(match.h, h, isMobile) : winner === 'a' ? getTeamDisplay(match.a, a, isMobile) : '—'
             })()}
           </span>
