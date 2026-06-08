@@ -186,30 +186,6 @@ export default function App() {
     // Sync immediately on mount
     console.log('📱 Aplicación iniciada - cargando datos iniciales...')
     syncFromFirebase()
-
-    // Sync every 10 minutes with countdown
-    console.log('⏰ Intervalo de sincronización configurado (cada 10 minutos)')
-    let secondsLeft = 600
-
-    const countdownInterval = setInterval(() => {
-      secondsLeft--
-      const mins = Math.floor(secondsLeft / 60)
-      const secs = secondsLeft % 60
-
-      if (secondsLeft === 0) {
-        console.log('🔄 ¡Sincronizando ahora!')
-        syncFromFirebase()
-        secondsLeft = 600
-      } else if (secondsLeft % 10 === 0) {
-        // Mostrar countdown cada 10 segundos
-        console.log(`⏳ Próximo sync en: ${mins}m ${secs}s`)
-      }
-    }, 1000)
-
-    return () => {
-      console.log('🛑 Limpiando intervalos')
-      clearInterval(countdownInterval)
-    }
   }, [])
 
   // Initialize participants in Firestore (only once)
