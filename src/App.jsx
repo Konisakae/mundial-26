@@ -132,15 +132,23 @@ export default function App() {
 
     // Sync from Firestore in background
     const syncFromFirebase = () => {
-      const now = new Date().toLocaleTimeString('es-ES')
-      console.log(`[${now}] 🔄 Sincronizando datos desde Firebase...`)
+      try {
+        const now = new Date().toLocaleTimeString('es-ES')
+        console.log(`[${now}] 🔄 Sincronizando datos desde Firebase...`)
 
-      getAsync('wc26_actuals', {}).then(fbActuals => {
-        const count = Object.keys(fbActuals || {}).length
-        console.log('✅ Actuals cargados:', count, 'partidos → actualizando estado...')
-        setActuals(fbActuals || {})
-        console.log('✅ STATE ACTUALIZADO: actuals')
-      }).catch(err => console.error('❌ Error cargando actuals:', err))
+        getAsync('wc26_actuals', {}).then(fbActuals => {
+          try {
+            const count = Object.keys(fbActuals || {}).length
+            console.log('✅ Actuals cargados:', count, 'partidos → actualizando estado...')
+            setActuals(fbActuals || {})
+            console.log('✅ STATE ACTUALIZADO: actuals')
+          } catch (innerErr) {
+            console.error('❌ Error en setState de actuals:', innerErr)
+          }
+        }).catch(err => console.error('❌ Error cargando actuals:', err))
+      } catch (outerErr) {
+        console.error('❌ Error en syncFromFirebase:', outerErr)
+      }
 
       getAsync('wc26_predictions', {}).then(fbPreds => {
         const count = Object.keys(fbPreds || {}).length
