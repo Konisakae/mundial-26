@@ -304,11 +304,22 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   }, [participants, predictions, actuals])
 
   // Gráfica de evolución acumulada (ranking)
-  const allPhases = ['J1', 'J2', 'J3', 'R16', 'R8', 'R4', 'SF', '3P', 'F']
-  const allLabels = ['J1', 'J2', 'J3', 'R16', 'R8', 'R4', 'SF', '3P', 'F']
+  const allPhasesFullList = ['J1', 'J2', 'J3', 'R16', 'R8', 'R4', 'SF', '3P', 'F']
+  const phaseInternalMap = { 'J1': 1, 'J2': 2, 'J3': 3, 'R16': 'R16', 'R8': 'OCT', 'R4': 'CTO', 'SF': 'SEMI', '3P': '3P', 'F': 'FIN' }
 
-  // Determinar qué fases mostrar: todas, pero con datos null para las no confirmadas
-  const lastConfirmedIdx = lastConfirmedPhase ? allPhases.indexOf(lastConfirmedPhase) : -1
+  // Detectar última fase con datos (jornadas confirmadas o fases con resultados)
+  let lastPhaseWithDataIdx = -1
+  for (let i = 0; i < allPhasesFullList.length; i++) {
+    const phase = allPhasesFullList[i]
+    const internalPhase = phaseInternalMap[phase]
+    if (resultsConfirmed[internalPhase]) {
+      lastPhaseWithDataIdx = i
+    }
+  }
+
+  // Mostrar solo fases hasta la última con datos (confirmada o con resultados provisionales)
+  const allPhases = lastPhaseWithDataIdx >= 0 ? allPhasesFullList.slice(0, lastPhaseWithDataIdx + 1) : []
+  const allLabels = allPhases
 
   const rankingDatasets = participants.map((p, i) => {
     const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
