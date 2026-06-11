@@ -400,7 +400,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
           font: { size: 12 },
           stepSize: 1,
           callback: function(value) {
-            if (value >= 1 && value <= 13) {
+            if (value >= 1 && value <= 12) {
               return value + '°'
             }
             return ''
