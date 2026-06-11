@@ -305,9 +305,9 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
 
   // Gráfica de evolución acumulada (ranking)
   const allPhasesFullList = ['J1', 'J2', 'J3', 'R16', 'R8', 'R4', 'SF', '3P', 'F']
+  const allLabels = allPhasesFullList // Mostrar todas las fases en el eje X
 
-  // Detectar última fase con datos en actuals
-  let lastPhaseWithDataIdx = -1
+  // Detectar qué fases tienen datos para no dibujar null donde no hay nada
   const phaseToMatches = {
     'J1': getMatchesForJornada(MATCHES, 1),
     'J2': getMatchesForJornada(MATCHES, 2),
@@ -320,25 +320,20 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
     'F': MATCHES.filter(m => m.ph === 'FIN'),
   }
 
-  for (let i = 0; i < allPhasesFullList.length; i++) {
-    const phase = allPhasesFullList[i]
+  const phasesWithData = {}
+  for (const phase of allPhasesFullList) {
     const phaseMatches = phaseToMatches[phase] || []
-    const hasData = phaseMatches.some(m => actuals[m.id])
-    if (hasData) {
-      lastPhaseWithDataIdx = i
-    }
+    phasesWithData[phase] = phaseMatches.some(m => actuals[m.id])
   }
-
-  // Mostrar solo fases hasta la última con datos
-  const allPhases = lastPhaseWithDataIdx >= 0 ? allPhasesFullList.slice(0, lastPhaseWithDataIdx + 1) : ['J1']
-  const allLabels = allPhases
 
   const rankingDatasets = participants.map((p, i) => {
     const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
-    const points = allPhases.map((phase, idx) => {
-      // Mostrar ranking para fases confirmadas y también provisionales (no confirmadas)
-      // Las provisionales se actualizan en tiempo real conforme se agregan resultados
-      return rankingsByPhase[p]?.[phase] || 13
+    const points = allLabels.map((phase) => {
+      // Mostrar ranking solo para fases con datos, null para las vacías
+      if (phasesWithData[phase]) {
+        return rankingsByPhase[p]?.[phase] || 13
+      }
+      return null
     })
 
     const isSelected = selectedParticipant === null || selectedParticipant === p
