@@ -305,20 +305,32 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
 
   // Gráfica de evolución acumulada (ranking)
   const allPhasesFullList = ['J1', 'J2', 'J3', 'R16', 'R8', 'R4', 'SF', '3P', 'F']
-  const phaseInternalMap = { 'J1': 1, 'J2': 2, 'J3': 3, 'R16': 'R16', 'R8': 'OCT', 'R4': 'CTO', 'SF': 'SEMI', '3P': '3P', 'F': 'FIN' }
 
-  // Detectar última fase con datos (jornadas confirmadas o fases con resultados)
+  // Detectar última fase con datos en actuals
   let lastPhaseWithDataIdx = -1
+  const phaseToMatches = {
+    'J1': getMatchesForJornada(MATCHES, 1),
+    'J2': getMatchesForJornada(MATCHES, 2),
+    'J3': getMatchesForJornada(MATCHES, 3),
+    'R16': MATCHES.filter(m => m.ph === 'R16'),
+    'R8': MATCHES.filter(m => m.ph === 'OCT'),
+    'R4': MATCHES.filter(m => m.ph === 'CTO'),
+    'SF': MATCHES.filter(m => m.ph === 'SEMI'),
+    '3P': MATCHES.filter(m => m.ph === '3P'),
+    'F': MATCHES.filter(m => m.ph === 'FIN'),
+  }
+
   for (let i = 0; i < allPhasesFullList.length; i++) {
     const phase = allPhasesFullList[i]
-    const internalPhase = phaseInternalMap[phase]
-    if (resultsConfirmed[internalPhase]) {
+    const phaseMatches = phaseToMatches[phase] || []
+    const hasData = phaseMatches.some(m => actuals[m.id])
+    if (hasData) {
       lastPhaseWithDataIdx = i
     }
   }
 
-  // Mostrar solo fases hasta la última con datos (confirmada o con resultados provisionales)
-  const allPhases = lastPhaseWithDataIdx >= 0 ? allPhasesFullList.slice(0, lastPhaseWithDataIdx + 1) : []
+  // Mostrar solo fases hasta la última con datos
+  const allPhases = lastPhaseWithDataIdx >= 0 ? allPhasesFullList.slice(0, lastPhaseWithDataIdx + 1) : ['J1']
   const allLabels = allPhases
 
   const rankingDatasets = participants.map((p, i) => {
