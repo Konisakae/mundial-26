@@ -313,10 +313,9 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
   const rankingDatasets = participants.map((p, i) => {
     const color = AVATAR_COLORS[i % AVATAR_COLORS.length]
     const points = allPhases.map((phase, idx) => {
-      if (idx <= lastConfirmedIdx) {
-        return rankingsByPhase[p]?.[phase] || 13
-      }
-      return null // Datos no confirmados aparecen como vacíos
+      // Mostrar ranking para fases confirmadas y también provisionales (no confirmadas)
+      // Las provisionales se actualizan en tiempo real conforme se agregan resultados
+      return rankingsByPhase[p]?.[phase] || 13
     })
 
     const isSelected = selectedParticipant === null || selectedParticipant === p
