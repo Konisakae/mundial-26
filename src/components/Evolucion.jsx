@@ -393,7 +393,7 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       y: {
         beginAtZero: false,
         min: 0,
-        max: 14,
+        max: 13,
         reverse: true,
         ticks: {
           color: '#cbd5e1',
