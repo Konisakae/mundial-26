@@ -98,11 +98,9 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
           const score = calcPts(pred, actual, m) || 0
           puntos += score
 
-          if (pred.h === actual.h && pred.a === actual.a) {
+          if (score === 5) {
             aciertos++
-          } else if ((Number(pred.h) > Number(pred.a) && Number(actual.h) > Number(actual.a)) ||
-                     (Number(pred.h) === Number(pred.a) && Number(actual.h) === Number(actual.a)) ||
-                     (Number(pred.h) < Number(pred.a) && Number(actual.h) < Number(actual.a))) {
+          } else if (score > 0) {
             parciales++
           } else {
             fallos++
