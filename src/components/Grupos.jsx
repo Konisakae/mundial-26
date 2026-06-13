@@ -76,21 +76,10 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
                   backgroundColor: GROUP_COLORS[groupId]?.border,
                   color: 'white',
                   borderBottom: '1px solid rgba(0, 0, 0, 0.3)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  textShadow: '-0.5px -0.5px 0 #003bff, 0.5px -0.5px 0 #003bff, -0.5px 0.5px 0 #003bff, 0.5px 0.5px 0 #003bff',
                 }}
               >
-                <div
-                  style={{
-                    border: `2px solid ${GROUP_COLORS[groupId]?.border}`,
-                    backgroundColor: 'transparent',
-                    padding: '0.5rem 1rem',
-                    textShadow: '-0.5px -0.5px 0 #003bff, 0.5px -0.5px 0 #003bff, -0.5px 0.5px 0 #003bff, 0.5px 0.5px 0 #003bff',
-                  }}
-                >
-                  GRUPO {groupId}
-                </div>
+                GRUPO {groupId}
               </div>
 
               <div className={styles.table}>
