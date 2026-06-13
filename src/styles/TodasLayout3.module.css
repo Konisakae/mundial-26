@@ -245,7 +245,7 @@
   color: white;
   font-weight: 700;
   font-size: 0.875rem;
-  min-width: 2.5rem;
+  width: 4rem;
   text-align: center;
   flex-shrink: 0;
 }
