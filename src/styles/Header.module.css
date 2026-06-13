@@ -49,8 +49,6 @@
   letter-spacing: 0.05em;
   white-space: nowrap;
   z-index: 50;
-  -webkit-text-stroke: 0.7px white;
-  -webkit-text-stroke-join: round;
 }
 
 .mundialFull {
