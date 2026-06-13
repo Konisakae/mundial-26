@@ -298,14 +298,14 @@
 }
 
 .prediction {
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   background: rgba(0, 217, 255, 0.2);
   border: 1px solid rgba(0, 217, 255, 0.5);
   border-radius: 0.25rem;
   color: #00d9ff;
   font-weight: 600;
   font-size: 0.875rem;
-  width: 3rem;
+  min-width: 2.5rem;
   text-align: center;
 }
 
