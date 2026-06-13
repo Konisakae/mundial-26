@@ -305,9 +305,8 @@
   color: #00d9ff;
   font-weight: 600;
   font-size: 0.875rem;
-  width: 3rem;
+  min-width: 2.5rem;
   text-align: center;
-  flex-shrink: 0;
 }
 
 .matchPoints {
