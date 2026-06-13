@@ -86,6 +86,7 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
                     backgroundColor: '#354a65',
                     padding: '0.75rem 1.5rem',
                     borderRadius: '0.5rem',
+                    color: GROUP_COLORS[groupId]?.border,
                   }}
                 >
                   GRUPO {groupId}
