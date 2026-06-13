@@ -176,11 +176,9 @@ export default function TodasLayout2({ participants, phase, jornada, predictions
                         const score = calcPts(pred, actual, m) || 0
                         puntosJornada += score
 
-                        if (pred.h === actual.h && pred.a === actual.a) {
+                        if (score === 5) {
                           jornAciertos++
-                        } else if ((Number(pred.h) > Number(pred.a) && Number(actual.h) > Number(actual.a)) ||
-                                   (Number(pred.h) === Number(pred.a) && Number(actual.h) === Number(actual.a)) ||
-                                   (Number(pred.h) < Number(pred.a) && Number(actual.h) < Number(actual.a))) {
+                        } else if (score > 0) {
                           jornParciales++
                         } else {
                           jornFallos++
