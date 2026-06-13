@@ -120,6 +120,10 @@ export default function Header({
 
           {!participant && !selectedParticipantTemp && !showPin && !isAdmin && (
             <div className={styles.mundialTitle}>
+              <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', WebkitTextStroke: '0.7px white' }}>
+                <span className={styles.mundialFull}>MUNDIAL 2026</span>
+                <span className={styles.mundialMini}>M26</span>
+              </div>
               <span className={styles.mundialFull}>MUNDIAL 2026</span>
               <span className={styles.mundialMini}>M26</span>
             </div>
