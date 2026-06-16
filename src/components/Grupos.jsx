@@ -49,7 +49,10 @@ export default function Grupos({ actuals, selectedThirds = {} }) {
     return Object.values(teams)
       .sort((a, b) => {
         if (b.pts !== a.pts) return b.pts - a.pts
-        return (b.g - b.gc) - (a.g - a.gc)
+        const dgA = a.g - a.gc
+        const dgB = b.g - b.gc
+        if (dgB !== dgA) return dgB - dgA
+        return b.g - a.g
       })
   }
 
