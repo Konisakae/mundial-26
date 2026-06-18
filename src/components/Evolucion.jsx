@@ -143,8 +143,8 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       pointRadius: showAll ? 0 : (isSelected ? 4 : 2),
       pointHoverRadius: 6,
       pointBackgroundColor: color.b,
-      pointBorderColor: '#354a65',
-      pointBorderWidth: 0,
+      pointBorderColor: '#ffffff',
+      pointBorderWidth: 1,
     }
   })
 
@@ -348,8 +348,8 @@ export default function Evolucion({ participants, predictions, actuals, resultsC
       pointRadius: isSelected ? 4 : 2,
       pointHoverRadius: 6,
       pointBackgroundColor: color.b,
-      pointBorderColor: '#354a65',
-      pointBorderWidth: 0,
+      pointBorderColor: '#ffffff',
+      pointBorderWidth: 1,
     }
   })
 
