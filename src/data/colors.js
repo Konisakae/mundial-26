@@ -38,7 +38,7 @@ export const AVATAR_COLORS = [
   {b:'#f092f2',t:'#000'},{b:'#93ffff',t:'#000'},
   {b:'#ffc66a',t:'#000'},{b:'#FF0000',t:'#fff'},
   {b:'#ff3eb2',t:'#fff'},{b:'#009d77',t:'#fff'},
-  {b:'#f60',t:'#fff'},{b:'#1aa4ff',t:'#fff'},
+  {b:'#ff6600',t:'#fff'},{b:'#1aa4ff',t:'#fff'},
   {b:'#FFAA00',t:'#000'},
 ]
 
