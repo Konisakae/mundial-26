@@ -34,7 +34,7 @@ export const PHASE_COLORS = {
 // Colores de avatar por índice de participante (máxima distinción)
 export const AVATAR_COLORS = [
   {b:'#00FF00',t:'#000'},{b:'#9d13ff',t:'#fff'},
-  {b:'#009d77',t:'#fff'},{b:'#FFFF00',t:'#000'},
+  {b:'#002761',t:'#fff'},{b:'#FFFF00',t:'#000'},
   {b:'#f092f2',t:'#000'},{b:'#93ffff',t:'#000'},
   {b:'#ffc66a',t:'#000'},{b:'#FF0000',t:'#fff'},
   {b:'#ff3eb2',t:'#fff'},{b:'#009d77',t:'#fff'},
