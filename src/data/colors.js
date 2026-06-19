@@ -35,7 +35,7 @@ export const PHASE_COLORS = {
 export const AVATAR_COLORS = [
   { b: "#00FF00", t: "#000" },
   { b: "#430271", t: "#fff" },
-  { b: "#0066FF", t: "#fff" },
+  { b: "#005be3", t: "#fff" },
   { b: "#FFFF00", t: "#000" },
   { b: "#f092f2", t: "#000" },
   { b: "#78ffff", t: "#000" },
