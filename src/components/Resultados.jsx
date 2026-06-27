@@ -86,8 +86,8 @@ export default function Resultados({
       if (jornada === 1) return true // Jornada 1 siempre accesible
       return resultsConfirmed[jornada - 1]
     } else if (phase === 'R16') {
-      // R16 requiere jornadas 1,2,3 confirmadas + enfrentamientos confirmados
-      return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3] && r16MatchupsConfirmed
+      // R16 requiere jornadas 1,2,3 confirmadas
+      return resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3]
     } else {
       // Otras fases requieren fase anterior confirmada
       const phaseOrder = { 'OCT': 'R16', 'CTO': 'OCT', 'SEMI': 'CTO', '3P': 'SEMI', 'FIN': 'SEMI' }
