@@ -219,6 +219,8 @@ export default function MatchCard({
           {homeOptions.length > 0 && isAdmin && !h ? (
             <select
               className={styles.thirdSelector}
+              name={`third-${match.id}`}
+              id={`third-${match.id}`}
               onChange={(e) => {
                 const group = e.target.value
                 if (onSelectThird) onSelectThird(match.id, group)
@@ -337,6 +339,8 @@ export default function MatchCard({
           {awayOptions.length > 0 && isAdmin && !selectedThirds[match.id] ? (
             <select
               className={styles.thirdSelector}
+              name={`third-${match.id}`}
+              id={`third-${match.id}`}
               onChange={(e) => {
                 const group = e.target.value
                 if (onSelectThird) onSelectThird(match.id, group)
