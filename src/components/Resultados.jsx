@@ -186,7 +186,7 @@ export default function Resultados({
         {matches.map(match => {
           const actual = actuals[match.id]
           const editing_data = editing[match.id]
-          const groupsCompleted = simulatedJornadas[1] && simulatedJornadas[2] && simulatedJornadas[3]
+          const groupsCompleted = resultsConfirmed[1] && resultsConfirmed[2] && resultsConfirmed[3]
 
           return (
             <MatchCard
