@@ -90,6 +90,11 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
     participants.forEach(p => {
       let aciertos = 0, parciales = 0, fallos = 0, puntos = 0
 
+      const esPleno = (score, match) => {
+        const plenos = { G: 5, R16: 7, OCT: 8, CTO: 9, SEMI: 10, '3P': 11, FIN: 12 }
+        return score === plenos[match.ph]
+      }
+
       matches.forEach(m => {
         const pred = predictions[p]?.[m.id]
         const actual = actuals[m.id]
@@ -98,7 +103,7 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
           const score = calcPts(pred, actual, m) || 0
           puntos += score
 
-          if (score === 5) {
+          if (esPleno(score, m)) {
             aciertos++
           } else if (score > 0) {
             parciales++
