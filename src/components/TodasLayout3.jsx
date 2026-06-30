@@ -191,8 +191,13 @@ export default function TodasLayout3({ participants, phase, setPhase, jornada, s
                     const a = getTeam(m.a, m.id)
                     const pred = predictions[p]?.[m.id]
                     const actual = actuals[m.id]
-                    const isCorrect = pred && actual && pred.h === actual.h && pred.a === actual.a
                     const matchPoints = pred && actual ? (calcPts(pred, actual, m) || 0) : 0
+
+                    const esPleno = (score, match) => {
+                      const plenos = { G: 5, R16: 7, OCT: 8, CTO: 9, SEMI: 10, '3P': 11, FIN: 12 }
+                      return score === plenos[match.ph]
+                    }
+                    const isCorrect = matchPoints > 0 && esPleno(matchPoints, m)
 
                     // En eliminatorias, determinar ganador
                     const isElimination = m.ph !== 'G'
