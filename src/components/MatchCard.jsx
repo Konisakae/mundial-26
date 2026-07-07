@@ -128,7 +128,7 @@ export default function MatchCard({
     'Gan. P81': { position: '1', group: 'G' },
     'Gan. P82': { position: '1', group: 'D' },
     'Gan. P83': { position: '1', group: 'H' },
-    'Gan. P84': { position: '1', group: 'K' },
+    'Gan. P84': { position: '2', group: 'K' },
     'Gan. P85': { position: '2', group: 'B' },
     'Gan. P86': { position: '2', group: 'G' },
     'Gan. P87': { position: '1', group: 'J' },
