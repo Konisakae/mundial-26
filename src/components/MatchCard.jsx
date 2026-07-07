@@ -129,10 +129,10 @@ export default function MatchCard({
     'Gan. P82': { position: '1', group: 'D' },
     'Gan. P83': { position: '1', group: 'H' },
     'Gan. P84': { position: '2', group: 'K' },
-    'Gan. P85': { position: '2', group: 'B' },
+    'Gan. P85': { position: '1', group: 'B' },
     'Gan. P86': { position: '2', group: 'G' },
     'Gan. P87': { position: '1', group: 'J' },
-    'Gan. P88': { position: '2', group: 'K' },
+    'Gan. P88': { position: '1', group: 'K' },
   }
 
   // Grupos de cuartos hardcodeados
@@ -144,7 +144,7 @@ export default function MatchCard({
     'Gan. P93': { position: '1', group: 'H' },
     'Gan. P94': { position: '1', group: 'G' },
     'Gan. P95': { position: '1', group: 'J' },
-    'Gan. P96': { position: '2', group: 'K' },
+    'Gan. P96': { position: '1', group: 'K' },
   }
 
   const extractGroupInfo = (teamStr) => {
