@@ -156,9 +156,12 @@ export default function App() {
       setOctavosSubstitutions(fbOctSubs)
     })
 
+    console.log('[DEBUG] Calling getAsync for octavosGroupInfo...')
     getAsync('wc26_octavosGroupInfo', {}).then(fbOctGroupInfo => {
-      console.log('[DEBUG] octavosGroupInfo from Firebase:', fbOctGroupInfo)
+      console.log('[DEBUG] octavosGroupInfo received:', fbOctGroupInfo)
       setOctavosGroupInfo(fbOctGroupInfo)
+    }).catch(err => {
+      console.error('[DEBUG] Error loading octavosGroupInfo:', err)
     })
 
     getAsync('wc26_r16MatchupsConfirmed', false).then(fbR16Match => {
