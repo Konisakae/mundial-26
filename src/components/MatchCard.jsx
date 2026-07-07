@@ -135,12 +135,29 @@ export default function MatchCard({
     'Gan. P88': { position: '2', group: 'K' },
   }
 
+  // Grupos de cuartos hardcodeados
+  const CUARTOS_GROUPS = {
+    'Gan. P89': { position: '2', group: 'C' },
+    'Gan. P90': { position: '1', group: 'I' },
+    'Gan. P91': { position: '2', group: 'I' },
+    'Gan. P92': { position: '1', group: 'L' },
+    'Gan. P93': { position: '1', group: 'H' },
+    'Gan. P94': { position: '1', group: 'G' },
+    'Gan. P95': { position: '1', group: 'J' },
+    'Gan. P96': { position: '2', group: 'K' },
+  }
+
   const extractGroupInfo = (teamStr) => {
     if (!teamStr) return null
 
     // Si es octavos, buscar en grupos hardcodeados
     if (match && match.ph === 'OCT' && OCTAVOS_GROUPS[teamStr]) {
       return OCTAVOS_GROUPS[teamStr]
+    }
+
+    // Si es cuartos, buscar en grupos hardcodeados
+    if (match && match.ph === 'CTO' && CUARTOS_GROUPS[teamStr]) {
+      return CUARTOS_GROUPS[teamStr]
     }
 
     // Si contiene "/" (múltiples opciones), mostrar con asterisco
