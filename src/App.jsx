@@ -157,6 +157,7 @@ export default function App() {
     })
 
     getAsync('wc26_octavosGroupInfo', {}).then(fbOctGroupInfo => {
+      console.log('[DEBUG] octavosGroupInfo from Firebase:', fbOctGroupInfo)
       setOctavosGroupInfo(fbOctGroupInfo)
     })
 
