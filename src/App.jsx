@@ -777,10 +777,10 @@ export default function App() {
 
     // Mapeo: P89-P96 a P97-P100
     const octToCto = {
-      89: [97, 90],
-      91: [99, 92],
-      93: [98, 94],
-      95: [100, 96],
+      90: [97, 89],
+      92: [99, 91],
+      94: [98, 93],
+      96: [100, 95],
     }
 
     Object.entries(octToCto).forEach(([octId, [ctoId, octIdPair]]) => {
