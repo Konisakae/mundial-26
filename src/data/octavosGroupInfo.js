@@ -1,0 +1,18 @@
+export const OCTAVOS_GROUP_INFO = {
+  'Gan. P73': { position: '1', group: 'B' },
+  'Gan. P74': { position: '1', group: 'C' },
+  'Gan. P75': { position: '2', group: 'D' },
+  'Gan. P76': { position: '2', group: 'C' },
+  'Gan. P77': { position: '2', group: 'I' },
+  'Gan. P78': { position: '1', group: 'I' },
+  'Gan. P79': { position: '1', group: 'A' },
+  'Gan. P80': { position: '1', group: 'L' },
+  'Gan. P81': { position: '1', group: 'G' },
+  'Gan. P82': { position: '1', group: 'D' },
+  'Gan. P83': { position: '1', group: 'H' },
+  'Gan. P84': { position: '1', group: 'K' },
+  'Gan. P85': { position: '2', group: 'B' },
+  'Gan. P86': { position: '2', group: 'G' },
+  'Gan. P87': { position: '1', group: 'J' },
+  'Gan. P88': { position: '2', group: 'K' },
+}

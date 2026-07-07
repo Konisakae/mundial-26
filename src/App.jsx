@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { DEFAULT_PARTICIPANTS } from './data/teams'
 import { MATCHES } from './data/matches'
+import { OCTAVOS_GROUP_INFO } from './data/octavosGroupInfo'
 import { calcTotalPts } from './utils/scoring'
 import { storage, getAsync, setAsync } from './utils/storage'
 import { getAllGroupWinners } from './utils/groupStandings'
@@ -74,7 +75,7 @@ export default function App() {
     const simPhases = storage.get('wc26_simulatedPhases', { R16: false, OCT: false, CTO: false, SEMI: false, '3P': false, FIN: false })
     const subs = storage.get('wc26_r16Substitutions', {})
     const octSubs = storage.get('wc26_octavosSubstitutions', {})
-    const octGroupInfo = storage.get('wc26_octavosGroupInfo', {})
+    const octGroupInfo = storage.get('wc26_octavosGroupInfo', OCTAVOS_GROUP_INFO)
     const ctoSubs = storage.get('wc26_cuartosSubstitutions', {})
     const ctoGroupInfo = storage.get('wc26_cuartosGroupInfo', {})
     const semiSubs = storage.get('wc26_semifinalSubstitutions', {})
@@ -156,13 +157,6 @@ export default function App() {
       setOctavosSubstitutions(fbOctSubs)
     })
 
-    console.log('[DEBUG] Calling getAsync for octavosGroupInfo...')
-    getAsync('wc26_octavosGroupInfo', {}).then(fbOctGroupInfo => {
-      console.log('[DEBUG] octavosGroupInfo received:', fbOctGroupInfo)
-      setOctavosGroupInfo(fbOctGroupInfo)
-    }).catch(err => {
-      console.error('[DEBUG] Error loading octavosGroupInfo:', err)
-    })
 
     getAsync('wc26_r16MatchupsConfirmed', false).then(fbR16Match => {
       setR16MatchupsConfirmed(fbR16Match)
@@ -189,16 +183,6 @@ export default function App() {
 
     initializeParticipants()
   }, [])
-
-  // Load octavos group info from Firebase when octavos subs are available
-  useEffect(() => {
-    if (octavosSubstitutions && Object.keys(octavosSubstitutions).length > 0 && (!octavosGroupInfo || Object.keys(octavosGroupInfo).length === 0)) {
-      getAsync('wc26_octavosGroupInfo', {}).then(fbOctGroupInfo => {
-        console.log('[DEBUG] Loading octavosGroupInfo from Firebase:', fbOctGroupInfo)
-        setOctavosGroupInfo(fbOctGroupInfo)
-      })
-    }
-  }, [octavosSubstitutions])
 
   // Generate elimination matches when R16 subs are loaded from Firestore
   useEffect(() => {
