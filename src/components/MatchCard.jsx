@@ -144,7 +144,7 @@ export default function MatchCard({
     'Gan. P93': { position: '1', group: 'H' },
     'Gan. P94': { position: '1', group: 'G' },
     'Gan. P95': { position: '1', group: 'J' },
-    'Gan. P96': { position: '1', group: 'K' },
+    'Gan. P96': { position: '1', group: 'B' },
   }
 
   const extractGroupInfo = (teamStr) => {
