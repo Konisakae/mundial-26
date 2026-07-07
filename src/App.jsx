@@ -190,6 +190,16 @@ export default function App() {
     initializeParticipants()
   }, [])
 
+  // Load octavos group info from Firebase when octavos subs are available
+  useEffect(() => {
+    if (octavosSubstitutions && Object.keys(octavosSubstitutions).length > 0 && (!octavosGroupInfo || Object.keys(octavosGroupInfo).length === 0)) {
+      getAsync('wc26_octavosGroupInfo', {}).then(fbOctGroupInfo => {
+        console.log('[DEBUG] Loading octavosGroupInfo from Firebase:', fbOctGroupInfo)
+        setOctavosGroupInfo(fbOctGroupInfo)
+      })
+    }
+  }, [octavosSubstitutions])
+
   // Generate elimination matches when R16 subs are loaded from Firestore
   useEffect(() => {
     if (r16Substitutions && Object.keys(r16Substitutions).length > 0 && (!octavosSubstitutions || Object.keys(octavosSubstitutions).length === 0)) {
