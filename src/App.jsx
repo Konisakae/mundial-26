@@ -156,6 +156,14 @@ export default function App() {
       setOctavosSubstitutions(fbOctSubs)
     })
 
+    getAsync('wc26_cuartosSubstitutions', {}).then(fbCtoSubs => {
+      setCuartosSubstitutions(fbCtoSubs)
+    })
+
+    getAsync('wc26_cuartosGroupInfo', {}).then(fbCtoGroupInfo => {
+      setCuartosGroupInfo(fbCtoGroupInfo)
+    })
+
     getAsync('wc26_r16MatchupsConfirmed', false).then(fbR16Match => {
       setR16MatchupsConfirmed(fbR16Match)
     })
