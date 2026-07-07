@@ -115,26 +115,51 @@ export default function MatchCard({
   }
 
   // Extraer grupo/clasificación en eliminatorias (ej: "1.º A" → "1º A")
+  // Grupos de octavos hardcodeados
+  const OCTAVOS_GROUPS = {
+    'Gan. P73': { position: '1', group: 'B' },
+    'Gan. P74': { position: '1', group: 'C' },
+    'Gan. P75': { position: '2', group: 'D' },
+    'Gan. P76': { position: '2', group: 'C' },
+    'Gan. P77': { position: '2', group: 'I' },
+    'Gan. P78': { position: '1', group: 'I' },
+    'Gan. P79': { position: '1', group: 'A' },
+    'Gan. P80': { position: '1', group: 'L' },
+    'Gan. P81': { position: '1', group: 'G' },
+    'Gan. P82': { position: '1', group: 'D' },
+    'Gan. P83': { position: '1', group: 'H' },
+    'Gan. P84': { position: '1', group: 'K' },
+    'Gan. P85': { position: '2', group: 'B' },
+    'Gan. P86': { position: '2', group: 'G' },
+    'Gan. P87': { position: '1', group: 'J' },
+    'Gan. P88': { position: '2', group: 'K' },
+  }
+
   const extractGroupInfo = (teamStr) => {
     if (!teamStr) return null
 
+    // Si es octavos, buscar en grupos hardcodeados
+    if (match && match.ph === 'OCT' && OCTAVOS_GROUPS[teamStr]) {
+      return OCTAVOS_GROUPS[teamStr]
+    }
+
     // Si contiene "/" (múltiples opciones), mostrar con asterisco
     if (teamStr.includes('/')) {
-      const match = teamStr.match(/^(\d+)/)
-      if (match) {
+      const matchObj = teamStr.match(/^(\d+)/)
+      if (matchObj) {
         return {
-          position: match[1],
+          position: matchObj[1],
           group: '*',
         }
       }
     }
 
     // Si es un grupo específico
-    const match = teamStr.match(/^(\d+)\D+(\w)$/)
-    if (match) {
+    const matchObj = teamStr.match(/^(\d+)\D+(\w)$/)
+    if (matchObj) {
       return {
-        position: match[1],
-        group: match[2],
+        position: matchObj[1],
+        group: matchObj[2],
       }
     }
     return null
