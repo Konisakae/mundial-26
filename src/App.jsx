@@ -160,6 +160,10 @@ export default function App() {
       setCuartosSubstitutions(fbCtoSubs)
     })
 
+    getAsync('wc26_semifinalSubstitutions', {}).then(fbSemiSubs => {
+      setSemifinalSubstitutions(fbSemiSubs)
+    })
+
     getAsync('wc26_r16MatchupsConfirmed', false).then(fbR16Match => {
       setR16MatchupsConfirmed(fbR16Match)
     })
