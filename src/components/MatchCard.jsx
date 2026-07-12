@@ -147,6 +147,14 @@ export default function MatchCard({
     'Gan. P96': { position: '1', group: 'B' },
   }
 
+  // Grupos de semifinales hardcodeados
+  const SEMIFINAL_GROUPS = {
+    'Gan. P97': { position: '1', group: 'I' },
+    'Gan. P98': { position: '1', group: 'H' },
+    'Gan. P99': { position: '1', group: 'L' },
+    'Gan. P100': { position: '1', group: 'J' },
+  }
+
   const extractGroupInfo = (teamStr) => {
     if (!teamStr) return null
 
@@ -158,6 +166,11 @@ export default function MatchCard({
     // Si es cuartos, buscar en grupos hardcodeados
     if (match && match.ph === 'CTO' && CUARTOS_GROUPS[teamStr]) {
       return CUARTOS_GROUPS[teamStr]
+    }
+
+    // Si es semifinales, buscar en grupos hardcodeados
+    if (match && match.ph === 'SEMI' && SEMIFINAL_GROUPS[teamStr]) {
+      return SEMIFINAL_GROUPS[teamStr]
     }
 
     // Si contiene "/" (múltiples opciones), mostrar con asterisco
