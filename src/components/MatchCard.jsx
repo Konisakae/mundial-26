@@ -155,11 +155,17 @@ export default function MatchCard({
     'Gan. P100': { position: '1', group: 'J' },
   }
 
-  // Grupos de tercerpuesto - se cargan dinámicamente desde Firebase cuando estén disponibles
-  const TERCERPUESTO_GROUPS = {}
+  // Grupos de tercerpuesto hardcodeados
+  const TERCERPUESTO_GROUPS = {
+    'Per. P101': { position: '1', group: 'I' },
+    'Per. P102': { position: '1', group: 'L' },
+  }
 
-  // Grupos de final - se cargan dinámicamente desde Firebase cuando estén disponibles
-  const FINAL_GROUPS = {}
+  // Grupos de final hardcodeados
+  const FINAL_GROUPS = {
+    'Gan. P101': { position: '1', group: 'H' },
+    'Gan. P102': { position: '1', group: 'J' },
+  }
 
   const extractGroupInfo = (teamStr) => {
     if (!teamStr) return null
