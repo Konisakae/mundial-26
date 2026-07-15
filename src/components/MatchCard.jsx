@@ -155,6 +155,12 @@ export default function MatchCard({
     'Gan. P100': { position: '1', group: 'J' },
   }
 
+  // Grupos de tercerpuesto - se cargan dinámicamente desde Firebase cuando estén disponibles
+  const TERCERPUESTO_GROUPS = {}
+
+  // Grupos de final - se cargan dinámicamente desde Firebase cuando estén disponibles
+  const FINAL_GROUPS = {}
+
   const extractGroupInfo = (teamStr) => {
     if (!teamStr) return null
 
@@ -171,6 +177,16 @@ export default function MatchCard({
     // Si es semifinales, buscar en grupos hardcodeados
     if (match && match.ph === 'SEMI' && SEMIFINAL_GROUPS[teamStr]) {
       return SEMIFINAL_GROUPS[teamStr]
+    }
+
+    // Si es tercerpuesto, buscar en grupos
+    if (match && match.ph === '3P' && TERCERPUESTO_GROUPS[teamStr]) {
+      return TERCERPUESTO_GROUPS[teamStr]
+    }
+
+    // Si es final, buscar en grupos
+    if (match && match.ph === 'FIN' && FINAL_GROUPS[teamStr]) {
+      return FINAL_GROUPS[teamStr]
     }
 
     // Si contiene "/" (múltiples opciones), mostrar con asterisco
