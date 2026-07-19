@@ -152,6 +152,14 @@ export default function App() {
       setSemifinalSubstitutions(fbSemiSubs)
     })
 
+    getAsync('wc26_tercerPuestoSubstitutions', {}).then(fbTercerSubs => {
+      setTercerPuestoSubstitutions(fbTercerSubs)
+    })
+
+    getAsync('wc26_finalSubstitutions', {}).then(fbFinalSubs => {
+      setFinalSubstitutions(fbFinalSubs)
+    })
+
     getAsync('wc26_r16MatchupsConfirmed', false).then(fbR16Match => {
       setR16MatchupsConfirmed(fbR16Match)
     })
@@ -200,9 +208,9 @@ export default function App() {
     }
   }, [cuartosSubstitutions, actuals])
 
-  // Generate final when semis are loaded from Firestore
+  // Generate tercerpuesto and final when semis are loaded from Firestore
   useEffect(() => {
-    if (semifinalSubstitutions && Object.keys(semifinalSubstitutions).length > 0 && (!finalSubstitutions || Object.keys(finalSubstitutions).length === 0)) {
+    if (semifinalSubstitutions && Object.keys(semifinalSubstitutions).length > 0 && (!tercerPuestoSubstitutions || Object.keys(tercerPuestoSubstitutions).length === 0) && (!finalSubstitutions || Object.keys(finalSubstitutions).length === 0)) {
       generateFinalMatches(semifinalSubstitutions, actuals, semifinalGroupInfo)
     }
   }, [semifinalSubstitutions, actuals])
